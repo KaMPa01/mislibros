@@ -1,0 +1,157 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(45deg, #706182, #fc9ca7);
+    position: relative;
+    overflow: hidden;
+}
+
+.header-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('imagenes/patron-header.png');
+    background-size: cover; /* Cubrir todo el espacio */
+    background-position: center; /* Centrar la imagen */
+    opacity: 0.3;
+    z-index: 1;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #706182;
+    text-align: center;
+    margin-top: 30px;
+}
+
+h3 {
+    font-size: 1.3rem;
+    color: #706182;
+    margin: 10px 0;
+}
+
+.separator {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.book-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.book {
+    text-align: center;
+    max-width: 250px;
+}
+
+.book-cover {
+    width: 100%;
+    max-width: 150px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.book-cover:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.book-description {
+    margin: 10px 0;
+    color: #555;
+    text-align: justify;
+    font-size: 0.9rem;
+}
+
+.buy-button {
+    display: inline-block;
+    background-color: #fc9ca7;
+    color: #ffffff;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.buy-button:hover {
+    background-color: #706182;
+    color: #fc9ca7;
+}
+
+.instagram-button {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e1306c;
+    color: #ffffff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.instagram-button:hover {
+    background-color: #c13584;
+}
+
+.instagram-button i {
+    margin-right: 10px;
+}
+
+/* Media Queries para Diseño Responsivo Avanzado */
+@media (max-width: 768px) {
+    .book-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .book {
+        max-width: 90%;
+    }
+    .book-cover {
+        max-width: 200px;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    .instagram-button {
+        flex-direction: column;
+        padding: 8px 16px;
+    }
+}
