@@ -5,11 +5,12 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
+    font-size: 16px; /* Tamaño de fuente base */
 }
 
 header {
     text-align: center;
-    padding: 50px 20px;
+    padding: 30px 20px;
     background: linear-gradient(45deg, #706182, #fc9ca7);
     position: relative;
     overflow: hidden;
@@ -22,14 +23,14 @@ header {
     width: 100%;
     height: 100%;
     background-image: url('imagenes/patron-header.png');
-    background-size: cover; /* Cubrir todo el espacio */
-    background-position: center; /* Centrar la imagen */
+    background-size: cover;
+    background-position: center;
     opacity: 0.3;
     z-index: 1;
 }
 
 h1 {
-    font-size: 2.5rem;
+    font-size: 2rem; /* Tamaño ajustado */
     color: #ffffff;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     margin: 0;
@@ -44,14 +45,14 @@ h1 {
 }
 
 h2 {
-    font-size: 1.8rem;
+    font-size: 1.5rem; /* Tamaño ajustado */
     color: #706182;
     text-align: center;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 h3 {
-    font-size: 1.3rem;
+    font-size: 1.2rem; /* Tamaño ajustado */
     color: #706182;
     margin: 10px 0;
 }
@@ -132,26 +133,81 @@ h3 {
     margin-right: 10px;
 }
 
-/* Media Queries para Diseño Responsivo Avanzado */
+/* Estilos para la sección Bookstagrammer */
+#Bookstagrammer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 1000;
+}
+
+#Bookstagrammer h2 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.Bookstagrammer-container {
+    display: flex;
+    flex-direction: column; /* Coloca los colaboradores en columna */
+    gap: 10px; /* Espacio entre colaboradores */
+}
+
+.booksgramer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.booksgramer img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.booksgramer .instagram-button {
+    background-color: #E1306C;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.booksgramer .instagram-button:hover {
+    background-color: #C13584;
+}
+
+.booksgramer .instagram-button i {
+    font-size: 18px;
+}
+
+/* Media Queries para Diseño Responsivo */
 @media (max-width: 768px) {
-    .book-container {
-        flex-direction: column;
-        align-items: center;
+    #Bookstagrammer {
+        bottom: 10px;
+        right: 10px;
+        padding: 10px;
     }
-    .book {
-        max-width: 90%;
+    #Bookstagrammer h2 {
+        font-size: 0.9rem;
     }
-    .book-cover {
-        max-width: 200px;
+    .booksgramer img {
+        width: 40px;
+        height: 40px;
     }
-    h1 {
-        font-size: 2rem;
-    }
-    h2 {
-        font-size: 1.5rem;
-    }
-    .instagram-button {
-        flex-direction: column;
-        padding: 8px 16px;
+    .booksgramer .instagram-button {
+        padding: 6px 10px;
+        font-size: 14px;
     }
 }
