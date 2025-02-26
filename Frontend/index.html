@@ -2,61 +2,153 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Panel de Administración</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Librería</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #libros-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .libro {
+      background-color: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      width: 200px;
+      text-align: center;
+    }
+
+    .libro h3 {
+      font-size: 1.2rem;
+    }
+
+    .libro p {
+      font-size: 1rem;
+    }
+
+    .libro a {
+      display: block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    input[type="text"], input[type="url"] {
+      margin: 5px;
+      padding: 10px;
+      font-size: 1rem;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
 </head>
 <body>
-  <h1>Añadir Libro</h1>
-  <form id="bookForm">
-    <input type="text" name="title" placeholder="Título" required>
-    <textarea name="description" placeholder="Descripción"></textarea>
-    <input type="text" name="coverImage" placeholder="URL de la portada">
-    <input type="text" name="purchaseLink" placeholder="Link de compra">
-    <button type="submit">Añadir Libro</button>
+  <h1>Libros Disponibles</h1>
+  
+  <!-- Contenedor donde se mostrarán los libros -->
+  <div id="libros-container"></div>
+  
+  <!-- Formulario para agregar nuevos libros -->
+  <h2>Agregar Nuevo Libro</h2>
+  <form id="addBookForm">
+    <input type="text" id="titulo" placeholder="Título" required />
+    <input type="text" id="descripcion" placeholder="Descripción" required />
+    <input type="url" id="url" placeholder="Enlace" required />
+    <button type="submit">Agregar Libro</button>
   </form>
-
-  <h1>Añadir Bookstagrammer</h1>
-  <form id="bookstagrammerForm">
-    <input type="text" name="name" placeholder="Nombre" required>
-    <input type="text" name="profileImage" placeholder="URL de la imagen de perfil">
-    <input type="text" name="instagramUrl" placeholder="URL de Instagram">
-    <button type="submit">Añadir Bookstagrammer</button>
-  </form>
-
+  
   <script>
-    const apiUrl = 'http://localhost:5000/api'; // Asegúrate de actualizar esto con la URL de tu backend en producción
-
-    document.getElementById('bookForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
-      try {
-        const res = await fetch(`${apiUrl}/books`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+    // Función para obtener los libros desde la API
+    fetch('https://mislibros-kampa01s-projects.vercel.app/api/books')  // URL de la API
+      .then(response => response.json())
+      .then(data => {
+        const librosContainer = document.getElementById('libros-container');
+        data.forEach(libro => {
+          const libroElement = document.createElement('div');
+          libroElement.classList.add('libro');
+          libroElement.innerHTML = `
+            <h3>${libro.titulo}</h3>
+            <p>${libro.descripcion}</p>
+            <a href="${libro.url}" target="_blank">Compra ahora</a>
+          `;
+          librosContainer.appendChild(libroElement);
         });
-        const result = await res.json();
-        console.log('Libro añadido:', result);
-      } catch (error) {
-        console.error('Error añadiendo el libro:', error);
-      }
-    });
+      })
+      .catch(error => console.error('Error:', error));
 
-    document.getElementById('bookstagrammerForm').addEventListener('submit', async (e) => {
+    // Función para agregar un nuevo libro
+    const addBookForm = document.getElementById('addBookForm');
+    addBookForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
-      try {
-        const res = await fetch(`${apiUrl}/bookstagrammers`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        const result = await res.json();
-        console.log('Bookstagrammer añadido:', result);
-      } catch (error) {
-        console.error('Error añadiendo el Bookstagrammer:', error);
-      }
+      
+      const newBook = {
+        titulo: document.getElementById('titulo').value,
+        descripcion: document.getElementById('descripcion').value,
+        url: document.getElementById('url').value
+      };
+      
+      // Enviar el nuevo libro a la API
+      fetch('https://mislibros-kampa01s-projects.vercel.app/api/books', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newBook),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Libro agregado:', data);
+        // Limpiar el formulario después de agregar el libro
+        addBookForm.reset();
+        // Agregar el libro recién creado al contenedor sin recargar
+        const librosContainer = document.getElementById('libros-container');
+        const libroElement = document.createElement('div');
+        libroElement.classList.add('libro');
+        libroElement.innerHTML = `
+          <h3>${data.titulo}</h3>
+          <p>${data.descripcion}</p>
+          <a href="${data.url}" target="_blank">Compra ahora</a>
+        `;
+        librosContainer.appendChild(libroElement);
+      })
+      .catch(error => console.error('Error al agregar libro:', error));
     });
   </script>
 </body>
