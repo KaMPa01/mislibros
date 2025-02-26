@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Administración</title>
+</head>
+<body>
+  <h1>Añadir Libro</h1>
+  <form id="bookForm">
+    <input type="text" name="title" placeholder="Título" required>
+    <textarea name="description" placeholder="Descripción"></textarea>
+    <input type="text" name="coverImage" placeholder="URL de la portada">
+    <input type="text" name="purchaseLink" placeholder="Link de compra">
+    <button type="submit">Añadir Libro</button>
+  </form>
+
+  <h1>Añadir Bookstagrammer</h1>
+  <form id="bookstagrammerForm">
+    <input type="text" name="name" placeholder="Nombre" required>
+    <input type="text" name="profileImage" placeholder="URL de la imagen de perfil">
+    <input type="text" name="instagramUrl" placeholder="URL de Instagram">
+    <button type="submit">Añadir Bookstagrammer</button>
+  </form>
+
+  <script>
+    const apiUrl = 'http://localhost:5000/api'; // Asegúrate de actualizar esto con la URL de tu backend en producción
+
+    document.getElementById('bookForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      try {
+        const res = await fetch(`${apiUrl}/books`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        console.log('Libro añadido:', result);
+      } catch (error) {
+        console.error('Error añadiendo el libro:', error);
+      }
+    });
+
+    document.getElementById('bookstagrammerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      try {
+        const res = await fetch(`${apiUrl}/bookstagrammers`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        console.log('Bookstagrammer añadido:', result);
+      } catch (error) {
+        console.error('Error añadiendo el Bookstagrammer:', error);
+      }
+    });
+  </script>
+</body>
+</html>
