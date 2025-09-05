@@ -130,7 +130,7 @@
     </div>
     <script>
         // ▼▼▼ Pega aquí la URL de tu script de Google ▼▼▼
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQdJAIlUgMhvDqGmyo_IUDfXFf6TtwlBrlfUyoc5dOoohHqw1R2oxQhuALfNHjGj-V/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9dVcyiGQt7bDcrxJgOFqB99atd2mw7dulzI8pGD1ahqamwybmJIqMYYnzuVWJANI1/exec";
 
         // --- SECCIÓN DE LOGIN ---
         const loginOverlay = document.getElementById('login-overlay');
@@ -145,11 +145,14 @@
         function attemptLogin() {
             loginBtn.disabled = true; loginBtn.textContent = 'Verificando...'; loginError.style.display = 'none';
             const payload = { action: 'login', user: usernameInput.value, pass: passwordInput.value };
-            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json' }})
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
             .then(response => response.json()).then(data => {
                 if (data.success) { loginOverlay.style.display = 'none'; mainContent.style.display = 'block'; loadOrders(); } 
                 else { loginError.textContent = 'Usuario o contraseña incorrectos.'; loginError.style.display = 'block'; loginBtn.disabled = false; loginBtn.textContent = 'Entrar'; }
-            }).catch(error => { console.error('Error en el login:', error); loginError.textContent = 'Error de conexión. Revisa la URL del script y tu conexión.'; loginError.style.display = 'block'; loginBtn.disabled = false; loginBtn.textContent = 'Entrar'; });
+            }).catch(error => { console.error('Error en el login:', error); loginError.textContent = 'Error de conexión. Revisa la URL y la implementación del script.'; loginError.style.display = 'block'; loginBtn.disabled = false; loginBtn.textContent = 'Entrar'; });
         }
 
         // --- SECCIÓN DE LA APP DE PEDIDOS ---
@@ -239,7 +242,10 @@
             const button = e.target;
             button.disabled = true; button.textContent = 'Actualizando...';
             const payload = { action: 'updateStatus', rowIndex: rowIndex, status: 'Enviado' };
-            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json' }})
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
             .then(response => response.json()).then(result => {
                 if (result.success) {
                     alert('¡Pedido marcado como "Enviado"!');
@@ -252,5 +258,9 @@
     </script>
 </body>
 </html>
+
+
+
+
 
 
