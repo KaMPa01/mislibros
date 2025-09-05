@@ -38,7 +38,6 @@
         .info-block p { margin: 5px 0; }
         .bizum-link a { font-weight: bold; color: #16a085; text-decoration: none; }
         .bizum-link a:hover { text-decoration: underline; }
-        /* ESTILOS PARA LA TABLA DE PRODUCTO RESTAURADA */
         .albaran-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .albaran-table th, .albaran-table td { border: 1px solid #ccc; padding: 10px; text-align: left; }
         .albaran-table th { background-color: #f2f2f2; }
@@ -83,7 +82,6 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN DE LA TABLA RESTAURADA -->
                 <div class="details-section">
                     <h3>Producto</h3>
                     <table class="albaran-table">
@@ -98,7 +96,7 @@
                         <tbody>
                             <tr>
                                 <!-- ▼▼▼ EDITA AQUÍ EL TÍTULO Y PRECIO DE TU LIBRO ▼▼▼ -->
-                                <td>Libro YO ANTES Y DESPUÉS DE TI </td>
+                                <td>Libro "YO ANTES Y DESPUÉS DE TI"</td>
                                 <td>1</td>
                                 <td>24 €</td>
                                 <td>24 €</td>
@@ -145,12 +143,6 @@
         passwordInput.addEventListener('keypress', (e) => e.key === 'Enter' && attemptLogin());
         
         function attemptLogin() {
-            if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbwQdJAIlUgMhvDqGmyo_IUDfXFf6TtwlBrlfUyoc5dOoohHqw1R2oxQhuALfNHjGj-V/exec" || !SCRIPT_URL) {
-                loginError.textContent = 'ERROR: Debes pegar la URL de tu Google Script en la variable SCRIPT_URL.';
-                loginError.style.display = 'block';
-                return;
-            }
-
             loginBtn.disabled = true; loginBtn.textContent = 'Verificando...'; loginError.style.display = 'none';
             const payload = { action: 'login', user: usernameInput.value, pass: passwordInput.value };
             fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json' }})
@@ -167,10 +159,6 @@
         let currentOrderElement = null;
 
         function loadOrders() {
-            if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbwQdJAIlUgMhvDqGmyo_IUDfXFf6TtwlBrlfUyoc5dOoohHqw1R2oxQhuALfNHjGj-V/exec" || !SCRIPT_URL) {
-                loader.textContent = "ERROR: No se ha configurado la URL del script de Google en el código.";
-                return;
-            }
             fetch(SCRIPT_URL).then(response => response.json()).then(data => {
                 loader.style.display = 'none';
                 renderOrders(data);
@@ -186,7 +174,7 @@
                 if (order.estado && order.estado.toLowerCase() === 'enviado') li.classList.add('status-enviado');
                 li.innerHTML = `
                     <div class="order-details">
-                        <strong>${order.nombre_y_apellido || 'Sin nombre'}</strong> - ${order.metodo_de_envío || 'Sin método envío'}<br>
+                        <strong>${order.nombre_y_apellido || 'Sin nombre'}</strong> - ${order.metodo_de_envio || 'Sin método envío'}<br>
                         <small>Pedido el: ${new Date(order.marca_temporal).toLocaleString('es-ES')}</small>
                     </div>
                     <div class="order-actions"><button>Ver Detalles</button></div>`;
@@ -202,25 +190,25 @@
             document.getElementById('details-order-id').textContent = order.rowIndex;
             document.getElementById('details-date').textContent = new Date(order.marca_temporal).toLocaleDateString('es-ES');
             document.getElementById('details-name').textContent = order.nombre_y_apellido || 'No especificado';
-            document.getElementById('details-email').textContent = order.correo_electrónico_obligatorio_para_envios_correos_y_inpost || 'No especificado';
-            document.getElementById('details-phone').textContent = order.teléfono_obligatorio_para_envío_correos_y_inpost || order['teléfono_698982882'] || 'No especificado';
+            document.getElementById('details-email').textContent = order.correo_electronico_obligatorio_para_envios_correos_y_inpost || 'No especificado';
+            document.getElementById('details-phone').textContent = order.telefono_obligatorio_para_envio_correos_y_inpost || order['telefono_698982882'] || 'No especificado';
             document.getElementById('details-signed').textContent = order.quieres_firmado || 'No especificado';
             document.getElementById('details-dedication').textContent = order.nombre_para_la_firma || 'No aplica';
             
             const shippingBlock = document.getElementById('shipping-info-block');
-            const shippingMethod = order.metodo_de_envío || '';
+            const shippingMethod = order.metodo_de_envio || '';
             let shippingHTML = `<p><strong>Método de Envío:</strong> ${shippingMethod}</p>`;
 
             if (shippingMethod.toLowerCase().includes('correos')) {
                 shippingHTML += `
-                    <p><strong>Dirección:</strong> ${order.para_envíos_por_correosdirección || 'No especificado'}</p>
-                    <p><strong>Código Postal:</strong> ${order.código_postal_obligatorio_para_envío_correos || 'No especificado'}</p>
-                    <p><strong>Población:</strong> ${order.población_obligatorio_para_envío_correos_y_inpost || 'No especificado'}</p>
+                    <p><strong>Dirección:</strong> ${order.para_envios_por_correosdireccion || 'No especificado'}</p>
+                    <p><strong>Código Postal:</strong> ${order.codigo_postal_obligatorio_para_envio_correos || 'No especificado'}</p>
+                    <p><strong>Población:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || 'No especificado'}</p>
                 `;
             } else if (shippingMethod.toLowerCase().includes('inpost')) {
                 shippingHTML += `
                     <p><strong>Punto Inpost:</strong> ${order.punto_inpost || 'No especificado'}</p>
-                    <p><strong>Población:</strong> ${order.población_obligatorio_para_envío_correos_y_inpost || 'No especificado'}</p>
+                    <p><strong>Población:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || 'No especificado'}</p>
                 `;
             } else if (shippingMethod.toLowerCase().includes('vinted')) {
                 shippingHTML += `<p><strong>Punto Vinted:</strong> ${order.punto_vinted || 'No especificado'}</p>`;
@@ -264,3 +252,5 @@
     </script>
 </body>
 </html>
+
+
