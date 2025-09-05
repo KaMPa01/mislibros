@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Gestión de Pedidos</title>
+    <meta name="robots" content="noindex, nofollow">
     <style>
         /* Estilos del Login */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f7f9; display: flex; justify-content: center; align-items: center; z-index: 2000; }
@@ -19,6 +20,17 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; color: #333; margin: 0; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
         h1, h2, h3 { color: #2c3e50; }
+        
+        /* --- ESTILOS PARA EL MENÚ LATERAL --- */
+        .main-layout { display: flex; flex-direction: row; gap: 30px; }
+        #orders-container { flex-grow: 1; }
+        #filter-menu { flex-basis: 220px; flex-shrink: 0; background-color: #ffffff; border-radius: 8px; padding: 20px; height: fit-content; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        #filter-menu h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        #filter-menu ul { list-style: none; padding: 0; margin: 0; }
+        #filter-menu li a { display: block; padding: 10px 15px; text-decoration: none; color: #34495e; border-radius: 5px; transition: background-color 0.2s; }
+        #filter-menu li a:hover { background-color: #f2f2f2; }
+        #filter-menu li a.active { background-color: #3498db; color: white; font-weight: bold; }
+
         .loading { text-align: center; padding: 50px; font-size: 1.2em; }
         .order-list { list-style: none; padding: 0; }
         .order-item { background-color: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: box-shadow 0.2s; }
@@ -38,13 +50,18 @@
         .info-block p { margin: 5px 0; }
         .bizum-link a { font-weight: bold; color: #16a085; text-decoration: none; }
         .bizum-link a:hover { text-decoration: underline; }
-        /* ESTILOS PARA LA TABLA DE PRODUCTO RESTAURADA */
         .albaran-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .albaran-table th, .albaran-table td { border: 1px solid #ccc; padding: 10px; text-align: left; }
         .albaran-table th { background-color: #f2f2f2; }
         .details-controls { text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
-        .details-controls button { background-color: #2ecc71; color: white; padding: 12px 20px; font-size: 1em; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+        .details-controls button { background-color: #2ecc71; color: white; padding: 12px 20px; font-size: 1em; margin: 5px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.2s; }
         .details-controls .close-btn { background-color: #e74c3c; }
+        .tracking-number { background-color: #eaf2f8; border-left: 4px solid #3498db; padding: 10px; margin-top: 10px; font-weight: bold;}
+        
+        @media (max-width: 900px) {
+            .main-layout { flex-direction: column-reverse; }
+        }
+
         @media print { body * { visibility: hidden; } .details-overlay, .details-content, .details-content * { visibility: visible; } .details-overlay { position: absolute; left: 0; top: 0; width: 100%; height: auto; background: none; padding: 0; } .details-content { box-shadow: none; margin: 0; border-radius: 0; } .details-controls { display: none; } }
     </style>
 </head>
@@ -54,10 +71,22 @@
     </div>
     <div id="main-content">
         <div class="container">
-            <h1>Panel de Pedidos</h1>
-            <p>Aquí se muestran los pedidos recibidos desde el formulario de preventa.</p>
-            <div id="loader" class="loading">Cargando pedidos...</div>
-            <ul id="order-list" class="order-list"></ul>
+            <div class="main-layout">
+                <div id="orders-container">
+                    <h1>Panel de Pedidos</h1>
+                    <p>Aquí se muestran los pedidos recibidos desde el formulario de preventa.</p>
+                    <div id="loader" class="loading">Cargando pedidos...</div>
+                    <ul id="order-list" class="order-list"></ul>
+                </div>
+                <aside id="filter-menu">
+                    <h3>Filtrar Pedidos</h3>
+                    <ul>
+                        <li><a href="#" class="filter-btn active" data-filter="todos">Todos</a></li>
+                        <li><a href="#" class="filter-btn" data-filter="pendiente">No Enviados</a></li>
+                        <li><a href="#" class="filter-btn" data-filter="enviado">Enviados</a></li>
+                    </ul>
+                </aside>
+            </div>
         </div>
         <div id="details-overlay" class="details-overlay">
             <div id="details-content" class="details-content">
@@ -83,7 +112,6 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN DE LA TABLA RESTAURADA -->
                 <div class="details-section">
                     <h3>Producto</h3>
                     <table class="albaran-table">
@@ -98,7 +126,7 @@
                         <tbody>
                             <tr>
                                 <!-- ▼▼▼ EDITA AQUÍ EL TÍTULO Y PRECIO DE TU LIBRO ▼▼▼ -->
-                                <td>Libro YO ANTES Y DESPUÉS DE TI </td>
+                                <td>Libro "YO ANTES Y DESPUÉS DE TI"</td>
                                 <td>1</td>
                                 <td>24 €</td>
                                 <td>24 €</td>
@@ -132,7 +160,7 @@
     </div>
     <script>
         // ▼▼▼ Pega aquí la URL de tu script de Google ▼▼▼
-        const SCRIPT_URL = "AKfycbwQdJAIlUgMhvDqGmyo_IUDfXFf6TtwlBrlfUyoc5dOoohHqw1R2oxQhuALfNHjGj-V";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwq2sZzesRJaILN0_FemOoVNA9s4CsWNjNaEyYtFs1_GS5sS8_9cCjiItC6YSqUt1et/exec";
 
         // --- SECCIÓN DE LOGIN ---
         const loginOverlay = document.getElementById('login-overlay');
@@ -145,40 +173,52 @@
         passwordInput.addEventListener('keypress', (e) => e.key === 'Enter' && attemptLogin());
         
         function attemptLogin() {
-            if (SCRIPT_URL === "URL_DE_TU_SCRIPT_AQUI" || !SCRIPT_URL) {
-                loginError.textContent = 'ERROR: Debes pegar la URL de tu Google Script en la variable SCRIPT_URL.';
-                loginError.style.display = 'block';
-                return;
-            }
-
             loginBtn.disabled = true; loginBtn.textContent = 'Verificando...'; loginError.style.display = 'none';
             const payload = { action: 'login', user: usernameInput.value, pass: passwordInput.value };
-            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json' }})
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
             .then(response => response.json()).then(data => {
                 if (data.success) { loginOverlay.style.display = 'none'; mainContent.style.display = 'block'; loadOrders(); } 
                 else { loginError.textContent = 'Usuario o contraseña incorrectos.'; loginError.style.display = 'block'; loginBtn.disabled = false; loginBtn.textContent = 'Entrar'; }
-            }).catch(error => { console.error('Error en el login:', error); loginError.textContent = 'Error de conexión. Revisa la URL del script y tu conexión.'; loginError.style.display = 'block'; loginBtn.disabled = false; loginBtn.textContent = 'Entrar'; });
+            }).catch(error => { console.error('Error en el login:', error); loginError.textContent = 'Error de conexión. Revisa la URL y la implementación del script.'; loginError.style.display = 'block'; loginBtn.disabled = false; loginBtn.textContent = 'Entrar'; });
         }
 
         // --- SECCIÓN DE LA APP DE PEDIDOS ---
         const loader = document.getElementById('loader');
         const orderList = document.getElementById('order-list');
         const detailsOverlay = document.getElementById('details-overlay');
+        let allOrders = []; // Variable global para guardar todos los pedidos
         let currentOrderElement = null;
 
         function loadOrders() {
-            if (SCRIPT_URL === "URL_DE_TU_SCRIPT_AQUI" || !SCRIPT_URL) {
-                loader.textContent = "ERROR: No se ha configurado la URL del script de Google en el código.";
-                return;
-            }
+            loader.style.display = 'block';
+            orderList.innerHTML = '';
             fetch(SCRIPT_URL).then(response => response.json()).then(data => {
                 loader.style.display = 'none';
-                renderOrders(data);
+                allOrders = data;
+                filterOrders(document.querySelector('.filter-btn.active').dataset.filter); // Aplica el filtro activo
             }).catch(error => { loader.textContent = "Error al cargar los pedidos."; console.error('Error fetching orders:', error); });
+        }
+
+        function filterOrders(filter) {
+            let filteredOrders;
+            if (filter === 'todos') {
+                filteredOrders = allOrders;
+            } else if (filter === 'enviado') {
+                filteredOrders = allOrders.filter(order => order.estado && order.estado.toLowerCase() === 'enviado');
+            } else { // 'pendiente'
+                filteredOrders = allOrders.filter(order => !order.estado || order.estado.toLowerCase() !== 'enviado');
+            }
+            renderOrders(filteredOrders);
         }
 
         function renderOrders(orders) {
             orderList.innerHTML = '';
+            if (orders.length === 0) {
+                orderList.innerHTML = '<p style="text-align: center; color: #777;">No hay pedidos en esta categoría.</p>';
+            }
             orders.forEach(order => {
                 if (!order.marca_temporal) return; 
                 const li = document.createElement('li');
@@ -186,7 +226,7 @@
                 if (order.estado && order.estado.toLowerCase() === 'enviado') li.classList.add('status-enviado');
                 li.innerHTML = `
                     <div class="order-details">
-                        <strong>${order.nombre_y_apellido || 'Sin nombre'}</strong> - ${order.metodo_de_envío || 'Sin método envío'}<br>
+                        <strong>${order.nombre_y_apellido || 'Sin nombre'}</strong> - ${order.metodo_de_envio || 'Sin método envío'}<br>
                         <small>Pedido el: ${new Date(order.marca_temporal).toLocaleString('es-ES')}</small>
                     </div>
                     <div class="order-actions"><button>Ver Detalles</button></div>`;
@@ -202,31 +242,36 @@
             document.getElementById('details-order-id').textContent = order.rowIndex;
             document.getElementById('details-date').textContent = new Date(order.marca_temporal).toLocaleDateString('es-ES');
             document.getElementById('details-name').textContent = order.nombre_y_apellido || 'No especificado';
-            document.getElementById('details-email').textContent = order.correo_electrónico_obligatorio_para_envios_correos_y_inpost || 'No especificado';
-            document.getElementById('details-phone').textContent = order.teléfono_obligatorio_para_envío_correos_y_inpost || order['teléfono_698982882'] || 'No especificado';
+            document.getElementById('details-email').textContent = order.correo_electronico_obligatorio_para_envios_correos_y_inpost || 'No especificado';
+            document.getElementById('details-phone').textContent = order.telefono_obligatorio_para_envio_correos_y_inpost || order.telefono_698982882 || 'No especificado';
             document.getElementById('details-signed').textContent = order.quieres_firmado || 'No especificado';
             document.getElementById('details-dedication').textContent = order.nombre_para_la_firma || 'No aplica';
             
             const shippingBlock = document.getElementById('shipping-info-block');
-            const shippingMethod = order.metodo_de_envío || '';
+            const shippingMethod = order.metodo_de_envio || '';
             let shippingHTML = `<p><strong>Método de Envío:</strong> ${shippingMethod}</p>`;
 
             if (shippingMethod.toLowerCase().includes('correos')) {
                 shippingHTML += `
-                    <p><strong>Dirección:</strong> ${order.para_envíos_por_correosdirección || 'No especificado'}</p>
-                    <p><strong>Código Postal:</strong> ${order.código_postal_obligatorio_para_envío_correos || 'No especificado'}</p>
-                    <p><strong>Población:</strong> ${order.población_obligatorio_para_envío_correos_y_inpost || 'No especificado'}</p>
+                    <p><strong>Dirección:</strong> ${order.para_envios_por_correos_direccion || 'No especificado'}</p>
+                    <p><strong>Código Postal:</strong> ${order.codigo_postal_obligatorio_para_envio_correos || 'No especificado'}</p>
+                    <p><strong>Población:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || 'No especificado'}</p>
                 `;
             } else if (shippingMethod.toLowerCase().includes('inpost')) {
                 shippingHTML += `
                     <p><strong>Punto Inpost:</strong> ${order.punto_inpost || 'No especificado'}</p>
-                    <p><strong>Población:</strong> ${order.población_obligatorio_para_envío_correos_y_inpost || 'No especificado'}</p>
+                    <p><strong>Población:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || 'No especificado'}</p>
                 `;
             } else if (shippingMethod.toLowerCase().includes('vinted')) {
                 shippingHTML += `<p><strong>Punto Vinted:</strong> ${order.punto_vinted || 'No especificado'}</p>`;
             } else {
                 shippingHTML += `<p>No se ha especificado una dirección válida para este método.</p>`;
             }
+
+            if (order.numero_de_envio) {
+                shippingHTML += `<div class="tracking-number">Nº Envío: ${order.numero_de_envio}</div>`;
+            }
+
             shippingBlock.innerHTML = shippingHTML;
 
             const paymentLink = document.getElementById('details-payment-proof');
@@ -239,7 +284,18 @@
                 paymentLink.parentElement.style.display = 'none';
             }
             
-            document.getElementById('mark-sent-btn').dataset.rowIndex = order.rowIndex;
+            const markSentBtn = document.getElementById('mark-sent-btn');
+            markSentBtn.dataset.rowIndex = order.rowIndex;
+            markSentBtn.dataset.currentState = order.estado || 'Pendiente';
+
+            if (order.estado && order.estado.toLowerCase() === 'enviado') {
+                markSentBtn.textContent = 'Desmarcar Envío';
+                markSentBtn.style.backgroundColor = '#f39c12'; // Naranja
+            } else {
+                markSentBtn.textContent = 'Marcar como Enviado';
+                markSentBtn.style.backgroundColor = '#2ecc71'; // Verde
+            }
+            
             detailsOverlay.style.display = 'flex';
         }
         
@@ -247,19 +303,60 @@
         document.getElementById('close-btn').addEventListener('click', () => detailsOverlay.style.display = 'none');
         
         document.getElementById('mark-sent-btn').addEventListener('click', (e) => {
-            const rowIndex = e.target.dataset.rowIndex;
             const button = e.target;
+            const rowIndex = button.dataset.rowIndex;
+            const currentState = button.dataset.currentState;
+            let payload;
+
+            if (currentState.toLowerCase() === 'enviado') {
+                if (confirm("¿Estás seguro de que quieres desmarcar este pedido como enviado? Se borrará el número de seguimiento.")) {
+                    payload = {
+                        action: 'updateStatus',
+                        rowIndex: rowIndex,
+                        status: 'Pendiente',
+                        tracking: ''
+                    };
+                } else {
+                    return;
+                }
+            } else {
+                const trackingNumber = prompt("Introduce el número de envío/seguimiento (deja en blanco si no tienes):", "");
+                if (trackingNumber === null) {
+                    return;
+                }
+                payload = { 
+                    action: 'updateStatus', 
+                    rowIndex: rowIndex, 
+                    status: 'Enviado',
+                    tracking: trackingNumber
+                };
+            }
+
             button.disabled = true; button.textContent = 'Actualizando...';
-            const payload = { action: 'updateStatus', rowIndex: rowIndex, status: 'Enviado' };
-            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json' }})
+            
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
             .then(response => response.json()).then(result => {
                 if (result.success) {
-                    alert('¡Pedido marcado como "Enviado"!');
+                    alert('¡Estado del pedido actualizado correctamente!');
                     detailsOverlay.style.display = 'none';
-                    if (currentOrderElement) currentOrderElement.classList.add('status-enviado');
-                } else alert('Error al actualizar: ' + result.message);
-                button.disabled = false; button.textContent = 'Marcar como Enviado';
-            }).catch(error => { console.error('Error updating status:', error); alert('Error de conexión.'); button.disabled = false; button.textContent = 'Marcar como Enviado'; });
+                    loadOrders(); 
+                } else {
+                    alert('Error al actualizar: ' + result.message);
+                }
+                button.disabled = false;
+            }).catch(error => { console.error('Error updating status:', error); alert('Error de conexión.'); button.disabled = false; });
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelector('.filter-btn.active').classList.remove('active');
+                e.target.classList.add('active');
+                filterOrders(e.target.dataset.filter);
+            });
         });
     </script>
 </body>
