@@ -130,7 +130,7 @@
     </div>
     <script>
         // ▼▼▼ Pega aquí la URL de tu script de Google ▼▼▼
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9dVcyiGQt7bDcrxJgOFqB99atd2mw7dulzI8pGD1ahqamwybmJIqMYYnzuVWJANI1/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQdJAIlUgMhvDqGmyo_IUDfXFf6TtwlBrlfUyoc5dOoohHqw1R2oxQhuALfNHjGj-V/exec";
 
         // --- SECCIÓN DE LOGIN ---
         const loginOverlay = document.getElementById('login-overlay');
@@ -190,11 +190,12 @@
         }
 
         function showOrderDetails(order) {
+            // Rellena los datos usando las claves limpias y normalizadas
             document.getElementById('details-order-id').textContent = order.rowIndex;
             document.getElementById('details-date').textContent = new Date(order.marca_temporal).toLocaleDateString('es-ES');
             document.getElementById('details-name').textContent = order.nombre_y_apellido || 'No especificado';
             document.getElementById('details-email').textContent = order.correo_electronico_obligatorio_para_envios_correos_y_inpost || 'No especificado';
-            document.getElementById('details-phone').textContent = order.telefono_obligatorio_para_envio_correos_y_inpost || order['telefono_698982882'] || 'No especificado';
+            document.getElementById('details-phone').textContent = order.telefono_obligatorio_para_envio_correos_y_inpost || order.telefono_698982882 || 'No especificado';
             document.getElementById('details-signed').textContent = order.quieres_firmado || 'No especificado';
             document.getElementById('details-dedication').textContent = order.nombre_para_la_firma || 'No aplica';
             
@@ -204,7 +205,7 @@
 
             if (shippingMethod.toLowerCase().includes('correos')) {
                 shippingHTML += `
-                    <p><strong>Dirección:</strong> ${order.para_envios_por_correosdireccion || 'No especificado'}</p>
+                    <p><strong>Dirección:</strong> ${order.para_envios_por_correos_direccion || 'No especificado'}</p>
                     <p><strong>Código Postal:</strong> ${order.codigo_postal_obligatorio_para_envio_correos || 'No especificado'}</p>
                     <p><strong>Población:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || 'No especificado'}</p>
                 `;
@@ -258,6 +259,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
