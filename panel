@@ -207,9 +207,9 @@
             if (filter === 'todos') {
                 filteredOrders = allOrders;
             } else if (filter === 'enviado') {
-                filteredOrders = allOrders.filter(order => order.estado && order.estado.toLowerCase() === 'enviado');
+                filteredOrders = allOrders.filter(order => order.estado && order.estado.trim().toLowerCase() === 'enviado');
             } else { // 'pendiente'
-                filteredOrders = allOrders.filter(order => !order.estado || order.estado.toLowerCase() !== 'enviado');
+                filteredOrders = allOrders.filter(order => !order.estado || order.estado.trim().toLowerCase() !== 'enviado');
             }
             renderOrders(filteredOrders);
         }
@@ -223,7 +223,7 @@
                 if (!order.marca_temporal) return; 
                 const li = document.createElement('li');
                 li.className = 'order-item';
-                if (order.estado && order.estado.toLowerCase() === 'enviado') li.classList.add('status-enviado');
+                if (order.estado && order.estado.trim().toLowerCase() === 'enviado') li.classList.add('status-enviado');
                 li.innerHTML = `
                     <div class="order-details">
                         <strong>${order.nombre_y_apellido || 'Sin nombre'}</strong> - ${order.metodo_de_envio || 'Sin método envío'}<br>
@@ -286,9 +286,10 @@
             
             const markSentBtn = document.getElementById('mark-sent-btn');
             markSentBtn.dataset.rowIndex = order.rowIndex;
-            markSentBtn.dataset.currentState = order.estado || 'Pendiente';
+            const currentState = (order.estado || 'Pendiente').trim().toLowerCase();
+            markSentBtn.dataset.currentState = currentState;
 
-            if (order.estado && order.estado.toLowerCase() === 'enviado') {
+            if (currentState === 'enviado') {
                 markSentBtn.textContent = 'Desmarcar Envío';
                 markSentBtn.style.backgroundColor = '#f39c12'; // Naranja
             } else {
@@ -308,7 +309,7 @@
             const currentState = button.dataset.currentState;
             let payload;
 
-            if (currentState.toLowerCase() === 'enviado') {
+            if (currentState === 'enviado') {
                 if (confirm("¿Estás seguro de que quieres desmarcar este pedido como enviado? Se borrará el número de seguimiento.")) {
                     payload = {
                         action: 'updateStatus',
@@ -361,5 +362,7 @@
     </script>
 </body>
 </html>
+
+
 
 
