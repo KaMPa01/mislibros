@@ -132,7 +132,7 @@
     </div>
     <script>
         // ▼▼▼ Pega aquí la URL de tu script de Google ▼▼▼
-        const SCRIPT_URL = "AKfycbwQdJAIlUgMhvDqGmyo_IUDfXFf6TtwlBrlfUyoc5dOoohHqw1R2oxQhuALfNHjGj-V";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQdJAIlUgMhvDqGmyo_IUDfXFf6TtwlBrlfUyoc5dOoohHqw1R2oxQhuALfNHjGj-V/exec";
 
         // --- SECCIÓN DE LOGIN ---
         const loginOverlay = document.getElementById('login-overlay');
@@ -145,7 +145,7 @@
         passwordInput.addEventListener('keypress', (e) => e.key === 'Enter' && attemptLogin());
         
         function attemptLogin() {
-            if (SCRIPT_URL === "URL_DE_TU_SCRIPT_AQUI" || !SCRIPT_URL) {
+            if (SCRIPT_URL === "https://script.google.com/macros/s/AKfycbwQdJAIlUgMhvDqGmyo_IUDfXFf6TtwlBrlfUyoc5dOoohHqw1R2oxQhuALfNHjGj-V/exec" || !SCRIPT_URL) {
                 loginError.textContent = 'ERROR: Debes pegar la URL de tu Google Script en la variable SCRIPT_URL.';
                 loginError.style.display = 'block';
                 return;
