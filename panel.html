@@ -77,36 +77,23 @@
 
         @media (max-width: 900px) { .main-layout { flex-direction: column-reverse; } }
         
-        /* --- REGLAS DE IMPRESIÓN DEFINITIVAS --- */
-        .print-mode {
-            background-color: #fff !important;
-        }
-        .print-mode > *:not(#details-overlay) {
-            display: none !important;
-        }
-        .print-mode #details-overlay {
-            position: static !important;
-            display: block !important;
-            overflow: visible !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            background: none !important;
-        }
-        .print-mode #details-content {
-            box-shadow: none !important;
-            border: none !important;
-            margin: 0 !important;
-            padding: 0 !important; 
-            border-radius: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            box-sizing: border-box !important;
-        }
-
+        /* --- REGLAS DE IMPRESIÓN DEFINITIVAS Y SIMPLIFICADAS --- */
         @media print {
             @page {
                 size: A4;
-                margin: 1cm; /* Márgenes de la página */
+                margin: 1.5cm;
+            }
+            body > *:not(#details-overlay) {
+                display: none !important;
+            }
+            #details-overlay {
+                display: block !important;
+                position: static !important;
+            }
+            #details-content {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
             }
             .details-section {
                 page-break-inside: avoid !important;
@@ -144,7 +131,7 @@
             <div id="details-content" class="details-content">
                 <div class="details-header">
                     <div class="logo">
-                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGIcHBxQfHh0iJCUnJjYrHicqKiooJDs2OTY3ODk6MP/wAARCAA7AKADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAECA//EABwQAQEBAAIDAQEAAAAAAAAAAAABEQISAyExQf/EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAHBEBAQEAAwEBAQEAAAAAAAAAAAERAgMhMRIT/9oADAMBAAIRAxEAPwD2UA0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL-OT/9oADAMBAAIAAwAAABDzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzjetc/etc" alt="Logo Ana Carolina" class="albaran-logo">
+                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGIcHBxQfHh0iJCUnJjYrHicqKiooJDs2OTY3ODk6MP/wAARCAA7AKADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAECA//EABwQAQEBAAIDAQEAAAAAAAAAAAABEQISAyExQf/EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAHBEBAQEAAwEBAQEAAAAAAAAAAAERAgMhMRIT/9oADAMBAAIRAxEAPwD2UA0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL-OT/9oADAMBAAIAAwAAABDzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzjetc/etc" alt="Logo Ana Carolina" class="albaran-logo">
                     </div>
                     <div class="sender-info"><strong>Pedido #: <span id="details-order-id"></span></strong><br>Fecha: <span id="details-date"></span></div>
                 </div>
@@ -444,9 +431,15 @@
         }
         
         document.getElementById('print-btn').addEventListener('click', () => {
+             // Aplicar una clase al body justo antes de imprimir
             document.body.classList.add('print-mode');
-            window.print();
-            document.body.classList.remove('print-mode');
+
+            // Pequeña pausa para que el navegador aplique los estilos antes de imprimir
+            setTimeout(() => {
+                window.print();
+                // Quitar la clase después de que se cierre el diálogo de impresión
+                document.body.classList.remove('print-mode');
+            }, 100);
         });
         document.getElementById('close-btn').addEventListener('click', () => detailsOverlay.style.display = 'none');
         
@@ -502,6 +495,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
