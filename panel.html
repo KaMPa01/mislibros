@@ -79,29 +79,22 @@
         
         /* --- REGLAS DE IMPRESIÓN DEFINITIVAS --- */
         @media print {
-            body * {
-                visibility: hidden;
+            body > *:not(#details-overlay) {
+                display: none;
             }
-            #details-overlay, #details-overlay * {
-                visibility: visible;
-            }
-            #details-overlay {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: visible;
-                background: white;
-                padding: 0;
-                margin: 0;
-            }
-            #details-content {
-                box-shadow: none;
-                border: none;
-                padding: 1.5cm;
-                box-sizing: border-box;
-                width: 100%;
+            #details-overlay, #details-content {
+                display: block !important;
+                position: static !important;
+                background: white !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+                overflow: visible !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
             }
             .details-section {
                 page-break-inside: avoid;
@@ -139,7 +132,7 @@
             <div id="details-content" class="details-content">
                 <div class="details-header">
                     <div class="logo">
-                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGIcHBxQfHh0iJCUnJjYrHicqKiooJDs2OTY3ODk6MP/wAARCAA7AKADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAECA//EABwQAQEBAAIDAQEAAAAAAAAAAAABEQISAyExQf/EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAHBEBAQEAAwEBAQEAAAAAAAAAAAERAgMhMRIT/9oADAMBAAIRAxEAPwD2UA0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL-OT/9oADAMBAAIAAwAAABDzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzjetc/etc" alt="Logo Ana Carolina" class="albaran-logo">
+                        <img src="https://www.escritoraanacarolina.com/imagenes/ana-carolina.jpg" alt="Logo Ana Carolina" class="albaran-logo">
                     </div>
                     <div class="sender-info"><strong>Pedido #: <span id="details-order-id"></span></strong><br>Fecha: <span id="details-date"></span></div>
                 </div>
@@ -362,9 +355,8 @@
                 });
             });
         }
-
-        function showOrderDetails(order) {
-            currentOpenOrder = order;
+        
+        function populateModal(order) {
             document.getElementById('details-order-id').textContent = order.rowIndex;
             document.getElementById('details-date').textContent = new Date(order.marca_temporal).toLocaleDateString('es-ES');
             document.getElementById('details-name').textContent = order.nombre_y_apellido || 'No especificado';
@@ -434,10 +426,14 @@
                 emailBtn.disabled = true;
                 emailBtn.onclick = null;
             }
-
-            detailsOverlay.style.display = 'flex';
         }
         
+        function showOrderDetails(order) {
+            currentOpenOrder = order;
+            populateModal(order); // Popula el modal visible
+            detailsOverlay.style.display = 'flex';
+        }
+
         document.getElementById('print-btn').addEventListener('click', () => {
             window.print();
         });
@@ -495,6 +491,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
