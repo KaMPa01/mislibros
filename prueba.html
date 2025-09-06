@@ -3,43 +3,503 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página de Ana Carolina - Autora de romances</title>
-  <meta name="description" content="Explora el mundo literario de Ana Carolina, autora de romance. Descubre sus libros, historias y más.">
-  <meta name="keywords" content="libros, literatura, Ana Carolina, autor, escritora, romance, comprar libros">
+  <title>Ana Carolina - Autora de Romances Eróticos</title>
+  <meta name="description" content="Explora el mundo literario de Ana Carolina, autora de romances eróticos. Descubre sus libros, historias y más. ¡Sígueme en Instagram para estar al día!">
+  <meta name="keywords" content="libros, literatura, Ana Carolina, Seducción, autor, escritora, Instagram, comprar libros">
   <meta name="author" content="Ana Carolina">
-
-  <meta property="og:title" content="Página de Ana Carolina - Autora de romances">
-  <meta property="og:description" content="Descubre los libros de la autora de romance Ana Carolina.">
-  <meta property="og:image" content="https://escritoraanacarolina.com/imagenes/header-floral.jpg"> <meta property="og:url" content="https://escritoraanacarolina.com/">
+  <!-- Open Graph y Twitter Card -->
+  <meta property="og:title" content="Página de Ana Carolina - Autora de romances eroticos">
+  <meta property="og:description" content="Explora el mundo literario de Ana Carolina, autora de Seducción. Descubre sus libros, historias y más.">
+  <meta property="og:image" content="https://escritoraanacarolina.com/imagenes/portada2.jpg">
+  <meta property="og:url" content="https://escritoraanacarolina.com/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Página de Ana Carolina - Autora de romances">
-  <meta name="twitter:description" content="Descubre los libros de la autora de romance Ana Carolina.">
-  <meta name="twitter:image" content="https://escritoraanacarolina.com/imagenes/header-floral.jpg"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta name="twitter:title" content="Página de Ana Carolina - Autora de romances eroticos">
+  <meta name="twitter:description" content="Explora el mundo literario de Ana Carolina, autora de Seducción. Descubre sus libros, historias y más.">
+  <meta name="twitter:image" content="https://escritoraanacarolina.com/mislibros/imagenes/portada1.jpg">
+  <!-- Enlace a FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Estilos CSS integrados basados en la estética de la portada */
+    :root {
+      --rosa-fondo: #F9EFF2;
+      --rosa-acento: #E8B5C7;
+      --dorado: #D4AF37;
+      --texto-oscuro: #5E3A2A;
+      --blanco: #FFFFFF;
+      --sombra-suave: 0 5px 15px rgba(92, 58, 42, 0.1);
+      --transicion: all 0.3s ease;
+      --fuente-titulos: 'Playfair Display', serif;
+      --fuente-texto: 'Cormorant Garamond', serif;
+    }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  <link rel="stylesheet" href="estilos2.css">
+    body {
+      font-family: var(--fuente-texto);
+      color: var(--texto-oscuro);
+      background-color: var(--rosa-fondo);
+      line-height: 1.7;
+      font-weight: 400;
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50c-5.523 0-10-4.477-10-10s4.477-10 10-10 10 4.477 10 10-4.477 10-10 10zm0 10c-11.046 0-20-8.954-20-20s8.954-20 20-20 20 8.954 20 20-8.954 20-20 20z' fill='%23e8b5c7' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
 
-  <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
+    /* Encabezado con patrón floral */
+    header {
+      text-align: center;
+      padding: 80px 20px;
+      background-image: url('https://escritoraanacarolina.com/imagenes/header-floral.jpg');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      color: var(--blanco);
+    }
+
+    /* Capa sutil para que el texto resalte */
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+
+    header h1 {
+      font-family: var(--fuente-titulos);
+      font-size: 3.5rem;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(92, 58, 42, 0.3);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Separador floral */
+    .separator {
+      width: 250px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+    }
+
+    /* Secciones */
+    section {
+      padding: 3rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section h2 {
+      font-family: var(--fuente-titulos);
+      color: var(--texto-oscuro);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      font-size: 2.2rem;
+      position: relative;
+      padding-bottom: 0.8rem;
+      font-weight: 700;
+    }
+
+    section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: var(--dorado);
+    }
+
+    /* Contenedor de libros */
+    .book-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .book {
+      background: var(--blanco);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--sombra-suave);
+      transition: var(--transicion);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .book::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--dorado);
+    }
+
+    .book:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(92, 58, 42, 0.15);
+    }
+
+    .book h3 {
+      background: var(--rosa-acento);
+      color: var(--blanco);
+      padding: 1.2rem;
+      margin: 0;
+      font-size: 1.3rem;
+      text-align: center;
+      font-family: var(--fuente-titulos);
+      font-weight: 700;
+    }
+
+    .book-cover {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      transition: var(--transicion);
+      padding: 1rem;
+    }
+
+    .book:hover .book-cover {
+      transform: scale(1.03);
+    }
+
+    .book-description {
+      padding: 1.5rem;
+      flex-grow: 1;
+      font-style: italic;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .buy-button {
+      display: block;
+      background: var(--dorado);
+      color: var(--texto-oscuro);
+      text-align: center;
+      padding: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transicion);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 0 1.5rem 1.5rem;
+      border-radius: 6px;
+      font-family: var(--fuente-titulos);
+      letter-spacing: 0.5px;
+    }
+
+    .buy-button:hover {
+      background: var(--texto-oscuro);
+      color: var(--blanco);
+      transform: translateY(-3px);
+    }
+
+    /* Botones de Instagram */
+    .instagram-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      background: linear-gradient(45deg, #E8B5C7 0%, #d893af 100%);
+      color: var(--blanco);
+      padding: 1rem 1.8rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transicion);
+      border: none;
+      cursor: pointer;
+      margin: 0.5rem;
+      font-family: var(--fuente-texto);
+      font-size: 1.1rem;
+    }
+
+    .instagram-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(232, 181, 199, 0.4);
+    }
+
+    /* Sección Bookstagrammer */
+    #Bookstagrammer {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 3rem 1rem;
+      border-top: 1px solid var(--rosa-acento);
+      border-bottom: 1px solid var(--rosa-acento);
+      margin: 2rem auto;
+      max-width: 1200px;
+      border-radius: 12px;
+    }
+
+    .Bookstagrammer-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .booksgramer {
+      background: var(--blanco);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--sombra-suave);
+      transition: var(--transicion);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 160px;
+    }
+
+    .booksgramer:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(92, 58, 42, 0.15);
+    }
+
+    .booksgramer img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border: 3px solid var(--dorado);
+    }
+
+    #toggleBookstagrammers {
+      margin: 0 auto;
+      display: block;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      background: var(--rosa-acento);
+      color: var(--blanco);
+      border: 2px solid var(--blanco);
+      box-shadow: 0 4px 10px rgba(92, 58, 42, 0.2);
+    }
+
+    #toggleBookstagrammers:hover {
+      background: var(--dorado);
+      transform: scale(1.05);
+    }
+
+    /* Botón de biografía */
+    .bio-button {
+      position: fixed;
+      bottom: 25px;
+      left: 25px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: none;
+      background: var(--blanco);
+      box-shadow: var(--sombra-suave);
+      cursor: pointer;
+      z-index: 100;
+      transition: var(--transicion);
+      overflow: hidden;
+      border: 2px solid var(--dorado);
+    }
+
+    .bio-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(92, 58, 42, 0.25);
+    }
+
+    .bio-button img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Contenido de biografía */
+    .bio-content {
+      position: fixed;
+      bottom: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 600px;
+      background: var(--blanco);
+      z-index: 99;
+      padding: 2.5rem;
+      box-shadow: 0 -5px 25px rgba(92, 58, 42, 0.15);
+      transition: bottom 0.5s ease;
+      max-height: 80vh;
+      overflow-y: auto;
+      border-radius: 15px 15px 0 0;
+    }
+
+    .bio-content.show {
+      bottom: 0;
+    }
+
+    .bio-photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 1.5rem;
+      border: 4px solid var(--dorado);
+      box-shadow: 0 5px 15px rgba(92, 58, 42, 0.2);
+    }
+
+    .bio-content h2 {
+      color: var(--texto-oscuro);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-family: var(--fuente-titulos);
+    }
+
+    .bio-content p {
+      max-width: 800px;
+      margin: 0 auto 1.5rem;
+      text-align: center;
+      line-height: 1.8;
+      font-size: 1.1rem;
+    }
+
+    .close-button {
+      display: block;
+      margin: 0 auto;
+      background: var(--rosa-acento);
+      color: var(--blanco);
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transicion);
+      font-family: var(--fuente-texto);
+      font-weight: 600;
+    }
+
+    .close-button:hover {
+      background: var(--texto-oscuro);
+      transform: translateY(-2px);
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Media queries para responsividad */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.5rem;
+      }
+      
+      section {
+        padding: 2rem 1rem;
+      }
+      
+      .book-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .Bookstagrammer-container {
+        gap: 1.5rem;
+      }
+      
+      .booksgramer {
+        width: 140px;
+        padding: 1.2rem;
+      }
+      
+      .booksgramer img {
+        width: 90px;
+        height: 90px;
+      }
+      
+      .bio-content {
+        padding: 2rem 1.5rem;
+        width: 95%;
+      }
+      
+      .bio-button {
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        left: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      section h2 {
+        font-size: 1.8rem;
+      }
+      
+      .book h3 {
+        font-size: 1.2rem;
+      }
+      
+      .book-cover {
+        height: 320px;
+      }
+      
+      .instagram-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+      
+      .bio-button {
+        width: 55px;
+        height: 55px;
+        bottom: 15px;
+        left: 15px;
+      }
+      
+      .bio-photo {
+        width: 150px;
+        height: 150px;
+      }
+      
+      .separator {
+        width: 200px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
+    <div class="header-pattern"></div>
     <h1>Bienvenidos a mi mundo literario</h1>
   </header>
-
-  <img src="imagenes/separador-floral.png" alt="Separador floral decorativo" class="separator">
-
+  
+  <img src="https://escritoraanacarolina.com/imagenes/separador_floral.png" alt="Separador floral decorativo" class="separator">
+  
   <section>
     <h2>Mis Libros</h2>
     <div class="book-container">
-     <div class="book">
+      <div class="book">
         <h3>YO ANTES Y DESPUÉS DE TI</h3>
         <img src="imagenes/portada3.jpg" alt="Portada del libro 'YO ANTES Y DESPUES DE TI'" class="book-cover">
         <p class="book-description">
-          Valkiria está rota.Ya no es la misma de antes, aunque a ojos de los demás se pone una máscara para esconder sus cicatrices detrás de tatuajes y tulipanes...
+          Valkiria está rota.Ya no es la misma de antes, aunque a ojos de los demás se pone una máscara para esconder sus cicatrices detrás de tatuajes y tulipanes. Pero Gabriel, el escort de lujo del que se ha enganchado hasta llevarla casi a la ruina, sí las ve, y a base de sexo e intensas charlas intentará arreglarla...
+          Ninguno de los dos estaban preparados para la vuelta de Felipe a España después de ocho años en Estados Unidos y todo lo que va a remover su llegada.
+          Un corazón roto. 
+          Un ángel sin alas. 
+          Un error del pasado que lo cambia todo.
         </p>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLScsFqoulsObZqjD0plvEA-wc_W26ZgPQnn_3Py0MqUXMHXwVA/viewform?usp=dialog" target="_blank" class="buy-button">PREVENTA</a>
       </div>
@@ -47,7 +507,7 @@
         <h3>¿Y si no, nos hubiéramos conocido por casualidad?</h3>
         <img src="imagenes/portada1.jpg" alt="Portada del libro '¿Y si no, nos hubiéramos conocido por casualidad?'" class="book-cover">
         <p class="book-description">
-          Vicky deja atrás su hogar para mudarse a Madrid con su mejor amiga, con el sueño de estudiar fotografía. Sin embargo, sus planes no salen como siempre había imaginado...
+          Vicky deja atrás su hogar para mudarse a Madrid con su mejor amiga, con el sueño de estudiar fotografía. Sin embargo, sus planes de convertirse en una fotógrafa de éxito no salen como siempre había imaginado...
         </p>
         <a href="https://www.amazon.es/nos-hubiéramos-conocido-por-casualidad/dp/B0DK9RJF91" target="_blank" class="buy-button">Compra ahora</a>
       </div>
@@ -66,49 +526,84 @@
       </a>
     </div>
   </section>
-
+  
+  <!-- Sección Bookstagrammer -->
   <section id="Bookstagrammer">
     <h2>Bookstagrammer</h2>
+    <!-- Botón para mostrar/ocultar la lista -->
     <button id="toggleBookstagrammers" class="instagram-button">
       <i class="fab fa-instagram"></i>
     </button>
+    <!-- Lista de colaboradores, inicialmente oculta -->
     <div id="bookstagrammerList" class="Bookstagrammer-container" style="display: none;">
+      <!-- Colaborador 1 -->
       <div class="booksgramer">
-        <img src="imagenes/enerojs.jpg" alt="Foto de perfil de enero.gs">
-        <a href="https://www.instagram.com/enero.gs/" target="_blank" class="instagram-button"><i class="fab fa-instagram"></i></a>
+        <img src="imagenes/enerojs.jpg" alt="Foto de perfil de Booksgramer 1">
+        <a href="https://www.instagram.com/enero.gs/" target="_blank" class="instagram-button">
+          <i class="fab fa-instagram"></i>
+        </a>
       </div>
+      <!-- Colaborador 2 -->
       <div class="booksgramer">
-        <img src="imagenes/panditalectora.jpg" alt="Foto de perfil de pandita.lectora">
-        <a href="https://www.instagram.com/pandita.lectora" target="_blank" class="instagram-button"><i class="fab fa-instagram"></i></a>
+        <img src="imagenes/panditalectora.jpg" alt="Foto de perfil de Booksgramer 2">
+        <a href="https://www.instagram.com/pandita.lectora" target="_blank" class="instagram-button">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      <!-- Colaborador 3 -->
+      <div class="booksgramer">
+        <img src="imagenes/pame.jpg" alt="Foto de perfil de Booksgramer 3">
+        <a href="https://www.instagram.com/fpamelagarcia" target="_blank" class="instagram-button">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      <!-- Colaborador 4 -->
+      <div class="booksgramer">
+        <img src="imagenes/isacat7.jpg" alt="Foto de perfil de Booksgramer 4">
+        <a href="https://www.instagram.com/isacat7" target="_blank" class="instagram-button">
+          <i class="fab fa-instagram"></i>
+        </a>
       </div>
     </div>
   </section>
-
+  
+  <!-- Botón circular con la foto de la autora en la esquina inferior izquierda -->
   <button id="bioButton" class="bio-button">
     <img src="imagenes/biografia.jpg" alt="Foto de la autora">
   </button>
-
+  
+  <!-- Sección de biografía (desplegable con animación) -->
   <div id="bioContent" class="bio-content">
     <img src="imagenes/ana-carolina.jpg" alt="Foto de la autora" class="bio-photo">
     <h2>Biografía</h2>
     <p>
-      Ana Carolina, creo que ahora soy del mundo... De cualquier lugar. Llegué a España hace unos cuantos años, mi obligación de aprender castellano se convirtió en leer muchos libros, demasiados...
+      Ana Carolina, creo que ahora soy del mundo... De cualquier lugar. 
+      Llegué a España hace unos cuantos años, mi obligación de aprender castellano por estudios se convirtió en leer muchos libros, demasiados. Y es una de mis pasiones, después de BTS claramente... seguido de una mala leche tremenda, y ser creo que... un poco malhablada. Algunas veces ni siquiera se en que idioma hablo. Mientras se me entienda... 
     </p>
     <button id="closeBio" class="close-button">Cerrar</button>
   </div>
-
+  
   <script>
+    // Mostrar/ocultar lista de Bookstagrammers
     document.getElementById('toggleBookstagrammers').addEventListener('click', function() {
       var list = document.getElementById('bookstagrammerList');
-      list.style.display = (list.style.display === 'none' || list.style.display === '') ? 'flex' : 'none';
+      if (list.style.display === 'none' || list.style.display === '') {
+        list.style.display = 'flex';
+      } else {
+        list.style.display = 'none';
+      }
     });
+    
+    // Alternar visibilidad de la biografía con animación
     document.getElementById('bioButton').addEventListener('click', function() {
-      document.getElementById('bioContent').classList.toggle('show');
+      var bioContent = document.getElementById('bioContent');
+      bioContent.classList.toggle('show');
     });
+    
+    // Botón para cerrar la biografía
     document.getElementById('closeBio').addEventListener('click', function() {
       document.getElementById('bioContent').classList.remove('show');
     });
   </script>
 </body>
-
 </html>
