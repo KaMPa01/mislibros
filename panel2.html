@@ -1,123 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página de Ana Carolina - Autora de romances eroticos</title>
-  <meta name="description" content="Explora el mundo literario de Ana Carolina, autora de romances eroticos. Descubre sus libros, historias y más. ¡Sígueme en Instagram para estar al día!">
-  <meta name="keywords" content="libros, literatura, Ana Carolina, Seducción, autor, escritora, Instagram, comprar libros">
-  <meta name="author" content="Ana Carolina">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="estilos.css">
-  <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Gestión de Pedidos</title>
+<style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; margin: 0; padding: 0; }
+    .details-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px; box-sizing: border-box; }
+    .details-content { background: white; padding: 40px; width: 100%; max-width: 800px; border-radius: 8px; }
+    .details-header { display: flex; justify-content: space-between; border-bottom: 2px solid #ccc; padding-bottom: 20px; }
+    .albaran-logo { max-width: 150px; max-height: 70px; object-fit: cover; }
+    .details-section { margin-top: 25px; }
+    .details-section .info-block { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 10px; }
+    .info-block p { margin: 5px 0; }
+    .albaran-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .albaran-table th, .albaran-table td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    .albaran-table th { background-color: #f2f2f2; }
+    .details-controls { text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+    .details-controls button { background-color: #2ecc71; color: white; padding: 12px 20px; font-size: 1em; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+    .details-controls .close-btn { background-color: #e74c3c; }
 
-  <style>
-    /* CSS específico para impresión del albarán */
     @media print {
-      body * {
-        visibility: hidden; /* Oculta todo */
-      }
-
-      #albaran, #albaran * {
-        visibility: visible; /* Muestra solo el albarán */
-      }
-
-      #albaran {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-      }
+        body > *:not(.details-overlay) { display: none !important; }
+        .details-overlay, .details-content { display: block !important; position: static !important; background: white !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; border-radius: 0 !important; overflow: visible !important; width: 100% !important; max-width: 100% !important; }
+        .details-section { page-break-inside: avoid; }
+        .details-controls { display: none !important; }
     }
-
-    /* Estilos básicos para el albarán */
-    #albaran {
-      border: 2px solid #333;
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 600px;
-      background-color: #fff;
-    }
-
-    #albaran h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    #albaran p {
-      font-size: 16px;
-      margin: 5px 0;
-    }
-  </style>
+</style>
 </head>
 <body>
-  <header>
-    <div class="header-pattern"></div>
-    <h1>Bienvenidos a mi mundo literario</h1>
-  </header>
-  <img src="imagenes/separador.png" alt="Separador decorativo" class="separator">
 
-  <!-- CONTENIDO DE LIBROS -->
-  <section>
-    <h2>Mis Libros</h2>
-    <div class="book-container">
-      <!-- Aquí van tus libros (sin cambios) -->
+<div class="details-overlay" style="display: flex;">
+    <div class="details-content">
+        <div class="details-header">
+            <div class="logo">
+                <img src="https://www.escritoraanacarolina.com/imagenes/ana-carolina.jpg" alt="Logo Ana Carolina" class="albaran-logo">
+            </div>
+            <div class="sender-info">
+                <strong>Pedido #: <span id="details-order-id">12345</span></strong><br>
+                Fecha: <span id="details-date">06/09/2025</span>
+            </div>
+        </div>
+
+        <div class="details-section">
+            <h3>Datos del Cliente</h3>
+            <div class="info-block">
+                <p><strong>Nombre:</strong> <span id="details-name">Ana Cliente</span></p>
+                <p><strong>Email:</strong> <span id="details-email">cliente@email.com</span></p>
+                <p><strong>Teléfono:</strong> <span id="details-phone">123456789</span></p>
+            </div>
+        </div>
+
+        <div class="details-section">
+            <h3>Detalles del Libro y Firma</h3>
+            <div class="info-block">
+                <p><strong>¿Quiere el libro firmado?:</strong> <span id="details-signed">Sí</span></p>
+                <p><strong>Nombre para la dedicatoria:</strong> <span id="details-dedication">Cliente Especial</span></p>
+            </div>
+        </div>
+
+        <div class="details-section">
+            <h3>Producto</h3>
+            <table class="albaran-table">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Libro "YO ANTES Y DESPUÉS DE TI"</td>
+                        <td>1</td>
+                        <td>24 €</td>
+                        <td>24 €</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="details-section">
+            <h3>Información de Envío</h3>
+            <div class="info-block">
+                <p><strong>Método de Envío:</strong> Correos</p>
+                <p><strong>Dirección:</strong> Calle Falsa 123</p>
+                <p><strong>Código Postal:</strong> 28000</p>
+                <p><strong>Población:</strong> Madrid</p>
+                <p><strong>Provincia:</strong> Madrid</p>
+                <div class="tracking-number">Nº Envío: ABC123456789</div>
+            </div>
+        </div>
+
+        <div class="details-controls">
+            <button id="print-btn" onclick="window.print();">Imprimir / Guardar PDF</button>
+        </div>
     </div>
-  </section>
+</div>
 
-  <!-- ALBARÁN -->
-  <div id="albaran">
-    <h2>Albarán de Pedido</h2>
-    <p><strong>Cliente:</strong> Juan Pérez</p>
-    <p><strong>Fecha:</strong> 06/09/2025</p>
-    <p><strong>Producto:</strong> YO ANTES Y DESPUÉS DE TI</p>
-    <p><strong>Cantidad:</strong> 1</p>
-    <p><strong>Importe:</strong> 12,50 €</p>
-  </div>
-
-  <!-- RESTO DE LA PÁGINA (Bookstagrammers, biografía, Instagram, etc.) -->
-  <section id="Bookstagrammer">
-    <!-- contenido -->
-  </section>
-
-  <button id="bioButton" class="bio-button">
-    <img src="imagenes/biografia.jpg" alt="Foto de la autora">
-  </button>
-  
-  <div id="bioContent" class="bio-content">
-    <img src="imagenes/ana-carolina.jpg" alt="Foto de la autora" class="bio-photo">
-    <h2>Biografía</h2>
-    <p>
-      Ana Carolina, creo que ahora soy del mundo... De cualquier lugar. 
-      Llegué a España hace unos cuantos años, mi obligación de aprender castellano por estudios se convirtió en leer muchos libros, demasiados...
-    </p>
-    <button id="closeBio" class="close-button">Cerrar</button>
-  </div>
-
-  <script>
-    // Mostrar/ocultar lista de Bookstagrammers
-    document.getElementById('toggleBookstagrammers')?.addEventListener('click', function() {
-      var list = document.getElementById('bookstagrammerList');
-      if (list.style.display === 'none' || list.style.display === '') {
-        list.style.display = 'flex';
-      } else {
-        list.style.display = 'none';
-      }
-    });
-    
-    // Alternar visibilidad de la biografía con animación
-    document.getElementById('bioButton')?.addEventListener('click', function() {
-      var bioContent = document.getElementById('bioContent');
-      bioContent.classList.toggle('show');
-    });
-    
-    // Botón para cerrar la biografía
-    document.getElementById('closeBio')?.addEventListener('click', function() {
-      document.getElementById('bioContent').classList.remove('show');
-    });
-  </script>
 </body>
 </html>
+
 
 
 
