@@ -19,20 +19,20 @@
   <meta name="twitter:image" content="https://escritoraanacarolina.com/mislibros/imagenes/portada1.jpg">
   <!-- Enlace a FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Google Fonts - Playfair Display (similar a la portada) -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Estilos -->
   <style>
-    /* Estilos CSS integrados basados en la estética de la portada */
     :root {
-      --rosa-fondo: #F9EFF2;
-      --rosa-acento: #E8B5C7;
-      --dorado: #D4AF37;
-      --texto-oscuro: #5E3A2A;
+      --rosa-claro: #FADADD;
+      --rosa-acento: #FFC8DD;
+      --azul-cielo: #BDE0FE;
+      --texto-oscuro: #5E6472;
       --blanco: #FFFFFF;
-      --sombra-suave: 0 5px 15px rgba(92, 58, 42, 0.1);
-      --transicion: all 0.3s ease;
+      --dorado: #D4AF37;
+      --fuente-portada: 'Playfair Display', serif;
       --fuente-titulos: 'Playfair Display', serif;
-      --fuente-texto: 'Cormorant Garamond', serif;
+      --fuente-cuerpo: 'Montserrat', sans-serif;
     }
 
     * {
@@ -42,18 +42,19 @@
     }
 
     body {
-      font-family: var(--fuente-texto);
+      font-family: var(--fuente-cuerpo);
+      background-color: var(--blanco);
       color: var(--texto-oscuro);
-      background-color: var(--rosa-fondo);
-      line-height: 1.7;
-      font-weight: 400;
-      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50c-5.523 0-10-4.477-10-10s4.477-10 10-10 10 4.477 10 10-4.477 10-10 10zm0 10c-11.046 0-20-8.954-20-20s8.954-20 20-20 20 8.954 20 20-8.954 20-20 20z' fill='%23e8b5c7' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      line-height: 1.6;
     }
 
-    /* Encabezado con patrón floral */
+    /* Header floral con tipografía de portada */
     header {
       text-align: center;
-      padding: 80px 20px;
+      padding: 100px 20px;
       background-image: url('https://escritoraanacarolina.com/imagenes/header-floral.jpg');
       background-size: cover;
       background-position: center;
@@ -61,32 +62,31 @@
       color: var(--blanco);
     }
 
-    /* Capa sutil para que el texto resalte */
     header::before {
       content: '';
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.15);
+      background: linear-gradient(rgba(94, 58, 42, 0.3), rgba(94, 58, 42, 0.5));
     }
 
     header h1 {
-      font-family: var(--fuente-titulos);
-      font-size: 3.5rem;
+      font-family: var(--fuente-portada);
+      font-size: 4.5rem;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
       margin: 0;
       position: relative;
-      z-index: 1;
-      text-shadow: 2px 2px 4px rgba(92, 58, 42, 0.3);
-      font-weight: 700;
+      z-index: 2;
       letter-spacing: 1px;
     }
 
-    /* Separador floral */
+    /* Separador */
     .separator {
       width: 250px;
       height: auto;
       display: block;
-      margin: 20px auto;
+      margin: 30px auto;
     }
 
     /* Secciones */
@@ -97,20 +97,19 @@
     }
 
     section h2 {
-      font-family: var(--fuente-titulos);
+      font-family: var(--fuente-portada);
+      font-size: 2.8rem;
       color: var(--texto-oscuro);
       text-align: center;
-      margin-bottom: 2.5rem;
-      font-size: 2.2rem;
-      position: relative;
-      padding-bottom: 0.8rem;
+      margin: 40px 0;
       font-weight: 700;
+      position: relative;
     }
 
     section h2::after {
       content: '';
       position: absolute;
-      bottom: 0;
+      bottom: -15px;
       left: 50%;
       transform: translateX(-50%);
       width: 100px;
@@ -120,21 +119,23 @@
 
     /* Contenedor de libros */
     .book-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2.5rem;
-      margin-bottom: 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      padding: 20px;
     }
 
     .book {
-      background: var(--blanco);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: var(--sombra-suave);
-      transition: var(--transicion);
-      display: flex;
-      flex-direction: column;
+      text-align: center;
+      max-width: 320px;
+      background-color: var(--blanco);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(189, 198, 214, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
+      overflow: hidden;
     }
 
     .book::before {
@@ -143,105 +144,82 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 4px;
+      height: 5px;
       background: var(--dorado);
     }
 
     .book:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 25px rgba(92, 58, 42, 0.15);
+      transform: translateY(-10px);
+      box-shadow: 0 12px 25px rgba(189, 198, 214, 0.6);
     }
 
     .book h3 {
-      background: var(--rosa-acento);
-      color: var(--blanco);
-      padding: 1.2rem;
-      margin: 0;
-      font-size: 1.3rem;
-      text-align: center;
-      font-family: var(--fuente-titulos);
+      font-family: var(--fuente-portada);
+      font-size: 1.8rem;
+      color: var(--texto-oscuro);
+      margin: 15px 0;
       font-weight: 700;
     }
 
     .book-cover {
       width: 100%;
-      height: 380px;
-      object-fit: cover;
-      transition: var(--transicion);
-      padding: 1rem;
+      max-width: 200px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
     }
 
     .book:hover .book-cover {
-      transform: scale(1.03);
+      transform: scale(1.05);
     }
 
     .book-description {
-      padding: 1.5rem;
-      flex-grow: 1;
-      font-style: italic;
-      line-height: 1.8;
-      text-align: center;
+      margin: 15px 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      text-align: justify;
     }
 
-    .buy-button {
-      display: block;
-      background: var(--dorado);
+    /* Botones */
+    .buy-button, .instagram-button, .close-button {
+      display: inline-block;
+      background-color: var(--rosa-acento);
       color: var(--texto-oscuro);
-      text-align: center;
-      padding: 0.9rem;
+      font-family: var(--fuente-cuerpo);
       font-weight: 600;
+      padding: 12px 24px;
       text-decoration: none;
-      transition: var(--transicion);
+      border-radius: 50px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
       border: none;
       cursor: pointer;
-      font-size: 1rem;
-      margin: 0 1.5rem 1.5rem;
-      border-radius: 6px;
-      font-family: var(--fuente-titulos);
-      letter-spacing: 0.5px;
     }
 
-    .buy-button:hover {
-      background: var(--texto-oscuro);
+    .buy-button:hover, .instagram-button:hover, .close-button:hover {
+      background-color: var(--dorado);
       color: var(--blanco);
-      transform: translateY(-3px);
+      transform: scale(1.05);
     }
 
-    /* Botones de Instagram */
     .instagram-button {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.7rem;
-      background: linear-gradient(45deg, #E8B5C7 0%, #d893af 100%);
-      color: var(--blanco);
-      padding: 1rem 1.8rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: var(--transicion);
-      border: none;
-      cursor: pointer;
-      margin: 0.5rem;
-      font-family: var(--fuente-texto);
-      font-size: 1.1rem;
-    }
-
-    .instagram-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(232, 181, 199, 0.4);
+      gap: 10px;
+      margin-top: 20px;
     }
 
     /* Sección Bookstagrammer */
     #Bookstagrammer {
       text-align: center;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 3rem 1rem;
-      border-top: 1px solid var(--rosa-acento);
-      border-bottom: 1px solid var(--rosa-acento);
-      margin: 2rem auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--rosa-claro);
+      box-shadow: 0 4px 15px rgba(189, 198, 214, 0.5);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 40px auto;
       max-width: 1200px;
-      border-radius: 12px;
     }
 
     .Bookstagrammer-container {
@@ -250,15 +228,14 @@
       justify-content: center;
       gap: 2rem;
       margin-top: 2rem;
-      animation: fadeIn 0.5s ease;
     }
 
     .booksgramer {
       background: var(--blanco);
       border-radius: 12px;
       padding: 1.5rem;
-      box-shadow: var(--sombra-suave);
-      transition: var(--transicion);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -267,7 +244,6 @@
 
     .booksgramer:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(92, 58, 42, 0.15);
     }
 
     .booksgramer img {
@@ -287,14 +263,10 @@
       border-radius: 50%;
       font-size: 1.5rem;
       background: var(--rosa-acento);
-      color: var(--blanco);
+      color: var(--texto-oscuro);
       border: 2px solid var(--blanco);
-      box-shadow: 0 4px 10px rgba(92, 58, 42, 0.2);
-    }
-
-    #toggleBookstagrammers:hover {
-      background: var(--dorado);
-      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
     }
 
     /* Botón de biografía */
@@ -307,17 +279,16 @@
       border-radius: 50%;
       border: none;
       background: var(--blanco);
-      box-shadow: var(--sombra-suave);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       cursor: pointer;
       z-index: 100;
-      transition: var(--transicion);
+      transition: transform 0.3s ease;
       overflow: hidden;
       border: 2px solid var(--dorado);
     }
 
     .bio-button:hover {
       transform: scale(1.1);
-      box-shadow: 0 8px 20px rgba(92, 58, 42, 0.25);
     }
 
     .bio-button img {
@@ -337,7 +308,7 @@
       background: var(--blanco);
       z-index: 99;
       padding: 2.5rem;
-      box-shadow: 0 -5px 25px rgba(92, 58, 42, 0.15);
+      box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.15);
       transition: bottom 0.5s ease;
       max-height: 80vh;
       overflow-y: auto;
@@ -356,14 +327,14 @@
       display: block;
       margin: 0 auto 1.5rem;
       border: 4px solid var(--dorado);
-      box-shadow: 0 5px 15px rgba(92, 58, 42, 0.2);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
     .bio-content h2 {
       color: var(--texto-oscuro);
       text-align: center;
       margin-bottom: 1.5rem;
-      font-family: var(--fuente-titulos);
+      font-family: var(--fuente-portada);
     }
 
     .bio-content p {
@@ -378,58 +349,35 @@
       display: block;
       margin: 0 auto;
       background: var(--rosa-acento);
-      color: var(--blanco);
+      color: var(--texto-oscuro);
       border: none;
       padding: 0.8rem 1.8rem;
       border-radius: 6px;
       cursor: pointer;
-      transition: var(--transicion);
-      font-family: var(--fuente-texto);
-      font-weight: 600;
+      transition: all 0.3s ease;
     }
 
     .close-button:hover {
-      background: var(--texto-oscuro);
-      transform: translateY(-2px);
+      background: var(--dorado);
+      color: var(--blanco);
     }
 
-    /* Animaciones */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Media queries para responsividad */
+    /* Responsividad */
     @media (max-width: 768px) {
       header h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
       }
       
-      section {
-        padding: 2rem 1rem;
+      section h2 {
+        font-size: 2.2rem;
       }
       
-      .book-container {
-        grid-template-columns: 1fr;
+      .book {
+        max-width: 280px;
       }
       
-      .Bookstagrammer-container {
-        gap: 1.5rem;
-      }
-      
-      .booksgramer {
-        width: 140px;
-        padding: 1.2rem;
-      }
-      
-      .booksgramer img {
-        width: 90px;
-        height: 90px;
-      }
-      
-      .bio-content {
-        padding: 2rem 1.5rem;
-        width: 95%;
+      .book h3 {
+        font-size: 1.5rem;
       }
       
       .bio-button {
@@ -442,24 +390,20 @@
 
     @media (max-width: 480px) {
       header h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
       
       section h2 {
         font-size: 1.8rem;
       }
       
-      .book h3 {
-        font-size: 1.2rem;
+      .book {
+        max-width: 100%;
+        padding: 20px;
       }
       
-      .book-cover {
-        height: 320px;
-      }
-      
-      .instagram-button {
-        padding: 0.8rem 1.5rem;
-        font-size: 1rem;
+      .separator {
+        width: 200px;
       }
       
       .bio-button {
@@ -473,20 +417,15 @@
         width: 150px;
         height: 150px;
       }
-      
-      .separator {
-        width: 200px;
-      }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-pattern"></div>
     <h1>Bienvenidos a mi mundo literario</h1>
   </header>
   
-  <img src="https://escritoraanacarolina.com/imagenes/separador_floral.png" alt="Separador floral decorativo" class="separator">
+  <img src="imagenes/separador_floral.png" alt="Separador floral decorativo" class="separator">
   
   <section>
     <h2>Mis Libros</h2>
