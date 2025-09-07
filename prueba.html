@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ana Carolina - Autora de Romances Eróticos</title>
-  <meta name="description" content="Explora el mundo literario de Ana Carolina, autora de romances eróticos. Descubre sus libros, historias y más. ¡Sígueme en Instagram para estar al día!">
+  <title>Página de Ana Carolina - Autora de romances eroticos</title>
+  <meta name="description" content="Explora el mundo literario de Ana Carolina, autora de romances eroticos. Descubre sus libros, historias y más. ¡Sígueme en Instagram para estar al día!">
   <meta name="keywords" content="libros, literatura, Ana Carolina, Seducción, autor, escritora, Instagram, comprar libros">
   <meta name="author" content="Ana Carolina">
-  <!-- Open Graph y Twitter Card -->
   <meta property="og:title" content="Página de Ana Carolina - Autora de romances eroticos">
   <meta property="og:description" content="Explora el mundo literario de Ana Carolina, autora de Seducción. Descubre sus libros, historias y más.">
   <meta property="og:image" content="https://escritoraanacarolina.com/imagenes/portada2.jpg">
@@ -17,428 +16,297 @@
   <meta name="twitter:title" content="Página de Ana Carolina - Autora de romances eroticos">
   <meta name="twitter:description" content="Explora el mundo literario de Ana Carolina, autora de Seducción. Descubre sus libros, historias y más.">
   <meta name="twitter:image" content="https://escritoraanacarolina.com/mislibros/imagenes/portada1.jpg">
-  <!-- Enlace a FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Google Fonts - Playfair Display (similar a la portada) -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-  <!-- Estilos -->
-  <style>
-    :root {
-      --rosa-claro: #FADADD;
-      --rosa-acento: #FFC8DD;
-      --azul-cielo: #BDE0FE;
-      --texto-oscuro: #5E6472;
-      --blanco: #FFFFFF;
-      --dorado: #D4AF37;
-      --fuente-portada: 'Playfair Display', serif;
-      --fuente-titulos: 'Playfair Display', serif;
-      --fuente-cuerpo: 'Montserrat', sans-serif;
-    }
+  <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+  <style>
+    /* Estilos generales inspirados en la portada "Yo antes y después de ti" */
+
+    /* Definición de la paleta de colores de la portada */
+    :root {
+        --color-cielo: #87CEEB; /* Azul vibrante del cielo */
+        --color-titulo-rosa: #FF1493; /* Rosa intenso del título */
+        --color-texto-oscuro: #36454F; /* Gris/Azul oscuro del pelo de los personajes */
+        --color-tulipan-coral: #FFA07A; /* Naranja/Coral de los tulipanes */
+        --color-tulipan-morado: #9370DB; /* Morado medio de los tulipanes */
+        --color-cesped-verde: #8FBC8F; /* Verde suave del césped */
+        --color-fondo-suave: #F0F8FF; /* Un blanco azulado muy claro para fondos */
+        --color-blanco-puro: #FFFFFF;
     }
 
     body {
-      font-family: var(--fuente-cuerpo);
-      background-color: var(--blanco);
-      color: var(--texto-oscuro);
-      margin: 0;
-      padding: 0;
-      font-size: 16px;
-      line-height: 1.6;
+        font-family: Arial, sans-serif;
+        background-color: var(--color-fondo-suave);
+        color: var(--color-texto-oscuro);
+        margin: 0;
+        padding: 0;
+        font-size: 16px;
     }
 
-    /* Header floral con tipografía de portada */
     header {
-      text-align: center;
-      padding: 100px 20px;
-      background-image: url('https://escritoraanacarolina.com/imagenes/header-floral.jpg');
-      background-size: cover;
-      background-position: center;
-      position: relative;
-      color: var(--blanco);
+        text-align: center;
+        padding: 50px 20px;
+        background: linear-gradient(135deg, var(--color-cielo), #B0E0E6); /* Gradiente suave del cielo */
+        position: relative;
+        overflow: hidden;
+        color: var(--color-blanco-puro);
     }
 
-    header::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(rgba(94, 58, 42, 0.3), rgba(94, 58, 42, 0.5));
+    h1 {
+        font-size: 2.8rem;
+        color: var(--color-blanco-puro);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        margin: 0;
+        position: relative;
+        z-index: 2;
     }
 
-    header h1 {
-      font-family: var(--fuente-portada);
-      font-size: 4.5rem;
-      font-weight: 700;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      margin: 0;
-      position: relative;
-      z-index: 2;
-      letter-spacing: 1px;
+    h2 {
+        font-size: 2rem;
+        color: var(--color-tulipan-morado);
+        text-align: center;
+        margin-top: 30px;
     }
 
-    /* Separador */
+    h3 {
+        font-size: 1.3rem;
+        color: var(--color-texto-oscuro);
+        margin: 10px 0;
+        text-align: center;
+    }
+
     .separator {
-      width: 250px;
-      height: auto;
-      display: block;
-      margin: 30px auto;
+        width: 100%;
+        height: auto;
+        display: block;
     }
 
-    /* Secciones */
-    section {
-      padding: 3rem 1rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    section h2 {
-      font-family: var(--fuente-portada);
-      font-size: 2.8rem;
-      color: var(--texto-oscuro);
-      text-align: center;
-      margin: 40px 0;
-      font-weight: 700;
-      position: relative;
-    }
-
-    section h2::after {
-      content: '';
-      position: absolute;
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 3px;
-      background: var(--dorado);
-    }
-
-    /* Contenedor de libros */
+    /* Estilos de los libros */
     .book-container {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-      padding: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        padding: 20px;
     }
 
     .book {
-      text-align: center;
-      max-width: 320px;
-      background-color: var(--blanco);
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(189, 198, 214, 0.4);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .book::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 5px;
-      background: var(--dorado);
+        background-color: var(--color-blanco-puro);
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 320px;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .book:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 12px 25px rgba(189, 198, 214, 0.6);
-    }
-
-    .book h3 {
-      font-family: var(--fuente-portada);
-      font-size: 1.8rem;
-      color: var(--texto-oscuro);
-      margin: 15px 0;
-      font-weight: 700;
+        transform: translateY(-10px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
     }
 
     .book-cover {
-      width: 100%;
-      max-width: 200px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      transition: transform 0.3s ease;
-    }
-
-    .book:hover .book-cover {
-      transform: scale(1.05);
+        width: 100%;
+        max-width: 200px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-bottom: 15px;
     }
 
     .book-description {
-      margin: 15px 0;
-      font-size: 0.95rem;
-      line-height: 1.7;
-      text-align: justify;
+        margin: 15px 0;
+        color: #555;
+        text-align: justify;
+        font-size: 0.95rem;
+        line-height: 1.6;
     }
 
-    /* Botones */
-    .buy-button, .instagram-button, .close-button {
-      display: inline-block;
-      background-color: var(--rosa-acento);
-      color: var(--texto-oscuro);
-      font-family: var(--fuente-cuerpo);
-      font-weight: 600;
-      padding: 12px 24px;
-      text-decoration: none;
-      border-radius: 50px;
-      font-size: 1rem;
-      transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
-      border: none;
-      cursor: pointer;
+    /* Estilos de los botones */
+    .buy-button, .instagram-button {
+        display: inline-block;
+        color: var(--color-blanco-puro);
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 30px;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        border: none;
+        cursor: pointer;
     }
 
-    .buy-button:hover, .instagram-button:hover, .close-button:hover {
-      background-color: var(--dorado);
-      color: var(--blanco);
-      transform: scale(1.05);
+    .buy-button {
+        background-color: var(--color-tulipan-coral);
+    }
+
+    .buy-button:hover {
+        background-color: #FF7F50; /* Coral más oscuro */
+        transform: scale(1.05);
     }
 
     .instagram-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 20px;
+        background-color: var(--color-titulo-rosa);
+    }
+
+    .instagram-button:hover {
+        background-color: #C71585; /* Rosa más oscuro */
+        transform: scale(1.05);
+    }
+
+    .instagram-button i {
+        margin-right: 8px;
     }
 
     /* Sección Bookstagrammer */
     #Bookstagrammer {
-      text-align: center;
-      background-color: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--rosa-claro);
-      box-shadow: 0 4px 15px rgba(189, 198, 214, 0.5);
-      border-radius: 15px;
-      padding: 25px;
-      margin: 40px auto;
-      max-width: 1200px;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        text-align: center;
     }
 
-    .Bookstagrammer-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .booksgramer {
-      background: var(--blanco);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 160px;
-    }
-
-    .booksgramer:hover {
-      transform: translateY(-5px);
-    }
-
-    .booksgramer img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 1rem;
-      border: 3px solid var(--dorado);
+    #Bookstagrammer h2 {
+        display: none; /* Ocultamos el título para un look más limpio */
     }
 
     #toggleBookstagrammers {
-      margin: 0 auto;
-      display: block;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      font-size: 1.5rem;
-      background: var(--rosa-acento);
-      color: var(--texto-oscuro);
-      border: 2px solid var(--blanco);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      cursor: pointer;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        border-radius: 50%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    /* Botón de biografía */
+    #toggleBookstagrammers i {
+        margin: 0;
+    }
+
+    .Bookstagrammer-container {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .booksgramer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .booksgramer img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid var(--color-tulipan-morado);
+    }
+
+    .booksgramer .instagram-button {
+        padding: 6px 10px;
+    }
+
+    /* Estilos para el botón y la biografía */
     .bio-button {
-      position: fixed;
-      bottom: 25px;
-      left: 25px;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      border: none;
-      background: var(--blanco);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      cursor: pointer;
-      z-index: 100;
-      transition: transform 0.3s ease;
-      overflow: hidden;
-      border: 2px solid var(--dorado);
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        border: 3px solid var(--color-blanco-puro);
+        background: transparent;
+        cursor: pointer;
+        z-index: 1000;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        overflow: hidden;
+        padding: 0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
     }
 
     .bio-button:hover {
-      transform: scale(1.1);
+        transform: scale(1.1);
     }
 
     .bio-button img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-    /* Contenido de biografía */
     .bio-content {
-      position: fixed;
-      bottom: -100%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 600px;
-      background: var(--blanco);
-      z-index: 99;
-      padding: 2.5rem;
-      box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.15);
-      transition: bottom 0.5s ease;
-      max-height: 80vh;
-      overflow-y: auto;
-      border-radius: 15px 15px 0 0;
+        position: fixed;
+        bottom: 100px;
+        left: 20px;
+        background: var(--color-blanco-puro);
+        padding: 25px;
+        width: 320px;
+        box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        border-radius: 15px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        visibility: hidden;
     }
 
     .bio-content.show {
-      bottom: 0;
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
     }
 
-    .bio-photo {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto 1.5rem;
-      border: 4px solid var(--dorado);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .bio-content h2 {
-      color: var(--texto-oscuro);
-      text-align: center;
-      margin-bottom: 1.5rem;
-      font-family: var(--fuente-portada);
-    }
-
-    .bio-content p {
-      max-width: 800px;
-      margin: 0 auto 1.5rem;
-      text-align: center;
-      line-height: 1.8;
-      font-size: 1.1rem;
+    .bio-content img.bio-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto 15px;
+        border: 4px solid var(--color-cielo);
     }
 
     .close-button {
-      display: block;
-      margin: 0 auto;
-      background: var(--rosa-acento);
-      color: var(--texto-oscuro);
-      border: none;
-      padding: 0.8rem 1.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
+        background: var(--color-tulipan-coral);
+        color: var(--color-blanco-puro);
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        margin-top: 15px;
+        border-radius: 20px;
+        transition: background-color 0.3s ease;
+        font-weight: bold;
     }
 
     .close-button:hover {
-      background: var(--dorado);
-      color: var(--blanco);
-    }
-
-    /* Responsividad */
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 3rem;
-      }
-      
-      section h2 {
-        font-size: 2.2rem;
-      }
-      
-      .book {
-        max-width: 280px;
-      }
-      
-      .book h3 {
-        font-size: 1.5rem;
-      }
-      
-      .bio-button {
-        width: 60px;
-        height: 60px;
-        bottom: 20px;
-        left: 20px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header h1 {
-        font-size: 2.5rem;
-      }
-      
-      section h2 {
-        font-size: 1.8rem;
-      }
-      
-      .book {
-        max-width: 100%;
-        padding: 20px;
-      }
-      
-      .separator {
-        width: 200px;
-      }
-      
-      .bio-button {
-        width: 55px;
-        height: 55px;
-        bottom: 15px;
-        left: 15px;
-      }
-      
-      .bio-photo {
-        width: 150px;
-        height: 150px;
-      }
+        background: #FF7F50;
     }
   </style>
-</head>
+  </head>
 <body>
   <header>
+    <div class="header-pattern"></div>
     <h1>Bienvenidos a mi mundo literario</h1>
   </header>
-  
-  <img src="imagenes/separador_floral.png" alt="Separador floral decorativo" class="separator">
-  
+  <img src="imagenes/separador.png" alt="Separador decorativo" class="separator">
   <section>
     <h2>Mis Libros</h2>
     <div class="book-container">
-      <div class="book">
+     <div class="book">
         <h3>YO ANTES Y DESPUÉS DE TI</h3>
         <img src="imagenes/portada3.jpg" alt="Portada del libro 'YO ANTES Y DESPUES DE TI'" class="book-cover">
         <p class="book-description">
           Valkiria está rota.Ya no es la misma de antes, aunque a ojos de los demás se pone una máscara para esconder sus cicatrices detrás de tatuajes y tulipanes. Pero Gabriel, el escort de lujo del que se ha enganchado hasta llevarla casi a la ruina, sí las ve, y a base de sexo e intensas charlas intentará arreglarla...
-          Ninguno de los dos estaban preparados para la vuelta de Felipe a España después de ocho años en Estados Unidos y todo lo que va a remover su llegada.
-          Un corazón roto. 
-          Un ángel sin alas. 
-          Un error del pasado que lo cambia todo.
+Ninguno de los dos estaban preparados para la vuelta de Felipe a España después de ocho años en Estados Unidos y todo lo que va a remover su llegada.
+Un corazón roto. 
+Un ángel sin alas. 
+Un error del pasado que lo cambia todo.
         </p>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLScsFqoulsObZqjD0plvEA-wc_W26ZgPQnn_3Py0MqUXMHXwVA/viewform?usp=dialog" target="_blank" class="buy-button">PREVENTA</a>
       </div>
@@ -466,37 +334,30 @@
     </div>
   </section>
   
-  <!-- Sección Bookstagrammer -->
   <section id="Bookstagrammer">
     <h2>Bookstagrammer</h2>
-    <!-- Botón para mostrar/ocultar la lista -->
     <button id="toggleBookstagrammers" class="instagram-button">
       <i class="fab fa-instagram"></i>
     </button>
-    <!-- Lista de colaboradores, inicialmente oculta -->
     <div id="bookstagrammerList" class="Bookstagrammer-container" style="display: none;">
-      <!-- Colaborador 1 -->
       <div class="booksgramer">
         <img src="imagenes/enerojs.jpg" alt="Foto de perfil de Booksgramer 1">
         <a href="https://www.instagram.com/enero.gs/" target="_blank" class="instagram-button">
           <i class="fab fa-instagram"></i>
         </a>
       </div>
-      <!-- Colaborador 2 -->
       <div class="booksgramer">
         <img src="imagenes/panditalectora.jpg" alt="Foto de perfil de Booksgramer 2">
         <a href="https://www.instagram.com/pandita.lectora" target="_blank" class="instagram-button">
           <i class="fab fa-instagram"></i>
         </a>
       </div>
-      <!-- Colaborador 3 -->
       <div class="booksgramer">
         <img src="imagenes/pame.jpg" alt="Foto de perfil de Booksgramer 3">
         <a href="https://www.instagram.com/fpamelagarcia" target="_blank" class="instagram-button">
           <i class="fab fa-instagram"></i>
         </a>
       </div>
-      <!-- Colaborador 4 -->
       <div class="booksgramer">
         <img src="imagenes/isacat7.jpg" alt="Foto de perfil de Booksgramer 4">
         <a href="https://www.instagram.com/isacat7" target="_blank" class="instagram-button">
@@ -506,18 +367,17 @@
     </div>
   </section>
   
-  <!-- Botón circular con la foto de la autora en la esquina inferior izquierda -->
   <button id="bioButton" class="bio-button">
     <img src="imagenes/biografia.jpg" alt="Foto de la autora">
   </button>
   
-  <!-- Sección de biografía (desplegable con animación) -->
   <div id="bioContent" class="bio-content">
     <img src="imagenes/ana-carolina.jpg" alt="Foto de la autora" class="bio-photo">
     <h2>Biografía</h2>
     <p>
       Ana Carolina, creo que ahora soy del mundo... De cualquier lugar. 
-      Llegué a España hace unos cuantos años, mi obligación de aprender castellano por estudios se convirtió en leer muchos libros, demasiados. Y es una de mis pasiones, después de BTS claramente... seguido de una mala leche tremenda, y ser creo que... un poco malhablada. Algunas veces ni siquiera se en que idioma hablo. Mientras se me entienda... 
+
+Llegué a España hace unos cuantos años, mi obligación de aprender castellano por estudios se convirtió en leer muchos libros, demasiados. Y es una de mis pasiones, después de BTS claramente... seguido de una mala leche tremenda, y ser creo que... un poco malhablada. Algunas veces ni siquiera se en que idioma hablo. Mientras se me entienda... 
     </p>
     <button id="closeBio" class="close-button">Cerrar</button>
   </div>
