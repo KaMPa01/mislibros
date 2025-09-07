@@ -75,6 +75,11 @@
             <p class="text-lg header-subtitle mt-2">"YO ANTES Y DESPUÉS DE TI"</p>
         </header>
 
+        <!-- Portada del libro -->
+        <div class="flex justify-center mb-8">
+            <img src="imagenes/portada3.jpg" alt="Portada del libro 'Yo Antes y Después de Ti'" class="rounded-lg shadow-lg max-w-xs md:max-w-sm lg:max-w-md">
+        </div>
+
         <!-- --- INSTRUCCIONES DE PAGO CON NUEVO ESTILO --- -->
         <div class="info-box p-4 rounded-md mb-8" role="alert">
             <div class="flex">
@@ -249,7 +254,7 @@
                 paymentProofData = {
                     fileName: file.name,
                     mimeType: file.type,
-                    base64Data: base64String.split(',')[1] // Remove the data URI prefix
+                    base64Data: base64String.split(',')[1]
                 };
             }
 
