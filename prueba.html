@@ -1,341 +1,156 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserva - YO ANTES Y DESPUÉS DE TI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5h4YbUvydEVw3uMWq--C4A631mJduMMLy0Yy3KSUw1ilZ1XQHuenkfHC50xaKpapQ/exec";
+
+    const form = document.getElementById('reserva-form');
+    const firmadoRadios = document.querySelectorAll('input[name="firmado"]');
+    const firmaContainer = document.getElementById('firma-container');
+    const metodoEnvio = document.getElementById('metodo_envio');
     
-    <link rel="stylesheet" href="https://geowidget.inpost.pl/inpost-geowidget.css">
-    <script src="https://geowidget.inpost.pl/inpost-geowidget.js" charset="utf-8"></script>
+    const inpostMapBtn = document.getElementById('inpost-map-btn');
+    const selectedInpostPointInfo = document.getElementById('selected-inpost-point-info');
+    const inpostPointIdInput = document.getElementById('inpost_point_id');
+    const inpostPointAddressInput = document.getElementById('inpost_point_address');
 
-    <style>
-        :root {
-            --color-cielo: #87CEEB;
-            --color-titulo-rosa: #FF1493;
-            --color-texto-oscuro: #2D3945;
-            --color-tulipan-coral: #FF7F50;
-            --color-tulipan-morado: #9370DB;
-            --color-cesped-verde: #8FBC8F;
-            --color-fondo-suave: #F0F8FF;
-            --color-blanco-puro: #FFFFFF;
-        }
-        body { font-family: 'Inter', sans-serif; background-color: var(--color-fondo-suave); }
-        .header-title { color: var(--color-titulo-rosa); }
-        .header-subtitle, .form-label, h3 { color: var(--color-texto-oscuro); }
-        .form-input { border-color: #D1D5DB; transition: border-color 0.2s, box-shadow 0.2s; }
-        .form-input:focus { border-color: var(--color-tulipan-coral); box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-tulipan-coral) 25%, transparent); outline: none; }
-        .submit-btn { background-color: var(--color-titulo-rosa); transition: background-color 0.2s; }
-        .submit-btn:hover { background-color: color-mix(in srgb, var(--color-titulo-rosa) 90%, black); }
-        .loader { border-top-color: var(--color-tulipan-coral); }
-        .hidden { display: none; }
-        .info-box { background-color: color-mix(in srgb, var(--color-cielo) 20%, transparent); border-left: 4px solid var(--color-cielo); color: var(--color-texto-oscuro); }
-        .info-box svg { color: var(--color-cielo); }
-        .file-btn { background-color: color-mix(in srgb, var(--color-tulipan-morado) 15%, transparent); color: var(--color-tulipan-morado); cursor: pointer; }
-        .file-btn:hover { background-color: color-mix(in srgb, var(--color-tulipan-morado) 25%, transparent); }
+    firmadoRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            firmaContainer.classList.toggle('hidden', e.target.value !== 'Sí');
+        });
+    });
 
-        /* ✨ NUEVO: Estilos para el botón de InPost y el punto seleccionado */
-        .inpost-btn {
-            background-color: #FFC700; /* Color corporativo de InPost */
-            color: #2D3945;
-            transition: background-color 0.2s;
-        }
-        .inpost-btn:hover {
-            background-color: color-mix(in srgb, #FFC700 90%, black);
-        }
-        #selected-inpost-point-info {
-            background-color: color-mix(in srgb, var(--color-cesped-verde) 20%, transparent);
-            border: 1px solid var(--color-cesped-verde);
-            border-radius: 0.375rem; /* rounded-md */
-            padding: 0.75rem; /* p-3 */
-            margin-top: 0.75rem; /* mt-3 */
-            font-size: 0.875rem; /* text-sm */
-        }
-    </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
+    metodoEnvio.addEventListener('change', () => {
+        const selected = metodoEnvio.value.toLowerCase();
+        const isCorreos = selected.includes('correos');
+        const isInpost = selected.includes('inpost');
 
-    <div class="container mx-auto p-4 md:p-8 max-w-3xl">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold header-title">Preventa</h1>
-            <p class="text-lg header-subtitle mt-2">"YO ANTES Y DESPUÉS DE TI"</p>
-        </header>
+        document.getElementById('direccion-correos').classList.toggle('hidden', !isCorreos);
+        document.getElementById('punto-inpost').classList.toggle('hidden', !isInpost);
 
-        <div class="flex justify-center mb-8">
-            <img src="imagenes/portada3.jpg" alt="Portada del libro 'Yo Antes y Después de Ti'" class="rounded-lg shadow-lg max-w-xs md:max-w-sm lg:max-w-md">
-        </div>
-
-        <div class="info-box p-4 rounded-md mb-8" role="alert">
-            <div class="flex">
-                <div class="py-1">
-                    <svg class="fill-current h-6 w-6 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-1-11V5h2v4h-2zm0 6v-2h2v2h-2z"/></svg>
-                </div>
-                <div>
-                    <p class="font-bold">Instrucciones de Pago</p>
-                    <p class="text-sm">Para confirmar tu reserva, realiza un Bizum de <strong>20 €</strong> al número <strong>698 982 882</strong>. Después, adjunta el justificante de pago en el formulario.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white p-6 md:p-10 rounded-lg shadow-lg">
-            <form id="reserva-form">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <div class="mb-4">
-                            <label for="nombre_apellido" class="form-label block mb-2">Nombre y Apellido *</label>
-                            <input type="text" id="nombre_apellido" name="nombre_apellido" required class="form-input w-full p-2 border rounded-md">
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label block mb-2">¿Quieres el libro firmado? *</label>
-                            <div class="flex items-center space-x-4">
-                                <label class="flex items-center"><input type="radio" name="firmado" value="Sí" required class="mr-2"> Sí</label>
-                                <label class="flex items-center"><input type="radio" name="firmado" value="No" class="mr-2"> No</label>
-                            </div>
-                        </div>
-                        <div id="firma-container" class="mb-4 hidden">
-                            <label for="nombre_firma" class="form-label block mb-2">Nombre para la dedicatoria</label>
-                            <input type="text" id="nombre_firma" name="nombre_firma" class="form-input w-full p-2 border rounded-md">
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label block mb-2">Método de Envío *</label>
-                            <select id="metodo_envio" name="metodo_envio" required class="form-input w-full p-2 border rounded-md bg-white">
-                                <option value="">Selecciona una opción...</option>
-                                <option value="Correos">Correos (Envío a domicilio)</option>
-                                <option value="Inpost">Inpost (Punto de recogida)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                         <div class="mb-4">
-                            <label for="email" class="form-label block mb-2">Correo Electrónico *</label>
-                            <input type="email" id="email" name="email" required class="form-input w-full p-2 border rounded-md">
-                        </div>
-                        <div class="mb-4">
-                            <label for="telefono" class="form-label block mb-2">Teléfono *</label>
-                            <input type="tel" id="telefono" name="telefono" required class="form-input w-full p-2 border rounded-md">
-                        </div>
-                        <div class="mb-4">
-                            <label for="justificante_pago_file" class="form-label block mb-2">Adjuntar justificante de pago *</label>
-                            <input type="file" id="justificante_pago_file" name="justificante_pago_file" required class="form-input w-full text-sm file-btn file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold" accept="image/png, image/jpeg, image/gif, application/pdf">
-                        </div>
-                    </div>
-                </div>
-
-                <div id="direccion-correos" class="mt-6 border-t pt-6 hidden">
-                    <h3 class="text-xl font-bold mb-4">Dirección de Envío (Correos)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="md:col-span-2">
-                            <label for="direccion" class="form-label block mb-2">Dirección Completa *</label>
-                            <input type="text" id="direccion" name="direccion" class="form-input w-full p-2 border rounded-md">
-                        </div>
-                        <div>
-                            <label for="poblacion" class="form-label block mb-2">Población *</label>
-                            <input type="text" id="poblacion" name="poblacion" class="form-input w-full p-2 border rounded-md">
-                        </div>
-                         <div>
-                            <label for="provincia" class="form-label block mb-2">Provincia *</label>
-                            <input type="text" id="provincia" name="provincia" class="form-input w-full p-2 border rounded-md">
-                        </div>
-                        <div>
-                            <label for="cp" class="form-label block mb-2">Código Postal *</label>
-                            <input type="text" id="cp" name="cp" class="form-input w-full p-2 border rounded-md">
-                        </div>
-                    </div>
-                </div>
-
-                <div id="punto-inpost" class="mt-6 border-t pt-6 hidden">
-                    <h3 class="text-xl font-bold mb-4">Punto de Recogida (Inpost)</h3>
-                    <div>
-                        <label class="form-label block mb-2">Selecciona tu punto de recogida preferido *</label>
-                        <button type="button" id="inpost-map-btn" class="inpost-btn font-bold py-2 px-4 rounded-lg w-full md:w-auto">
-                            🗺️ Abrir mapa y seleccionar punto
-                        </button>
-                        
-                        <div id="selected-inpost-point-info" class="hidden"></div>
-                        
-                        <input type="hidden" id="inpost_point_id" name="inpost_point_id">
-                        <input type="hidden" id="inpost_point_address" name="inpost_point_address">
-                    </div>
-                </div>
-
-                <div class="mt-8 text-center">
-                    <button type="submit" id="submit-button" class="submit-btn text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
-                        Confirmar Reserva
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+        document.getElementById('direccion').required = isCorreos;
+        document.getElementById('poblacion').required = isCorreos;
+        document.getElementById('provincia').required = isCorreos;
+        document.getElementById('cp').required = isCorreos;
+        
+        inpostPointIdInput.required = isInpost;
+        inpostPointAddressInput.required = isInpost;
+    });
     
-    <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-lg shadow-2xl p-8 max-w-sm w-full text-center">
-             <div id="modal-loader" class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mx-auto mb-4"></div>
-            <h3 id="modal-title" class="text-2xl font-bold header-subtitle mb-2">Procesando...</h3>
-            <p id="modal-message" class="text-gray-600 mb-6">Estamos guardando tu reserva. Por favor, espera.</p>
-            <button id="modal-close-btn" class="submit-btn text-white font-bold py-2 px-6 rounded-md hidden">Cerrar</button>
-        </div>
-    </div>
+    // ⚙️ LÓGICA DE INPOST ACTUALIZADA
+    inpostMapBtn.addEventListener('click', () => {
+        // ✨ VERIFICACIÓN DE SEGURIDAD
+        // Comprobamos si la librería de InPost se ha cargado correctamente en la ventana
+        if (typeof inpost === 'undefined' || typeof inpost.geowidget === 'undefined') {
+            console.error("Error: La librería GeoWidget de InPost no se ha cargado.");
+            alert("No se pudo cargar el mapa de puntos de recogida. Por favor, revisa tu conexión o si tienes algún bloqueador de scripts activo, y refresca la página.");
+            return; // Detenemos la ejecución si la librería no está disponible
+        }
 
-    <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5h4YbUvydEVw3uMWq--C4A631mJduMMLy0Yy3KSUw1ilZ1XQHuenkfHC50xaKpapQ/exec";
-
-        const form = document.getElementById('reserva-form');
-        const firmadoRadios = document.querySelectorAll('input[name="firmado"]');
-        const firmaContainer = document.getElementById('firma-container');
-        const metodoEnvio = document.getElementById('metodo_envio');
-        
-        // ⚙️ NUEVO: Referencias a los nuevos elementos de InPost
-        const inpostMapBtn = document.getElementById('inpost-map-btn');
-        const selectedInpostPointInfo = document.getElementById('selected-inpost-point-info');
-        const inpostPointIdInput = document.getElementById('inpost_point_id');
-        const inpostPointAddressInput = document.getElementById('inpost_point_address');
-
-        firmadoRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                firmaContainer.classList.toggle('hidden', e.target.value !== 'Sí');
-            });
-        });
-
-        metodoEnvio.addEventListener('change', () => {
-            const selected = metodoEnvio.value.toLowerCase();
-            const isCorreos = selected.includes('correos');
-            const isInpost = selected.includes('inpost');
-
-            document.getElementById('direccion-correos').classList.toggle('hidden', !isCorreos);
-            document.getElementById('punto-inpost').classList.toggle('hidden', !isInpost);
-
-            // Actualizar campos requeridos para Correos
-            document.getElementById('direccion').required = isCorreos;
-            document.getElementById('poblacion').required = isCorreos;
-            document.getElementById('provincia').required = isCorreos;
-            document.getElementById('cp').required = isCorreos;
+        // Si todo está correcto, abrimos el mapa
+        inpost.geowidget.open(point => {
+            console.log('Punto seleccionado:', point);
             
-            // ⚙️ NUEVO: Actualizar campos requeridos para InPost
-            inpostPointIdInput.required = isInpost;
-            inpostPointAddressInput.required = isInpost;
-        });
-        
-        // ⚙️ NUEVO: Lógica para el GeoWidget de InPost
-        inpostMapBtn.addEventListener('click', () => {
-            // El primer argumento es la función callback que se ejecuta al seleccionar un punto
-            // El segundo es un objeto de configuración (opcional)
-            inpost.geowidget.open(point => {
-                console.log('Punto seleccionado:', point); // Muy útil para depurar
-                
-                // Construir la dirección completa a partir de los detalles
-                const address = point.address_details;
-                const fullAddress = `${address.street} ${address.building_number}, ${address.post_code} ${address.city}`;
+            const address = point.address_details;
+            const fullAddress = `${address.street} ${address.building_number}, ${address.post_code} ${address.city}`;
 
-                // Guardar los datos en los campos ocultos del formulario
-                inpostPointIdInput.value = point.name; // 'name' es el ID del punto (ej: 'MAD0123')
-                inpostPointAddressInput.value = fullAddress;
-                
-                // Mostrar al usuario la información del punto que ha seleccionado
-                selectedInpostPointInfo.innerHTML = `
-                    <strong>Punto seleccionado:</strong><br>
-                    ${point.name} - ${point.location_description}<br>
-                    ${fullAddress}
-                `;
-                selectedInpostPointInfo.classList.remove('hidden');
-
-                // Disparar un evento 'input' para que cualquier validador se dé cuenta del cambio
-                inpostPointIdInput.dispatchEvent(new Event('input'));
-                inpostPointAddressInput.dispatchEvent(new Event('input'));
-
-            }, { language: 'es' }); // Se puede forzar el idioma a español
-        });
-
-
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const submitButton = document.getElementById('submit-button');
-            const modal = document.getElementById('modal');
-            const modalLoader = document.getElementById('modal-loader');
-            const modalTitle = document.getElementById('modal-title');
-            const modalMessage = document.getElementById('modal-message');
-            const modalCloseBtn = document.getElementById('modal-close-btn');
-
-            submitButton.disabled = true;
-            submitButton.textContent = 'Enviando...';
+            inpostPointIdInput.value = point.name;
+            inpostPointAddressInput.value = fullAddress;
             
-            modal.classList.remove('hidden');
-            modalLoader.classList.remove('hidden');
-            modalCloseBtn.classList.add('hidden');
-            modalTitle.textContent = 'Procesando...';
-            modalMessage.textContent = 'Estamos guardando tu reserva. Por favor, espera.';
+            selectedInpostPointInfo.innerHTML = `
+                <strong>Punto seleccionado:</strong><br>
+                ${point.name} - ${point.location_description}<br>
+                ${fullAddress}
+            `;
+            selectedInpostPointInfo.classList.remove('hidden');
 
-            const fileInput = document.getElementById('justificante_pago_file');
-            let paymentProofData = null;
+            inpostPointIdInput.dispatchEvent(new Event('input'));
+            inpostPointAddressInput.dispatchEvent(new Event('input'));
 
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                const base64String = await toBase64(file);
-                paymentProofData = {
-                    fileName: file.name,
-                    mimeType: file.type,
-                    base64Data: base64String.split(',')[1]
-                };
-            }
+        }, { language: 'es' });
+    });
 
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                if (key !== 'justificante_pago_file') {
-                    data[key] = value;
-                }
-            });
 
-            // El objeto 'data' ahora incluirá 'inpost_point_id' y 'inpost_point_address' si se seleccionó ese método
-            const payload = {
-                action: 'submitOrder',
-                orderData: data,
-                paymentProof: paymentProofData
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitButton = document.getElementById('submit-button');
+        const modal = document.getElementById('modal');
+        const modalLoader = document.getElementById('modal-loader');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Enviando...';
+        
+        modal.classList.remove('hidden');
+        modalLoader.classList.remove('hidden');
+        modalCloseBtn.classList.add('hidden');
+        modalTitle.textContent = 'Procesando...';
+        modalMessage.textContent = 'Estamos guardando tu reserva. Por favor, espera.';
+
+        const fileInput = document.getElementById('justificante_pago_file');
+        let paymentProofData = null;
+
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const base64String = await toBase64(file);
+            paymentProofData = {
+                fileName: file.name,
+                mimeType: file.type,
+                base64Data: base64String.split(',')[1]
             };
+        }
 
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-
-                modalLoader.classList.add('hidden');
-                modalCloseBtn.classList.remove('hidden');
-
-                if (result.success) {
-                    modalTitle.textContent = '¡Reserva Confirmada!';
-                    modalMessage.textContent = 'Gracias por tu pedido. He recibido tus datos correctamente.';
-                    form.reset();
-                    document.getElementById('direccion-correos').classList.add('hidden');
-                    document.getElementById('punto-inpost').classList.add('hidden');
-                    selectedInpostPointInfo.classList.add('hidden'); // Ocultar el info del punto
-                    firmaContainer.classList.add('hidden');
-                } else {
-                    throw new Error(result.message || 'Error desconocido');
-                }
-            } catch (error) {
-                modalTitle.textContent = 'Error en la Reserva';
-                modalMessage.textContent = `Hubo un problema al procesar tu pedido: ${error.message}. Por favor, inténtalo de nuevo.`;
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Confirmar Reserva';
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            if (key !== 'justificante_pago_file') {
+                data[key] = value;
             }
         });
 
-        document.getElementById('modal-close-btn').addEventListener('click', () => {
-            document.getElementById('modal').classList.add('hidden');
-        });
-    </script>
-</body>
-</html>
+        const payload = {
+            action: 'submitOrder',
+            orderData: data,
+            paymentProof: paymentProofData
+        };
 
+        try {
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+
+            modalLoader.classList.add('hidden');
+            modalCloseBtn.classList.remove('hidden');
+
+            if (result.success) {
+                modalTitle.textContent = '¡Reserva Confirmada!';
+                modalMessage.textContent = 'Gracias por tu pedido. He recibido tus datos correctamente.';
+                form.reset();
+                document.getElementById('direccion-correos').classList.add('hidden');
+                document.getElementById('punto-inpost').classList.add('hidden');
+                selectedInpostPointInfo.classList.add('hidden');
+                firmaContainer.classList.add('hidden');
+            } else {
+                throw new Error(result.message || 'Error desconocido');
+            }
+        } catch (error) {
+            modalTitle.textContent = 'Error en la Reserva';
+            modalMessage.textContent = `Hubo un problema al procesar tu pedido: ${error.message}. Por favor, inténtalo de nuevo.`;
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Confirmar Reserva';
+        }
+    });
+
+    document.getElementById('modal-close-btn').addEventListener('click', () => {
+        document.getElementById('modal').classList.add('hidden');
+    });
+</script>
