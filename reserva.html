@@ -1,105 +1,309 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reserva - YO ANTES Y DESPUÉS DE TI</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-body { font-family: 'Inter', sans-serif; background-color: #F0F8FF; }
-.header-title { color: #FF1493; }
-.header-subtitle, .form-label, h3 { color: #2D3945; }
-.form-input { border-color: #D1D5DB; transition: border-color 0.2s, box-shadow 0.2s; }
-.form-input:focus { border-color: #FF7F50; outline: none; }
-.submit-btn { background-color: #FF1493; transition: background-color 0.2s; }
-.submit-btn:hover { background-color: #c71585; }
-.modal-bg { display: none; position: fixed; inset:0; background: rgba(0,0,0,0.6); z-index:50; justify-content: center; align-items:center; }
-.modal-content { background:white; padding:1rem; border-radius:0.5rem; max-width:600px; width:90%; height:80%; display:flex; flex-direction: column; }
-.modal-iframe { flex:1; border:none; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva - YO ANTES Y DESPUÉS DE TI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-cielo: #87CEEB;
+            --color-titulo-rosa: #FF1493;
+            --color-texto-oscuro: #2D3945;
+            --color-tulipan-coral: #FF7F50;
+            --color-tulipan-morado: #9370DB;
+            --color-cesped-verde: #8FBC8F;
+            --color-fondo-suave: #F0F8FF;
+            --color-blanco-puro: #FFFFFF;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-fondo-suave);
+        }
+        
+        .header-title { color: var(--color-titulo-rosa); }
+        .header-subtitle, .form-label, h3 { color: var(--color-texto-oscuro); }
+        .form-input { 
+            border-color: #D1D5DB; 
+            transition: border-color 0.2s, box-shadow 0.2s; 
+        }
+        .form-input:focus { 
+            border-color: var(--color-tulipan-coral); 
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-tulipan-coral) 25%, transparent); 
+            outline: none; 
+        }
+        .submit-btn { 
+            background-color: var(--color-titulo-rosa);
+            transition: background-color 0.2s;
+        }
+        .submit-btn:hover { 
+            background-color: color-mix(in srgb, var(--color-titulo-rosa) 90%, black);
+        }
+        .loader { border-top-color: var(--color-tulipan-coral); }
+        .hidden { display: none; }
+
+        /* Estilos para el cuadro de instrucciones */
+        .info-box {
+            background-color: color-mix(in srgb, var(--color-cielo) 20%, transparent);
+            border-left: 4px solid var(--color-cielo);
+            color: var(--color-texto-oscuro);
+        }
+        .info-box svg {
+            color: var(--color-cielo);
+        }
+
+        /* Estilo para el botón de adjuntar archivo */
+        .file-btn {
+            background-color: color-mix(in srgb, var(--color-tulipan-morado) 15%, transparent);
+            color: var(--color-tulipan-morado);
+            cursor: pointer;
+        }
+        .file-btn:hover {
+            background-color: color-mix(in srgb, var(--color-tulipan-morado) 25%, transparent);
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="container mx-auto p-4 md:p-8 max-w-3xl">
-    <header class="text-center mb-8">
-        <h1 class="text-4xl font-bold header-title">Preventa</h1>
-        <p class="text-lg header-subtitle mt-2">"YO ANTES Y DESPUÉS DE TI"</p>
-    </header>
 
-    <div class="bg-white p-6 md:p-10 rounded-lg shadow-lg">
-        <form id="reserva-form">
-            <div class="mb-4">
-                <label for="nombre_apellido" class="form-label block mb-2">Nombre y Apellido *</label>
-                <input type="text" id="nombre_apellido" name="nombre_apellido" required class="form-input w-full p-2 border rounded-md">
-            </div>
+    <div class="container mx-auto p-4 md:p-8 max-w-3xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold header-title">Preventa</h1>
+            <p class="text-lg header-subtitle mt-2">"YO ANTES Y DESPUÉS DE TI"</p>
+        </header>
 
-            <div class="mb-4">
-                <label class="form-label block mb-2">Método de Envío *</label>
-                <select id="metodo_envio" name="metodo_envio" required class="form-input w-full p-2 border rounded-md">
-                    <option value="">Selecciona una opción...</option>
-                    <option value="Correos">Correos (Envío a domicilio)</option>
-                    <option value="Inpost">Inpost (Punto de recogida)</option>
-                </select>
-            </div>
+        <!-- Portada del libro -->
+        <div class="flex justify-center mb-8">
+            <img src="imagenes/portada3.jpg" alt="Portada del libro 'Yo Antes y Después de Ti'" class="rounded-lg shadow-lg max-w-xs md:max-w-sm lg:max-w-md">
+        </div>
 
-            <!-- Campo InPost -->
-            <div id="punto-inpost" class="mt-6 border-t pt-6 hidden">
-                <h3 class="text-xl font-bold mb-4">Punto de Recogida (InPost)</h3>
-                <p class="text-sm text-gray-700 mb-2">Selecciona tu punto de recogida en el mapa:</p>
-                <button type="button" id="abrir-mapa" class="submit-btn text-white font-bold py-2 px-4 rounded-md mb-2">Seleccionar punto en el mapa</button>
-                <input type="text" id="inpost_point" name="inpost_point" required class="form-input w-full p-2 border rounded-md mt-2" placeholder="Tu punto de InPost seleccionado">
+        <!-- --- INSTRUCCIONES DE PAGO CON NUEVO ESTILO --- -->
+        <div class="info-box p-4 rounded-md mb-8" role="alert">
+            <div class="flex">
+                <div class="py-1">
+                    <svg class="fill-current h-6 w-6 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-1-11V5h2v4h-2zm0 6v-2h2v2h-2z"/></svg>
+                </div>
+                <div>
+                    <p class="font-bold">Instrucciones de Pago</p>
+                    <p class="text-sm">Para confirmar tu reserva, realiza un Bizum de <strong>20 €</strong> al número <strong>698 982 882</strong>. Después, adjunta el justificante de pago en el formulario.</p>
+                </div>
             </div>
+        </div>
 
-            <div class="mt-8 text-center">
-                <button type="submit" class="submit-btn text-white font-bold py-3 px-8 rounded-lg">Confirmar Reserva</button>
-            </div>
-        </form>
+        <div class="bg-white p-6 md:p-10 rounded-lg shadow-lg">
+            <form id="reserva-form">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Columna Izquierda -->
+                    <div>
+                        <div class="mb-4">
+                            <label for="nombre_apellido" class="form-label block mb-2">Nombre y Apellido *</label>
+                            <input type="text" id="nombre_apellido" name="nombre_apellido" required class="form-input w-full p-2 border rounded-md">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label block mb-2">¿Quieres el libro firmado? *</label>
+                            <div class="flex items-center space-x-4">
+                                <label class="flex items-center"><input type="radio" name="firmado" value="Sí" required class="mr-2"> Sí</label>
+                                <label class="flex items-center"><input type="radio" name="firmado" value="No" class="mr-2"> No</label>
+                            </div>
+                        </div>
+
+                        <div id="firma-container" class="mb-4 hidden">
+                            <label for="nombre_firma" class="form-label block mb-2">Nombre para la dedicatoria</label>
+                            <input type="text" id="nombre_firma" name="nombre_firma" class="form-input w-full p-2 border rounded-md">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label block mb-2">Método de Envío *</label>
+                            <select id="metodo_envio" name="metodo_envio" required class="form-input w-full p-2 border rounded-md bg-white">
+                                <option value="">Selecciona una opción...</option>
+                                <option value="Correos">Correos (Envío a domicilio)</option>
+                                <option value="Inpost">Inpost (Punto de recogida)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Columna Derecha -->
+                    <div>
+                         <div class="mb-4">
+                            <label for="email" class="form-label block mb-2">Correo Electrónico *</label>
+                            <input type="email" id="email" name="email" required class="form-input w-full p-2 border rounded-md">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="telefono" class="form-label block mb-2">Teléfono *</label>
+                            <input type="tel" id="telefono" name="telefono" required class="form-input w-full p-2 border rounded-md">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="justificante_pago_file" class="form-label block mb-2">Adjuntar justificante de pago *</label>
+                            <input type="file" id="justificante_pago_file" name="justificante_pago_file" required class="form-input w-full text-sm file-btn file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold" accept="image/png, image/jpeg, image/gif, application/pdf">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campos de Dirección Condicionales -->
+                <div id="direccion-correos" class="mt-6 border-t pt-6 hidden">
+                    <h3 class="text-xl font-bold mb-4">Dirección de Envío (Correos)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label for="direccion" class="form-label block mb-2">Dirección Completa *</label>
+                            <input type="text" id="direccion" name="direccion" class="form-input w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label for="poblacion" class="form-label block mb-2">Población *</label>
+                            <input type="text" id="poblacion" name="poblacion" class="form-input w-full p-2 border rounded-md">
+                        </div>
+                         <div>
+                            <label for="provincia" class="form-label block mb-2">Provincia *</label>
+                            <input type="text" id="provincia" name="provincia" class="form-input w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label for="cp" class="form-label block mb-2">Código Postal *</label>
+                            <input type="text" id="cp" name="cp" class="form-input w-full p-2 border rounded-md">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="punto-inpost" class="mt-6 border-t pt-6 hidden">
+                    <h3 class="text-xl font-bold mb-4">Punto de Recogida (Inpost)</h3>
+                     <div>
+                        <label for="inpost_point" class="form-label block mb-2">Dirección del Punto Inpost *</label>
+                        <input type="text" id="inpost_point" name="inpost_point" class="form-input w-full p-2 border rounded-md">
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button type="submit" id="submit-button" class="submit-btn text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                        Confirmar Reserva
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-<!-- Modal del mapa -->
-<div id="modal-mapa" class="modal-bg flex">
-    <div class="modal-content">
-        <iframe src="https://www.inpost.es/buscar-el-punto-pack-mas-cercano/" class="modal-iframe"></iframe>
-        <button id="seleccionar-punto" class="submit-btn text-white font-bold py-2 px-4 mt-2 rounded-md">Usar este punto</button>
-        <button id="cerrar-mapa" class="submit-btn text-white font-bold py-2 px-4 mt-2 rounded-md bg-gray-500 hover:bg-gray-700">Cerrar</button>
+    
+    <!-- Modal de Éxito/Error -->
+    <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-lg shadow-2xl p-8 max-w-sm w-full text-center">
+             <div id="modal-loader" class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mx-auto mb-4"></div>
+            <h3 id="modal-title" class="text-2xl font-bold header-subtitle mb-2">Procesando...</h3>
+            <p id="modal-message" class="text-gray-600 mb-6">Estamos guardando tu reserva. Por favor, espera.</p>
+            <button id="modal-close-btn" class="submit-btn text-white font-bold py-2 px-6 rounded-md hidden">Cerrar</button>
+        </div>
     </div>
-</div>
 
-<script>
-const metodoEnvio = document.getElementById('metodo_envio');
-const puntoInpost = document.getElementById('punto-inpost');
-const modalMapa = document.getElementById('modal-mapa');
-const abrirMapaBtn = document.getElementById('abrir-mapa');
-const cerrarMapaBtn = document.getElementById('cerrar-mapa');
-const seleccionarPuntoBtn = document.getElementById('seleccionar-punto');
-const inputInpost = document.getElementById('inpost_point');
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5h4YbUvydEVw3uMWq--C4A631mJduMMLy0Yy3KSUw1ilZ1XQHuenkfHC50xaKpapQ/exec";
 
-// Mostrar/ocultar campo InPost según método de envío
-metodoEnvio.addEventListener('change', () => {
-    puntoInpost.classList.toggle('hidden', metodoEnvio.value !== 'Inpost');
-    inputInpost.required = metodoEnvio.value === 'Inpost';
-});
+        const form = document.getElementById('reserva-form');
+        const firmadoRadios = document.querySelectorAll('input[name="firmado"]');
+        const firmaContainer = document.getElementById('firma-container');
+        const metodoEnvio = document.getElementById('metodo_envio');
 
-// Abrir modal
-abrirMapaBtn.addEventListener('click', () => {
-    modalMapa.style.display = 'flex';
-});
+        firmadoRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                firmaContainer.classList.toggle('hidden', e.target.value !== 'Sí');
+            });
+        });
 
-// Cerrar modal
-cerrarMapaBtn.addEventListener('click', () => {
-    modalMapa.style.display = 'none';
-});
+        metodoEnvio.addEventListener('change', () => {
+            const selected = metodoEnvio.value.toLowerCase();
+            document.getElementById('direccion-correos').classList.toggle('hidden', !selected.includes('correos'));
+            document.getElementById('punto-inpost').classList.toggle('hidden', !selected.includes('inpost'));
 
-// Botón "Usar este punto" simula la selección
-seleccionarPuntoBtn.addEventListener('click', () => {
-    // Aquí puedes capturar manualmente la dirección que el usuario ve en el iframe
-    // Como no hay integración directa, pedimos que escriba algo o se podría hacer un prompt
-    const direccion = prompt("Ingresa la dirección del punto que deseas seleccionar:");
-    if(direccion) {
-        inputInpost.value = direccion;
-        modalMapa.style.display = 'none';
-    }
-});
-</script>
+            document.getElementById('direccion').required = selected.includes('correos');
+            document.getElementById('poblacion').required = selected.includes('correos');
+            document.getElementById('provincia').required = selected.includes('correos');
+            document.getElementById('cp').required = selected.includes('correos');
+            document.getElementById('inpost_point').required = selected.includes('inpost');
+        });
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitButton = document.getElementById('submit-button');
+            const modal = document.getElementById('modal');
+            const modalLoader = document.getElementById('modal-loader');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Enviando...';
+            
+            modal.classList.remove('hidden');
+            modalLoader.classList.remove('hidden');
+            modalCloseBtn.classList.add('hidden');
+            modalTitle.textContent = 'Procesando...';
+            modalMessage.textContent = 'Estamos guardando tu reserva. Por favor, espera.';
+
+            const fileInput = document.getElementById('justificante_pago_file');
+            let paymentProofData = null;
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const base64String = await toBase64(file);
+                paymentProofData = {
+                    fileName: file.name,
+                    mimeType: file.type,
+                    base64Data: base64String.split(',')[1]
+                };
+            }
+
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key !== 'justificante_pago_file') {
+                    data[key] = value;
+                }
+            });
+
+            const payload = {
+                action: 'submitOrder',
+                orderData: data,
+                paymentProof: paymentProofData
+            };
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                modalLoader.classList.add('hidden');
+                modalCloseBtn.classList.remove('hidden');
+
+                if (result.success) {
+                    modalTitle.textContent = '¡Reserva Confirmada!';
+                    modalMessage.textContent = 'Gracias por tu pedido. He recibido tus datos correctamente.';
+                    form.reset();
+                    document.getElementById('direccion-correos').classList.add('hidden');
+                    document.getElementById('punto-inpost').classList.add('hidden');
+                    firmaContainer.classList.add('hidden');
+                } else {
+                    throw new Error(result.message || 'Error desconocido');
+                }
+            } catch (error) {
+                modalTitle.textContent = 'Error en la Reserva';
+                modalMessage.textContent = `Hubo un problema al procesar tu pedido: ${error.message}. Por favor, inténtalo de nuevo.`;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Confirmar Reserva';
+            }
+        });
+
+        document.getElementById('modal-close-btn').addEventListener('click', () => {
+            document.getElementById('modal').classList.add('hidden');
+        });
+    </script>
 </body>
 </html>
