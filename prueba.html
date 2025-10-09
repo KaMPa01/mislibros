@@ -1,306 +1,465 @@
 <!DOCTYPE html>
- <html lang="es">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Reserva - YO ANTES Y DESPUÉS DE TI</title>
-     <script src="https://cdn.tailwindcss.com"></script>
-     <style>
-         :root {
-             --color-cielo: #87CEEB;
-             --color-titulo-rosa: #FF1493;
-             --color-texto-oscuro: #2D3945;
-             --color-tulipan-coral: #FF7F50;
-             --color-tulipan-morado: #9370DB;
-             --color-cesped-verde: #8FBC8F;
-             --color-fondo-suave: #F0F8FF;
-             --color-blanco-puro: #FFFFFF;
-         }
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Ana Carolina - Autora de romances eroticos</title>
+    <meta name="description" content="Explora el mundo literario de Ana Carolina, autora de romances eroticos. Descubre sus libros, historias y más. ¡Sígueme en Instagram para estar al día!">
+    <meta name="keywords" content="libros, literatura, Ana Carolina, Seducción, autor, escritora, Instagram, comprar libros">
+    <meta name="author" content="Ana Carolina">
+    <meta property="og:title" content="Página de Ana Carolina - Autora de romances eroticos">
+    <meta property="og:description" content="Explora el mundo literario de Ana Carolina, autora de Seducción. Descubre sus libros, historias y más.">
+    <meta property="og:image" content="https://escritoraanacarolina.com/imagenes/portada2.jpg">
+    <meta property="og:url" content="https://escritoraanacarolina.com/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Página de Ana Carolina - Autora de romances eroticos">
+    <meta name="twitter:description" content="Explora el mundo literario de Ana Carolina, autora de Seducción. Descubre sus libros, historias y más.">
+    <meta name="twitter:image" content="https://escritoraanacarolina.com/mislibros/imagenes/portada1.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
-         body { 
-             font-family: 'Inter', sans-serif;
-             background-color: var(--color-fondo-suave);
-         }
-         
-         .header-title { color: var(--color-titulo-rosa); }
-         .header-subtitle, .form-label, h3 { color: var(--color-texto-oscuro); }
-         .form-input { 
-             border-color: #D1D5DB; 
-             transition: border-color 0.2s, box-shadow 0.2s; 
-         }
-         .form-input:focus { 
-             border-color: var(--color-tulipan-coral); 
-             box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-tulipan-coral) 25%, transparent); 
-             outline: none; 
-         }
-         .submit-btn { 
-             background-color: var(--color-titulo-rosa);
-             transition: background-color 0.2s;
-         }
-         .submit-btn:hover { 
-             background-color: color-mix(in srgb, var(--color-titulo-rosa) 90%, black);
-         }
-         .loader { border-top-color: var(--color-tulipan-coral); }
-         .hidden { display: none; }
+    <style>
+        /* Estilos generales inspirados en la portada "Yo antes y después de ti" */
 
-         /* Estilos para el cuadro de instrucciones */
-         .info-box {
-             background-color: color-mix(in srgb, var(--color-cielo) 20%, transparent);
-             border-left: 4px solid var(--color-cielo);
-             color: var(--color-texto-oscuro);
-         }
-         .info-box svg {
-             color: var(--color-cielo);
-         }
+        /* Definición de la paleta de colores de la portada con más énfasis */
+        :root {
+            --color-cielo: #87CEEB; /* Azul vibrante del cielo */
+            --color-titulo-rosa: #FF1493; /* Rosa intenso del título, ahora más presente */
+            --color-texto-oscuro: #2D3945; /* Gris/Azul oscuro más profundo para el texto principal */
+            --color-tulipan-coral: #FF7F50; /* Naranja/Coral más fuerte de los tulipanes */
+            --color-tulipan-morado: #9370DB; /* Morado medio de los tulipanes */
+            --color-cesped-verde: #8FBC8F; /* Verde suave del césped */
+            --color-fondo-suave: #F0F8FF; /* Un blanco azulado muy claro para fondos */
+            --color-blanco-puro: #FFFFFF;
+        }
 
-         /* Estilo para el botón de adjuntar archivo */
-         .file-btn {
-             background-color: color-mix(in srgb, var(--color-tulipan-morado) 15%, transparent);
-             color: var(--color-tulipan-morado);
-             cursor: pointer;
-         }
-         .file-btn:hover {
-             background-color: color-mix(in srgb, var(--color-tulipan-morado) 25%, transparent);
-         }
-     </style>
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
- </head>
- <body>
+        body {
+            font-family: 'Open Sans', sans-serif; /* Nueva fuente para el cuerpo */
+            background-color: var(--color-fondo-suave);
+            color: var(--color-texto-oscuro);
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
 
-     <div class="container mx-auto p-4 md:p-8 max-w-3xl">
-         <header class="text-center mb-8">
-             <h1 class="text-4xl font-bold header-title">Preventa</h1>
-             <p class="text-lg header-subtitle mt-2">"YO ANTES Y DESPUÉS DE TI"</p>
-         </header>
+        header {
+            text-align: center;
+            padding: 60px 20px; /* Más padding para un look más abierto */
+            background: linear-gradient(135deg, var(--color-cielo), #B0E0E6); /* Gradiente suave del cielo */
+            position: relative;
+            overflow: hidden;
+            color: var(--color-blanco-puro);
+        }
 
-         <div class="flex justify-center mb-8">
-             <img src="imagenes/portada3.jpg" alt="Portada del libro 'Yo Antes y Después de Ti'" class="rounded-lg shadow-lg max-w-xs md:max-w-sm lg:max-w-md">
-         </div>
+        h1 {
+            font-family: 'Montserrat', sans-serif; /* Nueva fuente para títulos */
+            font-size: 3.5rem; /* Más grande para el impacto */
+            color: var(--color-blanco-puro); /* Blanco sobre el degradado de cielo */
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
+            margin: 0;
+            position: relative;
+            z-index: 2;
+        }
 
-         <div class="info-box p-4 rounded-md mb-8" role="alert">
-             <div class="flex">
-                 <div class="py-1">
-                     <svg class="fill-current h-6 w-6 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-1-11V5h2v4h-2zm0 6v-2h2v2h-2z"/></svg>
-                 </div>
-                 <div>
-                     <p class="font-bold">Instrucciones de Pago</p>
-                     <p class="text-sm">Para confirmar tu reserva, realiza un Bizum de <strong>20 €</strong> al número <strong>698 982 882</strong>. Después, adjunta el justificante de pago en el formulario.</p>
-                 </div>
-             </div>
-         </div>
+        h2 {
+            font-family: 'Montserrat', sans-serif; /* Nueva fuente para subtítulos */
+            font-size: 2.5rem; /* Más grande */
+            color: var(--color-tulipan-morado); /* Morado vibrante */
+            text-align: center;
+            margin-top: 40px; /* Más espacio */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
 
-         <div class="bg-white p-6 md:p-10 rounded-lg shadow-lg">
-             <form id="reserva-form">
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     <div>
-                         <div class="mb-4">
-                             <label for="nombre_apellido" class="form-label block mb-2">Nombre y Apellido *</label>
-                             <input type="text" id="nombre_apellido" name="nombre_apellido" required class="form-input w-full p-2 border rounded-md">
-                         </div>
+        h3 {
+            font-family: 'Montserrat', sans-serif; /* Nueva fuente para títulos de libros */
+            font-size: 1.5rem; /* Más grande */
+            color: var(--color-texto-oscuro);
+            margin: 15px 0 10px; /* Ajuste de margen */
+            text-align: center;
+        }
 
-                         <div class="mb-4">
-                             <label class="form-label block mb-2">¿Quieres el libro firmado? *</label>
-                             <div class="flex items-center space-x-4">
-                                 <label class="flex items-center"><input type="radio" name="firmado" value="Sí" required class="mr-2"> Sí</label>
-                                 <label class="flex items-center"><input type="radio" name="firmado" value="No" class="mr-2"> No</label>
-                             </div>
-                         </div>
+        .separator {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.8; /* Ligeramente transparente para integrarse mejor */
+        }
 
-                         <div id="firma-container" class="mb-4 hidden">
-                             <label for="nombre_firma" class="form-label block mb-2">Nombre para la dedicatoria</label>
-                             <input type="text" id="nombre_firma" name="nombre_firma" class="form-input w-full p-2 border rounded-md">
-                         </div>
-                         
-                         <div class="mb-4">
-                             <label class="form-label block mb-2">Método de Envío *</label>
-                             <select id="metodo_envio" name="metodo_envio" required class="form-input w-full p-2 border rounded-md bg-white">
-                                 <option value="">Selecciona una opción...</option>
-                                 <option value="Correos">Correos (Envío a domicilio)</option>
-                                 <option value="Inpost">Inpost (Punto de recogida)</option>
-                             </select>
-                         </div>
-                     </div>
-                     <div>
-                           <div class="mb-4">
-                                 <label for="email" class="form-label block mb-2">Correo Electrónico *</label>
-                                 <input type="email" id="email" name="email" required class="form-input w-full p-2 border rounded-md">
-                             </div>
-                             
-                             <div class="mb-4">
-                                 <label for="telefono" class="form-label block mb-2">Teléfono *</label>
-                                 <input type="tel" id="telefono" name="telefono" required class="form-input w-full p-2 border rounded-md">
-                             </div>
+        /* Estilos de los libros */
+        .book-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 30px 20px; /* Más padding */
+        }
 
-                             <div class="mb-4">
-                                 <label for="justificante_pago_file" class="form-label block mb-2">Adjuntar justificante de pago *</label>
-                                 <input type="file" id="justificante_pago_file" name="justificante_pago_file" required class="form-input w-full text-sm file-btn file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold" accept="image/png, image/jpeg, image/gif, application/pdf">
-                             </div>
-                         </div>
-                     </div>
+        .book {
+            background-color: var(--color-blanco-puro);
+            border-radius: 20px; /* Esquinas más redondeadas */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Sombra más suave y extendida */
+            text-align: center;
+            max-width: 350px; /* Ligeramente más anchos */
+            padding: 25px; /* Más padding interno */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-                     <div id="direccion-correos" class="mt-6 border-t pt-6 hidden">
-                         <h3 class="text-xl font-bold mb-4">Dirección de Envío (Correos)</h3>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                             <div class="md:col-span-2">
-                                 <label for="direccion" class="form-label block mb-2">Dirección Completa *</label>
-                                 <input type="text" id="direccion" name="direccion" class="form-input w-full p-2 border rounded-md">
-                             </div>
-                             <div>
-                                 <label for="poblacion" class="form-label block mb-2">Población *</label>
-                                 <input type="text" id="poblacion" name="poblacion" class="form-input w-full p-2 border rounded-md">
-                             </div>
-                             <div>
-                                 <label for="provincia" class="form-label block mb-2">Provincia *</label>
-                                 <input type="text" id="provincia" name="provincia" class="form-input w-full p-2 border rounded-md">
-                             </div>
-                             <div>
-                                 <label for="cp" class="form-label block mb-2">Código Postal *</label>
-                                 <input type="text" id="cp" name="cp" class="form-input w-full p-2 border rounded-md">
-                             </div>
-                         </div>
-                     </div>
+        .book:hover {
+            transform: translateY(-12px); /* Más elevación al pasar el ratón */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
 
-                     <div id="punto-inpost" class="mt-6 border-t pt-6 hidden">
-                         <h3 class="text-xl font-bold mb-4">Punto de Recogida (Inpost)</h3>
-                             <div>
-                                 <label for="inpost_point" class="form-label block mb-2">Dirección del Punto Inpost *</label>
-                                 <input type="text" id="inpost_point" name="inpost_point" class="form-input w-full p-2 border rounded-md">
-                             </div>
-                         </div>
+        .book-cover {
+            width: 100%;
+            max-width: 220px; /* Portadas ligeramente más grandes */
+            border-radius: 12px; /* Esquinas de imagen más redondeadas */
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25); /* Sombra más fuerte para la portada */
+            margin-bottom: 20px; /* Más espacio debajo */
+        }
 
-                         <div class="mt-8 text-center">
-                             <button type="submit" id="submit-button" class="submit-btn text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
-                                 Confirmar Reserva
-                             </button>
-                         </div>
-                     </form>
-                 </div>
-             </div>
-             
-             <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
-                 <div class="bg-white rounded-lg shadow-2xl p-8 max-w-sm w-full text-center">
-                         <div id="modal-loader" class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mx-auto mb-4"></div>
-                     <h3 id="modal-title" class="text-2xl font-bold header-subtitle mb-2">Procesando...</h3>
-                     <p id="modal-message" class="text-gray-600 mb-6">Estamos guardando tu reserva. Por favor, espera.</p>
-                     <button id="modal-close-btn" class="submit-btn text-white font-bold py-2 px-6 rounded-md hidden">Cerrar</button>
-                 </div>
-             </div>
+        .book-description {
+            margin: 20px 0; /* Más espacio alrededor */
+            color: var(--color-texto-oscuro); /* Texto más oscuro y legible */
+            text-align: justify;
+            font-size: 1rem; /* Tamaño de fuente ligeramente mayor */
+            line-height: 1.7; /* Mayor interlineado para legibilidad */
+        }
 
-             <script>
-                 // --- CAMBIO HECHO AQUÍ ---
-                 // Apunta a la nueva función serverless en Vercel
-                 const SCRIPT_URL = "/api/reservar"; 
-                 // --- FIN DEL CAMBIO ---
+        /* Estilos de los botones base */
+        .buy-button, .instagram-button, .soon-button {
+            display: inline-block;
+            color: var(--color-blanco-puro);
+            padding: 14px 30px; /* Más grandes */
+            text-decoration: none;
+            border-radius: 35px; /* Más redondeados */
+            font-size: 1.1rem; /* Texto más grande */
+            font-weight: 700; /* Más negrita */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Sombra para los botones */
+            text-align: center;
+        }
 
-                 const form = document.getElementById('reserva-form');
-                 const firmadoRadios = document.querySelectorAll('input[name="firmado"]');
-                 const firmaContainer = document.getElementById('firma-container');
-                 const metodoEnvio = document.getElementById('metodo_envio');
+        .buy-button {
+            background-color: var(--color-tulipan-coral); /* Coral más fuerte */
+        }
 
-                 firmadoRadios.forEach(radio => {
-                     radio.addEventListener('change', (e) => {
-                         firmaContainer.classList.toggle('hidden', e.target.value !== 'Sí');
-                     });
-                 });
+        .buy-button:hover {
+            background-color: #FF6347; /* Un coral aún más vivo */
+            transform: scale(1.08);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
 
-                 metodoEnvio.addEventListener('change', () => {
-                     const selected = metodoEnvio.value.toLowerCase();
-                     document.getElementById('direccion-correos').classList.toggle('hidden', !selected.includes('correos'));
-                     document.getElementById('punto-inpost').classList.toggle('hidden', !selected.includes('inpost'));
+        /* --- NUEVO ESTILO PARA EL BOTÓN PRÓXIMAMENTE --- */
+        .soon-button {
+            background-color: var(--color-tulipan-morado); /* Usa el morado vibrante */
+            cursor: pointer; /* Lo mantiene cliclable para que el usuario pueda intentar hacer algo, aunque no haya link */
+        }
 
-                     document.getElementById('direccion').required = selected.includes('correos');
-                     document.getElementById('poblacion').required = selected.includes('correos');
-                     document.getElementById('provincia').required = selected.includes('correos');
-                     document.getElementById('cp').required = selected.includes('correos');
-                     document.getElementById('inpost_point').required = selected.includes('inpost');
-                 });
+        .soon-button:hover {
+            background-color: #7B68EE; /* Morado un poco más oscuro */
+            transform: scale(1.08);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        /* ------------------------------------------- */
 
-                 const toBase64 = file => new Promise((resolve, reject) => {
-                     const reader = new FileReader();
-                     reader.readAsDataURL(file);
-                     reader.onload = () => resolve(reader.result);
-                     reader.onerror = error => reject(error);
-                 });
+        .instagram-button {
+            background-color: var(--color-titulo-rosa); /* Rosa vibrante */
+        }
 
-                 form.addEventListener('submit', async (e) => {
-                     e.preventDefault();
-                     const submitButton = document.getElementById('submit-button');
-                     const modal = document.getElementById('modal');
-                     const modalLoader = document.getElementById('modal-loader');
-                     const modalTitle = document.getElementById('modal-title');
-                     const modalMessage = document.getElementById('modal-message');
-                     const modalCloseBtn = document.getElementById('modal-close-btn');
+        .instagram-button:hover {
+            background-color: #E6007A; /* Rosa más oscuro */
+            transform: scale(1.08);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
 
-                     submitButton.disabled = true;
-                     submitButton.textContent = 'Enviando...';
-                     
-                     modal.classList.remove('hidden');
-                     modalLoader.classList.remove('hidden');
-                     modalCloseBtn.classList.add('hidden');
-                     modalTitle.textContent = 'Procesando...';
-                     modalMessage.textContent = 'Estamos guardando tu reserva. Por favor, espera.';
+        .instagram-button i {
+            margin-right: 10px;
+        }
 
-                     const fileInput = document.getElementById('justificante_pago_file');
-                     let paymentProofData = null;
+        /* Sección Bookstagrammer */
+        #Bookstagrammer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            text-align: center;
+        }
 
-                     if (fileInput.files.length > 0) {
-                         const file = fileInput.files[0];
-                         const base64String = await toBase64(file);
-                         paymentProofData = {
-                             fileName: file.name,
-                             mimeType: file.type,
-                             base64Data: base64String.split(',')[1]
-                         };
-                     }
+        #Bookstagrammer h2 {
+            display: none; /* Ocultamos el título para un look más limpio */
+        }
 
-                     const formData = new FormData(form);
-                     const data = {};
-                     formData.forEach((value, key) => {
-                         if (key !== 'justificante_pago_file') {
-                             data[key] = value;
-                         }
-                     });
+        #toggleBookstagrammers {
+            width: 55px; /* Más grande */
+            height: 55px;
+            font-size: 1.8rem; /* Icono más grande */
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-tulipan-morado); /* Color distintivo */
+            color: var(--color-blanco-puro);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        
+        #toggleBookstagrammers:hover {
+            background-color: #7B68EE; /* Morado un poco más oscuro */
+            transform: scale(1.1);
+        }
 
-                     const payload = {
-                         action: 'submitOrder',
-                         orderData: data,
-                         paymentProof: paymentProofData
-                     };
+        #toggleBookstagrammers i {
+            margin: 0;
+        }
 
-                     try {
-                         const response = await fetch(SCRIPT_URL, {
-                             method: 'POST',
-                             body: JSON.stringify(payload)
-                         });
-                         const result = await response.json();
+        .Bookstagrammer-container {
+            background-color: rgba(255, 255, 255, 0.98); /* Fondo casi opaco */
+            padding: 20px;
+            border-radius: 15px; /* Más redondeado */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); /* Sombra más definida */
+            margin-bottom: 15px; /* Más espacio */
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Más espacio entre elementos */
+        }
 
-                         modalLoader.classList.add('hidden');
-                         modalCloseBtn.classList.remove('hidden');
+        .booksgramer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-                         if (result.success) {
-                             modalTitle.textContent = '¡Reserva Confirmada!';
-                             modalMessage.textContent = 'Gracias por tu pedido. He recibido tus datos correctamente.';
-                             form.reset();
-                             document.getElementById('direccion-correos').classList.add('hidden');
-                             document.getElementById('punto-inpost').classList.add('hidden');
-                             firmaContainer.classList.add('hidden');
-                         } else {
-                             throw new Error(result.message || 'Error desconocido');
-                         }
-                     } catch (error) {
-                         modalTitle.textContent = 'Error en la Reserva';
-                         modalMessage.textContent = `Hubo un problema al procesar tu pedido: ${error.message}. Por favor, inténtalo de nuevo.`;
-                     } finally {
-                         submitButton.disabled = false;
-                         submitButton.textContent = 'Confirmar Reserva';
-                     }
-                 });
+        .booksgramer img {
+            width: 55px; /* Más grande */
+            height: 55px;
+            border-radius: 50%;
+            border: 3px solid var(--color-tulipan-coral); /* Borde con color de acento */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
 
-                 document.getElementById('modal-close-btn').addEventListener('click', () => {
-                     document.getElementById('modal').classList.add('hidden');
-                 });
-             </script>
-         </body>
-         </html>
+        .booksgramer .instagram-button {
+            padding: 8px 15px; /* Ajuste de padding */
+            font-size: 0.95rem;
+            box-shadow: none; /* Quitamos sombra extra */
+        }
+        .booksgramer .instagram-button:hover {
+            transform: scale(1.05); /* Escala más sutil */
+        }
+
+
+        /* Estilos para el botón y la biografía */
+        .bio-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            border: 4px solid var(--color-titulo-rosa); /* Borde con rosa de acento */
+            background: transparent;
+            cursor: pointer;
+            z-index: 1000;
+            width: 75px; /* Más grande */
+            height: 75px;
+            border-radius: 50%;
+            overflow: hidden;
+            padding: 0;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.3); /* Sombra más fuerte */
+            transition: transform 0.3s ease;
+        }
+
+        .bio-button:hover {
+            transform: scale(1.15); /* Más elevación */
+        }
+
+        .bio-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .bio-content {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            background: var(--color-blanco-puro);
+            padding: 30px; /* Más padding */
+            width: 350px; /* Más ancho */
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3); /* Sombra más potente */
+            z-index: 999;
+            border-radius: 20px; /* Más redondeado */
+            opacity: 0;
+            transform: translateY(30px); /* Más desplazamiento inicial */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Transición más suave */
+            visibility: hidden;
+        }
+
+        .bio-content.show {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .bio-content img.bio-photo {
+            width: 130px; /* Más grande */
+            height: 130px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px; /* Más espacio debajo */
+            border: 5px solid var(--color-tulipan-coral); /* Borde con color de acento */
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        .bio-content h2 {
+            font-size: 2rem; /* Tamaño de título dentro de la bio */
+            margin-top: 0;
+            color: var(--color-tulipan-morado);
+        }
+
+        .close-button {
+            background: var(--color-tulipan-coral);
+            color: var(--color-blanco-puro);
+            border: none;
+            padding: 10px 20px; /* Más grande */
+            cursor: pointer;
+            margin-top: 20px; /* Más espacio */
+            border-radius: 25px; /* Más redondeado */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 700; /* Más negrita */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .close-button:hover {
+            background: #FF6347;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-pattern"></div>
+        <h1>Bienvenidos a mi mundo literario</h1>
+    </header>
+    <img src="imagenes/tulipan.png" alt="Separador decorativo" class="separator">
+    <section>
+        <h2>Mis Libros</h2>
+        <div class="book-container">
+            <div class="book">
+                <h3>YO ANTES Y DESPUÉS DE TI</h3>
+                <img src="imagenes/portada3.jpg" alt="Portada del libro 'YO ANTES Y DESPUES DE TI'" class="book-cover">
+                <p class="book-description">
+                    Valkiria está rota.Ya no es la misma de antes, aunque a ojos de los demás se pone una máscara para esconder sus cicatrices detrás de tatuajes y tulipanes. Pero Gabriel, el escort de lujo del que se ha enganchado hasta llevarla casi a la ruina, sí las ve, y a base de sexo e intensas charlas intentará arreglarla...
+Ninguno de los dos estaban preparados para la vuelta de Felipe a España después de ocho años en Estados Unidos y todo lo que va a remover su llegada.
+Un corazón roto. 
+Un ángel sin alas. 
+Un error del pasado que lo cambia todo.
+                </p>
+                <a href="#" onclick="alert('¡Estás al tanto! La segunda tanda de preventa está en preparación. Sígueme en Instagram para no perderte el anuncio oficial.'); return false;" class="soon-button">PRÓXIMAMENTE</a>
+            </div>
+            <div class="book">
+                <h3>LA CHICA DEL PRIMER ASALTO</h3>
+                <img src="imagenes/portada4.jpg" alt="Portada del libro 'LA CHICA DEL PRIMER ASALTO'" class="book-cover">
+                <p class="book-description">
+                    A sus veintiún años, Clara está a punto de convertirse en campeona de España en la categoría superwélter. Entrena sin descanso, su mayor sueño… representar España en las Olimpiadas de Francia. A su lado está Rubén, su hermano mayor y exboxeador, que dejó el ring por razones que aún no es capaz de superar. Y decide dedicarse por completo a la pequeña.
+Enric, un Cartetí de 36 años, neurólogo, no ha tenido ninguna relación sentimental, para no enfrentarse a las heridas que dejó una relación rota, y que continúan atormentándole.
+Lo último que espera es que una joven boxeadora irrumpa en su vida en lo que pensó que solo sería una noche.
+Sueños, pasado que pesan, encuentros que pueden cambiarlo todo…
+                </p>
+                <a href="https://www.amazon.es/chica-del-primer-asalto-ebook/dp/B0FC2PYJBW/ref=sr_1_1?crid=26MNP277LNT0&dib=eyJ2IjoiMSJ9.lwUWa9OKoBxNZ5KV7itF1Kp6zL_TsOF9e4fS_xPs3lbGjHj071QN20LucGBJIEps.1OudNgbEscmLYHVrLTZ80lgFsj6pz3PHmwtUaYeCHZc&dib_tag=se&keywords=la+chica+del+primer+asalto&qid=1757241085&sprefix=la+chica+del%2Caps%2C116&sr=8-1" target="_blank" class="buy-button">COMPRAR AHORA</a>
+            </div>
+            <div class="book">
+                <h3>¿Y si no, nos hubiéramos conocido por casualidad?</h3>
+                <img src="imagenes/portada1.jpg" alt="Portada del libro '¿Y si no, nos hubiéramos conocido por casualidad?'" class="book-cover">
+                <p class="book-description">
+                    Vicky deja atrás su hogar para mudarse a Madrid con su mejor amiga, con el sueño de estudiar fotografía. Sin embargo, sus planes de convertirse en una fotógrafa de éxito no salen como siempre había imaginado...
+                </p>
+                <a href="https://www.amazon.es/nos-hubiéramos-conocido-por-casualidad/dp/B0DK9RJF91" target="_blank" class="buy-button">Compra ahora</a>
+            </div>
+            <div class="book">
+                <h3>¿Y si volviéramos a vernos por casualidad?</h3>
+                <img src="imagenes/portada2.jpg" alt="Portada del libro '¿Y si volviéramos a vernos por casualidad?'" class="book-cover">
+                <p class="book-description">
+                    Vicky nunca imaginó que construiría una vida con Tae y Aera a su lado, casi perfecta, cercana a lo que muchos consideran una familia modelo, en Corea del Sur...
+                </p>
+                <a href="https://www.amazon.es/volviéramos-Casualidad-hubiéramos-conocido-casualidad/dp/B0DTGB4S33" target="_blank" class="buy-button">Compra ahora</a>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="https://www.instagram.com/ana.caro.li.na?igsh=MXRleHRmamNiam5vcg%3D%3D&utm_source=qr" target="_blank" class="instagram-button">
+                <i class="fab fa-instagram"></i> ¡Sígueme en Instagram!
+            </a>
+        </div>
+    </section>
+    
+    <section id="Bookstagrammer">
+        <h2>Bookstagrammer</h2>
+        <button id="toggleBookstagrammers" class="instagram-button">
+            <i class="fab fa-instagram"></i>
+        </button>
+        <div id="bookstagrammerList" class="Bookstagrammer-container" style="display: none;">
+            <div class="booksgramer">
+                <img src="imagenes/enerojs.jpg" alt="Foto de perfil de Booksgramer 1">
+                <a href="https://www.instagram.com/enero.gs/" target="_blank" class="instagram-button">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            <div class="booksgramer">
+                <img src="imagenes/panditalectora.jpg" alt="Foto de perfil de Booksgramer 2">
+                <a href="https://www.instagram.com/pandita.lectora" target="_blank" class="instagram-button">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            <div class="booksgramer">
+                <img src="imagenes/pame.jpg" alt="Foto de perfil de Booksgramer 3">
+                <a href="https://www.instagram.com/fpamelagarcia" target="_blank" class="instagram-button">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            
+        </div>
+    </section>
+    
+    <button id="bioButton" class="bio-button">
+        <img src="imagenes/biografia.jpg" alt="Foto de la autora">
+    </button>
+    
+    <div id="bioContent" class="bio-content">
+        <img src="imagenes/ana-carolina.jpg" alt="Foto de la autora" class="bio-photo">
+        <h2>Biografía</h2>
+        <p>
+            Ana Carolina, creo que ahora soy del mundo... De cualquier lugar. 
+
+Llegué a España hace unos cuantos años, mi obligación de aprender castellano por estudios se convirtió en leer muchos libros, demasiados. Y es una de mis pasiones, después de BTS claramente... seguido de una mala leche tremenda, y ser creo que... un poco malhablada. Algunas veces ni siquiera se en que idioma hablo. Mientras se me entienda... 
+        </p>
+        <button id="closeBio" class="close-button">Cerrar</button>
+    </div>
+    
+    <script>
+        // Mostrar/ocultar lista de Bookstagrammers
+        document.getElementById('toggleBookstagrammers').addEventListener('click', function() {
+            var list = document.getElementById('bookstagrammerList');
+            if (list.style.display === 'none' || list.style.display === '') {
+                list.style.display = 'flex';
+            } else {
+                list.style.display = 'none';
+            }
+        });
+        
+        // Alternar visibilidad de la biografía con animación
+        document.getElementById('bioButton').addEventListener('click', function() {
+            var bioContent = document.getElementById('bioContent');
+            bioContent.classList.toggle('show');
+        });
+        
+        // Botón para cerrar la biografía
+        document.getElementById('closeBio').addEventListener('click', function() {
+            document.getElementById('bioContent').classList.remove('show');
+        });
+    </script>
+</body>
+</html>
