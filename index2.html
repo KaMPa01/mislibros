@@ -3,191 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Ana Carolina - Autora de romances eróticos</title>
-    <meta name="description" content="Explora el mundo literario de Ana Carolina, autora de romances eróticos. Descubre sus libros, historias y más. ¡Sígueme en Instagram para estar al día!">
-    <meta name="keywords" content="libros, literatura, Ana Carolina, Seducción, autor, escritora, Instagram, comprar libros">
-    <meta name="author" content="Ana Carolina">
-    <meta property="og:title" content="Página de Ana Carolina - Autora de romances eróticos">
-    <meta property="og:description" content="Explora el mundo literario de Ana Carolina, autora de Seducción. Descubre sus libros, historias y más.">
-    <meta property="og:image" content="https://escritoraanacarolina.com/imagenes/portada2.jpg">
-    <meta property="og:url" content="https://escritoraanacarolina.com/">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Página de Ana Carolina - Autora de romances eróticos">
-    <meta name="twitter:description" content="Explora el mundo literario de Ana Carolina, autora de Seducción. Descubre sus libros, historias y más.">
-    <meta name="twitter:image" content="https://escritoraanacarolina.com/mislibros/imagenes/portada1.jpg">
+    <title>Página de Ana Carolina - Autora de romances eroticos</title>
+    <meta name="description" content="Explora el mundo literario de Ana Carolina...">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* Estilos generales (Mantenidos de tu original) */
+        /* TUS ESTILOS ORIGINALES INTACTOS */
         :root {
-            --color-cielo: #87CEEB;
-            --color-titulo-rosa: #FF1493;
-            --color-texto-oscuro: #2D3945;
-            --color-tulipan-coral: #FF7F50;
-            --color-tulipan-morado: #9370DB;
-            --color-cesped-verde: #8FBC8F;
-            --color-fondo-suave: #F0F8FF;
+            --color-cielo: #87CEEB; 
+            --color-titulo-rosa: #FF1493; 
+            --color-texto-oscuro: #2D3945; 
+            --color-tulipan-coral: #FF7F50; 
+            --color-tulipan-morado: #9370DB; 
+            --color-cesped-verde: #8FBC8F; 
+            --color-fondo-suave: #F0F8FF; 
             --color-blanco-puro: #FFFFFF;
         }
-
         body { font-family: 'Open Sans', sans-serif; background-color: var(--color-fondo-suave); color: var(--color-texto-oscuro); margin: 0; padding: 0; font-size: 16px; }
-        header { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, var(--color-cielo), #B0E0E6); color: var(--color-blanco-puro); position: relative; overflow: hidden; }
-        h1 { font-family: 'Montserrat', sans-serif; font-size: 3.5rem; text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4); margin: 0; z-index: 2; position: relative; }
-        h2 { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; color: var(--color-tulipan-morado); text-align: center; margin-top: 40px; }
-        h3 { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; text-align: center; margin: 15px 0 10px; }
-        
+        header { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, var(--color-cielo), #B0E0E6); position: relative; overflow: hidden; color: var(--color-blanco-puro); }
+        h1 { font-family: 'Montserrat', sans-serif; font-size: 3.5rem; color: var(--color-blanco-puro); text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4); margin: 0; position: relative; z-index: 2; }
+        h2 { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; color: var(--color-tulipan-morado); text-align: center; margin-top: 40px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); }
+        h3 { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; color: var(--color-texto-oscuro); margin: 15px 0 10px; text-align: center; }
         .separator { width: 100%; height: auto; display: block; opacity: 0.8; }
         
-        /* Contenedor de Libros */
         .book-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 30px 20px; }
-        .book { background-color: var(--color-blanco-puro); border-radius: 20px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); text-align: center; max-width: 350px; padding: 25px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .book { background-color: var(--color-blanco-puro); border-radius: 20px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); text-align: center; max-width: 350px; padding: 25px; transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; align-items: center; }
         .book:hover { transform: translateY(-12px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); }
         .book-cover { width: 100%; max-width: 220px; border-radius: 12px; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25); margin-bottom: 20px; }
-        .book-description { margin: 20px 0; text-align: justify; font-size: 1rem; line-height: 1.7; }
-
-        /* Botones */
-        .buy-button, .instagram-button, .soon-button { display: inline-block; color: var(--color-blanco-puro); padding: 14px 30px; text-decoration: none; border-radius: 35px; font-size: 1.1rem; font-weight: 700; transition: 0.3s; border: none; cursor: pointer; text-align: center; }
-        .buy-button { background-color: var(--color-tulipan-coral); }
-        .buy-button:hover { background-color: #FF6347; transform: scale(1.08); }
-        .soon-button { background-color: var(--color-tulipan-morado); }
-        .soon-button:hover { background-color: #7B68EE; transform: scale(1.08); }
-        .instagram-button { background-color: var(--color-titulo-rosa); }
+        .book-description { margin: 20px 0; color: var(--color-texto-oscuro); text-align: justify; font-size: 1rem; line-height: 1.7; flex-grow: 1; }
         
-        /* Estilos Bio y Bookstagrammer (Igual que los tuyos) */
-        .bio-button { position: fixed; bottom: 20px; left: 20px; border: 4px solid var(--color-titulo-rosa); width: 75px; height: 75px; border-radius: 50%; overflow: hidden; z-index: 1000; cursor: pointer; transition: 0.3s; padding: 0; }
-        .bio-button:hover { transform: scale(1.15); }
-        .bio-button img { width: 100%; height: 100%; object-fit: cover; }
-        .bio-content { position: fixed; bottom: 100px; left: 20px; background: white; padding: 30px; width: 350px; border-radius: 20px; box-shadow: 0px 8px 25px rgba(0,0,0,0.3); z-index: 999; visibility: hidden; opacity: 0; transform: translateY(30px); transition: 0.5s; }
-        .bio-content.show { visibility: visible; opacity: 1; transform: translateY(0); }
-        .bio-photo { width: 130px; height: 130px; border-radius: 50%; display: block; margin: 0 auto 20px; border: 5px solid var(--color-tulipan-coral); }
+        .buy-button, .instagram-button, .soon-button { display: inline-block; color: var(--color-blanco-puro); padding: 14px 30px; text-decoration: none; border-radius: 35px; font-size: 1.1rem; font-weight: 700; transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: center; margin-top: auto; }
+        .buy-button { background-color: var(--color-tulipan-coral); }
+        .buy-button:hover { background-color: #FF6347; transform: scale(1.08); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
+        .soon-button { background-color: var(--color-tulipan-morado); }
+        .soon-button:hover { background-color: #7B68EE; transform: scale(1.08); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
+        .instagram-button { background-color: var(--color-titulo-rosa); }
+        .instagram-button:hover { background-color: #E6007A; transform: scale(1.08); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
+        .instagram-button i { margin-right: 10px; }
 
-        #Bookstagrammer { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
-        #toggleBookstagrammers { width: 55px; height: 55px; border-radius: 50%; background: var(--color-tulipan-morado); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; }
-        .Bookstagrammer-container { background: rgba(255,255,255,0.98); padding: 20px; border-radius: 15px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
+        /* Estilos Bio y Bookstagrammer intactos */
+        #Bookstagrammer { position: fixed; bottom: 20px; right: 20px; z-index: 1000; text-align: center; }
+        #Bookstagrammer h2 { display: none; }
+        #toggleBookstagrammers { width: 55px; height: 55px; font-size: 1.8rem; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; background-color: var(--color-tulipan-morado); color: var(--color-blanco-puro); box-shadow: 0 3px 8px rgba(0,0,0,0.2); transition: background-color 0.3s ease, transform 0.2s ease; }
+        #toggleBookstagrammers:hover { background-color: #7B68EE; transform: scale(1.1); }
+        .Bookstagrammer-container { background-color: rgba(255, 255, 255, 0.98); padding: 20px; border-radius: 15px; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; }
         .booksgramer { display: flex; align-items: center; gap: 12px; }
         .booksgramer img { width: 55px; height: 55px; border-radius: 50%; border: 3px solid var(--color-tulipan-coral); }
+        .booksgramer .instagram-button { padding: 8px 15px; font-size: 0.95rem; box-shadow: none; }
+        .bio-button { position: fixed; bottom: 20px; left: 20px; border: 4px solid var(--color-titulo-rosa); background: transparent; cursor: pointer; z-index: 1000; width: 75px; height: 75px; border-radius: 50%; overflow: hidden; padding: 0; box-shadow: 0 5px 12px rgba(0,0,0,0.3); transition: transform 0.3s ease; }
+        .bio-button:hover { transform: scale(1.15); }
+        .bio-button img { width: 100%; height: 100%; object-fit: cover; }
+        .bio-content { position: fixed; bottom: 100px; left: 20px; background: var(--color-blanco-puro); padding: 30px; width: 350px; box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3); z-index: 999; border-radius: 20px; opacity: 0; transform: translateY(30px); transition: opacity 0.5s ease, transform 0.5s ease; visibility: hidden; }
+        .bio-content.show { opacity: 1; transform: translateY(0); visibility: visible; }
+        .bio-content img.bio-photo { width: 130px; height: 130px; border-radius: 50%; display: block; margin: 0 auto 20px; border: 5px solid var(--color-tulipan-coral); }
+        .bio-content h2 { font-size: 2rem; margin-top: 0; color: var(--color-tulipan-morado); }
+        .close-button { background: var(--color-tulipan-coral); color: var(--color-blanco-puro); border: none; padding: 10px 20px; cursor: pointer; margin-top: 20px; border-radius: 25px; transition: background-color 0.3s ease, transform 0.2s ease; font-weight: 700; }
+        .close-button:hover { background: #FF6347; transform: scale(1.05); }
+        
+        #loader { text-align: center; width: 100%; padding: 40px; font-size: 1.2rem; color: var(--color-tulipan-morado); font-weight: bold; }
     </style>
 </head>
 <body>
     <header>
+        <div class="header-pattern"></div>
         <h1>Bienvenidos a mi mundo literario</h1>
     </header>
-    <img src="imagenes/tulipan.png" alt="Separador" class="separator">
-
+    <img src="imagenes/tulipan.png" alt="Separador decorativo" class="separator">
+    
     <section>
         <h2>Mis Libros</h2>
-        <div class="book-container">
-            
-            <div class="book" id="libro-principal">
-                <h3 id="idx-titulo">Cargando...</h3>
-                <img src="" id="idx-portada" alt="Portada" class="book-cover">
-                <p class="book-description" id="idx-sinopsis">
-                    Valkiria está rota. Ya no es la misma de antes, aunque a ojos de los demás se pone una máscara para esconder sus cicatrices...
-                </p>
-                <div id="contenedor-boton-dinamico">
-                    <span style="font-size: 0.9rem; color: #888;">Verificando estado...</span>
-                </div>
-            </div>
-
-            <div class="book">
-                <h3>LA CHICA DEL PRIMER ASALTO</h3>
-                <img src="imagenes/portada4.jpg" alt="Portada" class="book-cover">
-                <p class="book-description">
-                    Clara está a punto de convertirse en campeona de España. Entrena sin descanso. Enric, un neurólogo, no ha tenido ninguna relación sentimental hasta que una joven boxeadora irrumpe en su vida...
-                </p>
-                <a href="https://www.amazon.es/chica-del-primer-asalto-ebook/dp/B0FC2PYJBW" target="_blank" class="buy-button">COMPRAR AHORA</a>
-            </div>
-
-            <div class="book">
-                <h3>¿Y si no, nos hubiéramos conocido por casualidad?</h3>
-                <img src="imagenes/portada1.jpg" alt="Portada" class="book-cover">
-                <p class="book-description">
-                    Vicky deja atrás su hogar para mudarse a Madrid con su mejor amiga, con el sueño de estudiar fotografía. Sin embargo, sus planes no salen como siempre había imaginado...
-                </p>
-                <a href="https://www.amazon.es/nos-hubiéramos-conocido-por-casualidad/dp/B0DK9RJF91" target="_blank" class="buy-button">COMPRA AHORA</a>
-            </div>
-
-            <div class="book">
-                <h3>¿Y si volviéramos a vernos por casualidad?</h3>
-                <img src="imagenes/portada2.jpg" alt="Portada" class="book-cover">
-                <p class="book-description">
-                    Vicky nunca imaginó que construiría una vida con Tae y Aera a su lado, casi perfecta, cercana a lo que muchos consideran una familia modelo en Corea del Sur...
-                </p>
-                <a href="https://www.amazon.es/volviéramos-Casualidad-hubiéramos-conocido-casualidad/dp/B0DTGB4S33" target="_blank" class="buy-button">COMPRA AHORA</a>
-            </div>
+        <div class="book-container" id="books-grid">
+            <div id="loader"><i class="fas fa-spinner fa-spin"></i> Cargando libros...</div>
         </div>
 
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="https://www.instagram.com/ana.caro.li.na" target="_blank" class="instagram-button">
+        <div style="text-align: center; margin-top: 30px; margin-bottom: 50px;">
+            <a href="https://www.instagram.com/ana.caro.li.na?igsh=MXRleHRmamNiam5vcg%3D%3D&utm_source=qr" target="_blank" class="instagram-button">
                 <i class="fab fa-instagram"></i> ¡Sígueme en Instagram!
             </a>
         </div>
     </section>
-
+    
     <section id="Bookstagrammer">
+        <h2>Bookstagrammer</h2>
         <button id="toggleBookstagrammers" class="instagram-button"><i class="fab fa-instagram"></i></button>
         <div id="bookstagrammerList" class="Bookstagrammer-container" style="display: none;">
             <div class="booksgramer">
-                <img src="imagenes/enerojs.jpg">
+                <img src="imagenes/enerojs.jpg" alt="Foto de perfil">
                 <a href="https://www.instagram.com/enero.gs/" target="_blank" class="instagram-button"><i class="fab fa-instagram"></i></a>
             </div>
             <div class="booksgramer">
-                <img src="imagenes/panditalectora.jpg">
+                <img src="imagenes/panditalectora.jpg" alt="Foto de perfil">
                 <a href="https://www.instagram.com/pandita.lectora" target="_blank" class="instagram-button"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="booksgramer">
+                <img src="imagenes/pame.jpg" alt="Foto de perfil">
+                <a href="https://www.instagram.com/fpamelagarcia" target="_blank" class="instagram-button"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
     </section>
-
-    <button id="bioButton" class="bio-button"><img src="imagenes/biografia.jpg"></button>
+    
+    <button id="bioButton" class="bio-button">
+        <img src="imagenes/biografia.jpg" alt="Foto de la autora">
+    </button>
+    
     <div id="bioContent" class="bio-content">
-        <img src="imagenes/ana-carolina.jpg" class="bio-photo">
+        <img src="imagenes/ana-carolina.jpg" alt="Foto de la autora" class="bio-photo">
         <h2>Biografía</h2>
-        <p>Ana Carolina, creo que ahora soy del mundo... Llegué a España hace unos años y mi pasión por leer se convirtió en mi motor...</p>
-        <button id="closeBio" class="buy-button" style="padding: 10px 20px;">Cerrar</button>
+        <p>Ana Carolina, creo que ahora soy del mundo... De cualquier lugar. Llegué a España hace unos cuantos años...</p>
+        <button id="closeBio" class="close-button">Cerrar</button>
     </div>
-
+    
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3i9b6Ek6ghlzNjNkWDZJlnouhN49OCWgazcHu1u-uAHMhWOEQBlWYu8XXJS9pA1DK/execc";
+        // LA URL DE TU SCRIPT DE GOOGLE
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwt_xwMOsvvf9Gxbt1Hjodc4tf2aCVhNtuqBGEEEfK7vAOdc84-U3Qbyro0EN3WIJJs/exec";
 
-        // LÓGICA DINÁMICA PARA EL LIBRO PRINCIPAL
-        async function cargarLibroConfig() {
+        // CARGAR LIBROS AL INICIAR
+        window.onload = async function() {
             try {
-                const resp = await fetch(SCRIPT_URL + "?action=getLibroActivo");
-                const libro = await resp.json();
-
-                if(libro.titulo) document.getElementById('idx-titulo').innerText = libro.titulo;
-                if(libro.portada) document.getElementById('idx-portada').src = libro.portada;
-
-                const contenedor = document.getElementById('contenedor-boton-dinamico');
+                const response = await fetch(SCRIPT_URL + "?action=getAllLibros");
+                const libros = await response.json();
                 
-                if (libro.estado === "PREVENTA") {
-                    contenedor.innerHTML = `<a href="reserva.html" class="buy-button">RESERVAR AHORA</a>`;
-                } else if (libro.estado === "AMAZON") {
-                    contenedor.innerHTML = `<a href="${libro.amazonUrl}" target="_blank" class="buy-button" style="background-color: #FF9900;">COMPRAR EN AMAZON</a>`;
-                } else {
-                    contenedor.innerHTML = `<a href="#" onclick="alert('¡Próximamente!'); return false;" class="soon-button">PRÓXIMAMENTE</a>`;
-                }
-            } catch (e) {
-                console.error("Error cargando configuración:", e);
-                document.getElementById('contenedor-boton-dinamico').innerHTML = "No disponible.";
+                const grid = document.getElementById('books-grid');
+                grid.innerHTML = ""; 
+
+                libros.forEach(libro => {
+                    if (libro.estado === 'OCULTO') return;
+
+                    let btnClass = "buy-button";
+                    let btnText = "COMPRAR AHORA";
+                    let btnLink = libro.amazonUrl || "#";
+                    let target = "_blank";
+                    
+                    if (libro.estado === 'PREVENTA') {
+                        btnClass = "soon-button"; // Usa tu botón morado
+                        btnText = "RESERVAR AHORA";
+                        btnLink = "reserva.html";
+                        target = "_self";
+                    }
+
+                    const sinopsis = libro.sinopsis || "Pronto descubrirás la sinopsis de esta historia...";
+
+                    grid.innerHTML += `
+                        <div class="book">
+                            <h3>${libro.titulo}</h3>
+                            <img src="${libro.portada}" alt="Portada" class="book-cover">
+                            <p class="book-description">${sinopsis}</p>
+                            <a href="${btnLink}" target="${target}" class="${btnClass}">${btnText}</a>
+                        </div>
+                    `;
+                });
+
+                if(grid.innerHTML === "") grid.innerHTML = "<p>Muy pronto nuevos libros...</p>";
+
+            } catch (error) {
+                document.getElementById('books-grid').innerHTML = "<p>Error al cargar el catálogo.</p>";
             }
-        }
+        };
 
-        // Eventos Bio y Bookstagrammer
-        document.getElementById('bioButton').addEventListener('click', () => document.getElementById('bioContent').classList.add('show'));
-        document.getElementById('closeBio').addEventListener('click', () => document.getElementById('bioContent').classList.remove('show'));
-        document.getElementById('toggleBookstagrammers').addEventListener('click', () => {
-            const list = document.getElementById('bookstagrammerList');
-            list.style.display = list.style.display === 'none' ? 'flex' : 'none';
+        // Scripts visuales de tu web
+        document.getElementById('toggleBookstagrammers').addEventListener('click', function() {
+            var list = document.getElementById('bookstagrammerList');
+            list.style.display = (list.style.display === 'none' || list.style.display === '') ? 'flex' : 'none';
         });
-
-        window.onload = cargarLibroConfig;
+        document.getElementById('bioButton').addEventListener('click', function() {
+            document.getElementById('bioContent').classList.toggle('show');
+        });
+        document.getElementById('closeBio').addEventListener('click', function() {
+            document.getElementById('bioContent').classList.remove('show');
+        });
     </script>
 </body>
 </html>
