@@ -3,19 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserva - Autora Ana Carolina</title>
+    <title>Reserva de Libro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --color-cielo: #87CEEB;
-            --color-titulo-rosa: #FF1493;
-            --color-texto-oscuro: #2D3945;
-            --color-tulipan-coral: #FF7F50;
-            --color-tulipan-morado: #9370DB;
-            --color-fondo-suave: #F0F8FF;
-            --color-blanco-puro: #FFFFFF;
-        }
+        :root { --color-cielo: #87CEEB; --color-titulo-rosa: #FF1493; --color-texto-oscuro: #2D3945; --color-tulipan-coral: #FF7F50; --color-tulipan-morado: #9370DB; --color-fondo-suave: #F0F8FF; --color-blanco-puro: #FFFFFF; }
         body { font-family: 'Inter', sans-serif; background-color: var(--color-fondo-suave); }
         .header-title { color: var(--color-titulo-rosa); }
         .header-subtitle, .form-label, h3 { color: var(--color-texto-oscuro); }
@@ -23,14 +15,11 @@
         .form-input:focus { border-color: var(--color-tulipan-coral); box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-tulipan-coral) 25%, transparent); outline: none; }
         .submit-btn { background-color: var(--color-titulo-rosa); transition: background-color 0.2s; }
         .submit-btn:hover { background-color: color-mix(in srgb, var(--color-titulo-rosa) 90%, black); }
-        .loader { border-top-color: var(--color-tulipan-coral); border: 4px solid #f3f3f3; border-top: 4px solid var(--color-tulipan-coral); animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .info-box { background-color: color-mix(in srgb, var(--color-cielo) 20%, transparent); border-left: 4px solid var(--color-cielo); color: var(--color-texto-oscuro); }
-        .info-box svg { color: var(--color-cielo); }
         .file-btn { background-color: color-mix(in srgb, var(--color-tulipan-morado) 15%, transparent); color: var(--color-tulipan-morado); cursor: pointer; }
         .file-btn:hover { background-color: color-mix(in srgb, var(--color-tulipan-morado) 25%, transparent); }
-        .sold-out-warning { background-color: color-mix(in srgb, var(--color-tulipan-coral) 15%, transparent); border: 2px solid var(--color-tulipan-coral); color: var(--color-texto-oscuro); text-align: center; }
-        .sold-out-warning strong { color: var(--color-tulipan-coral); }
+        .loader { border-top-color: var(--color-tulipan-coral); border: 4px solid #f3f3f3; border-top: 4px solid var(--color-tulipan-coral); animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -38,28 +27,21 @@
     <div class="container mx-auto p-4 md:p-8 max-w-3xl">
         <header class="text-center mb-8">
             <h1 class="text-4xl font-bold header-title">Preventa</h1>
-            <p class="text-lg header-subtitle mt-2" id="dynamic-title">Cargando libro...</p>
+            <p class="text-lg header-subtitle mt-2" id="header-book-title">Cargando...</p>
         </header>
 
         <div class="flex justify-center mb-8">
-            <img src="" id="dynamic-cover" alt="Portada del libro" class="rounded-lg shadow-lg max-w-xs md:max-w-sm lg:max-w-md hidden">
+            <img src="" id="header-book-cover" class="rounded-lg shadow-lg max-w-xs md:max-w-sm lg:max-w-md">
         </div>
 
-        <div id="sold-out-message" class="sold-out-warning p-6 rounded-lg mb-8 hidden"> 
-            <p class="text-xl font-bold mb-2">¡PREVENTA CERRADA! 🚨</p>
-            <p class="text-lg">Las reservas para este libro ya no están disponibles.</p>
-        </div>
-
-        <div id="reservation-form-container" class="hidden">
+        <div id="reservation-form-container">
             
-            <div class="info-box p-4 rounded-md mb-8" role="alert">
+            <div class="info-box p-4 rounded-md mb-8">
                 <div class="flex">
-                    <div class="py-1">
-                        <svg class="fill-current h-6 w-6 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-1-11V5h2v4h-2zm0 6v-2h2v2h-2z"/></svg>
-                    </div>
+                    <div class="py-1"><svg class="fill-current h-6 w-6 mr-4 text-[--color-cielo]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-1-11V5h2v4h-2zm0 6v-2h2v2h-2z"/></svg></div>
                     <div>
                         <p class="font-bold">Instrucciones de Pago</p>
-                        <p class="text-sm">Para confirmar tu reserva, realiza un Bizum de <strong class="text-lg" id="dynamic-price"></strong> al número **698 982 882**. Después, adjunta el justificante de pago abajo.</p>
+                        <p class="text-sm" id="bizum-instruction">Cargando instrucciones de pago...</p>
                     </div>
                 </div>
             </div>
@@ -68,45 +50,61 @@
                 <form id="reserva-form">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <div class="mb-4"><label class="form-label block mb-2">Nombre y Apellido *</label><input type="text" name="nombre_apellido" required class="form-input w-full p-2 border rounded-md"></div>
-                            <div class="mb-4"><label class="form-label block mb-2">¿Quieres el libro firmado? *</label>
+                            <div class="mb-4">
+                                <label class="form-label block mb-2">Nombre y Apellido *</label>
+                                <input type="text" name="nombre_apellido" required class="form-input w-full p-2 border rounded-md">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label block mb-2">¿Quieres el libro firmado? *</label>
                                 <div class="flex items-center space-x-4">
                                     <label class="flex items-center"><input type="radio" name="firmado" value="Sí" required class="mr-2"> Sí</label>
                                     <label class="flex items-center"><input type="radio" name="firmado" value="No" class="mr-2"> No</label>
                                 </div>
                             </div>
-                            <div id="firma-container" class="mb-4 hidden"><label class="form-label block mb-2">Nombre para la dedicatoria</label><input type="text" name="nombre_firma" class="form-input w-full p-2 border rounded-md"></div>
-                            <div class="mb-4"><label class="form-label block mb-2">Método de Envío *</label>
+                            <div id="firma-container" class="mb-4 hidden">
+                                <label class="form-label block mb-2">Nombre para la dedicatoria</label>
+                                <input type="text" name="nombre_firma" class="form-input w-full p-2 border rounded-md">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label block mb-2">Método de Envío *</label>
                                 <select id="metodo_envio" name="metodo_envio" required class="form-input w-full p-2 border rounded-md bg-white">
-                                    <option value="">Selecciona una opción...</option>
+                                    <option value="">Selecciona...</option>
                                     <option value="Correos">Correos (Envío a domicilio)</option>
                                     <option value="Inpost">Inpost (Punto de recogida)</option>
                                 </select>
                             </div>
                         </div>
                         <div>
-                            <div class="mb-4"><label class="form-label block mb-2">Correo Electrónico *</label><input type="email" name="email" required class="form-input w-full p-2 border rounded-md"></div>
-                            <div class="mb-4"><label class="form-label block mb-2">Teléfono *</label><input type="tel" name="telefono" required class="form-input w-full p-2 border rounded-md"></div>
-                            <div class="mb-4"><label class="form-label block mb-2">Adjuntar Bizum *</label><input type="file" id="justificante_pago_file" required class="form-input w-full text-sm file-btn file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold" accept="image/*, application/pdf"></div>
+                            <div class="mb-4">
+                                <label class="form-label block mb-2">Correo Electrónico *</label>
+                                <input type="email" name="email" required class="form-input w-full p-2 border rounded-md">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label block mb-2">Teléfono *</label>
+                                <input type="tel" name="telefono" required class="form-input w-full p-2 border rounded-md">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label block mb-2">Adjuntar justificante de pago *</label>
+                                <input type="file" id="justificante_pago_file" required class="form-input w-full text-sm file-btn file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold" accept="image/*, application/pdf">
+                            </div>
                         </div>
                     </div>
 
                     <div id="direccion-correos" class="mt-6 border-t pt-6 hidden">
-                        <h3 class="text-xl font-bold mb-4">Dirección de Envío</h3>
+                        <h3 class="text-xl font-bold mb-4">Dirección de Envío (Correos)</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="md:col-span-2"><label class="form-label block mb-2">Dirección Completa *</label><input type="text" id="direccion" name="direccion" class="form-input w-full p-2 border rounded-md"></div>
+                            <div class="md:col-span-2"><label class="form-label block mb-2">Dirección *</label><input type="text" id="direccion" name="direccion" class="form-input w-full p-2 border rounded-md"></div>
                             <div><label class="form-label block mb-2">Población *</label><input type="text" id="poblacion" name="poblacion" class="form-input w-full p-2 border rounded-md"></div>
                             <div><label class="form-label block mb-2">Provincia *</label><input type="text" id="provincia" name="provincia" class="form-input w-full p-2 border rounded-md"></div>
-                            <div><label class="form-label block mb-2">C.P. *</label><input type="text" id="cp" name="cp" class="form-input w-full p-2 border rounded-md"></div>
+                            <div><label class="form-label block mb-2">Código Postal *</label><input type="text" id="cp" name="cp" class="form-input w-full p-2 border rounded-md"></div>
                         </div>
                     </div>
-
                     <div id="punto-inpost" class="mt-6 border-t pt-6 hidden">
-                        <h3 class="text-xl font-bold mb-4">Punto Inpost</h3>
-                        <div><label class="form-label block mb-2">Dirección del Punto *</label><input type="text" id="inpost_point" name="inpost_point" class="form-input w-full p-2 border rounded-md"></div>
+                        <h3 class="text-xl font-bold mb-4">Punto de Recogida (Inpost)</h3>
+                        <div><label class="form-label block mb-2">Dirección del Punto Inpost *</label><input type="text" id="inpost_point" name="inpost_point" class="form-input w-full p-2 border rounded-md"></div>
                     </div>
 
-                    <div class="mt-8 text-center"><button type="submit" id="submit-button" class="submit-btn text-white font-bold py-3 px-8 rounded-lg shadow-md">Confirmar Reserva</button></div>
+                    <div class="mt-8 text-center"><button type="submit" id="submit-button" class="submit-btn text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">Confirmar Reserva</button></div>
                 </form>
             </div>
         </div>
@@ -114,110 +112,84 @@
     
     <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white rounded-lg shadow-2xl p-8 max-w-sm w-full text-center">
-            <div id="modal-loader" class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mx-auto mb-4"></div>
+            <div id="modal-loader" class="loader ease-linear rounded-full h-12 w-12 mx-auto mb-4"></div>
             <h3 id="modal-title" class="text-2xl font-bold header-subtitle mb-2">Procesando...</h3>
             <p id="modal-message" class="text-gray-600 mb-6">Estamos guardando tu reserva. Por favor, espera.</p>
-            <button id="modal-close-btn" class="submit-btn text-white font-bold py-2 px-6 rounded-md hidden">Cerrar</button>
+            <button id="modal-close-btn" class="submit-btn text-white font-bold py-2 px-6 rounded-md hidden" onclick="window.location.href='index.html'">Volver al Inicio</button>
         </div>
     </div>
 
     <script>
-        // PEGA AQUÍ LA URL DE TU GOOGLE APPS SCRIPT
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIYjqLTX-WlinyDw0wyZlr4Is_ZIIw6S4UNSj5jQdLiC_McDDMHwzGQFaoPrBHoURQ/exec";
+        // ¡¡IMPORTANTE!! URL DE SCRIPT
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwujrRlLGiQbze6Me1VZD4MY4e1jLErIKMwDgv3CXqColoMLWwfq2T3e7du4Equi_z4/exec";
 
-        const formContainer = document.getElementById('reservation-form-container');
-        const soldOutMessage = document.getElementById('sold-out-message');
+        // LECTURA DINÁMICA DE LA URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const dynamicTitle = urlParams.get('libro') || "YO ANTES Y DESPUÉS DE TI";
+        const dynamicPrice = urlParams.get('precio') || "20";
+        const dynamicCover = urlParams.get('portada') || "imagenes/portada3.jpg";
 
-        // 1. CARGA INTELIGENTE DESDE EL PANEL
-        window.onload = async () => {
-            try {
-                const r = await fetch(SCRIPT_URL + "?action=getLibroActivo");
-                const libro = await r.json();
+        // CONFIGURAR INTERFAZ
+        document.getElementById('header-book-title').textContent = `"${dynamicTitle}"`;
+        document.title = `Reserva - ${dynamicTitle}`;
+        document.getElementById('header-book-cover').src = dynamicCover;
+        document.getElementById('bizum-instruction').innerHTML = `Para confirmar tu reserva, realiza un Bizum de <strong>${dynamicPrice} €</strong> al número <strong>698 982 882</strong>. Después, adjunta el justificante de pago aquí abajo.`;
 
-                if (libro.estado !== 'PREVENTA') {
-                    soldOutMessage.classList.remove('hidden');
-                    document.getElementById('dynamic-title').innerText = "Venta Cerrada";
-                } else {
-                    formContainer.classList.remove('hidden');
-                    document.getElementById('dynamic-title').innerText = `"${libro.titulo}"`;
-                    document.getElementById('dynamic-price').innerText = libro.precio;
-                    if(libro.portada) {
-                        const img = document.getElementById('dynamic-cover');
-                        img.src = libro.portada;
-                        img.classList.remove('hidden');
-                    }
-                }
-            } catch (e) { console.error("Error al cargar libro", e); }
-        };
-
-        // 2. LÓGICA DE FORMULARIO ORIGINAL
+        // LOGICA DE CAMPOS DEL FORMULARIO
         const form = document.getElementById('reserva-form');
-        document.querySelectorAll('input[name="firmado"]').forEach(radio => {
-            radio.addEventListener('change', (e) => document.getElementById('firma-container').classList.toggle('hidden', e.target.value !== 'Sí'));
+        document.querySelectorAll('input[name="firmado"]').forEach(r => r.addEventListener('change', e => document.getElementById('firma-container').classList.toggle('hidden', e.target.value !== 'Sí')));
+        
+        document.getElementById('metodo_envio').addEventListener('change', e => {
+            const v = e.target.value.toLowerCase();
+            document.getElementById('direccion-correos').classList.toggle('hidden', !v.includes('correos'));
+            document.getElementById('punto-inpost').classList.toggle('hidden', !v.includes('inpost'));
+            document.getElementById('direccion').required = document.getElementById('poblacion').required = document.getElementById('provincia').required = document.getElementById('cp').required = v.includes('correos');
+            document.getElementById('inpost_point').required = v.includes('inpost');
         });
 
-        document.getElementById('metodo_envio').addEventListener('change', (e) => {
-            const isCorreos = e.target.value.includes('Correos');
-            const isInpost = e.target.value.includes('Inpost');
-            document.getElementById('direccion-correos').classList.toggle('hidden', !isCorreos);
-            document.getElementById('punto-inpost').classList.toggle('hidden', !isInpost);
-            document.getElementById('direccion').required = isCorreos;
-            document.getElementById('poblacion').required = isCorreos;
-            document.getElementById('provincia').required = isCorreos;
-            document.getElementById('cp').required = isCorreos;
-            document.getElementById('inpost_point').required = isInpost;
-        });
-
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader(); reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result); reader.onerror = error => reject(error);
-        });
-
+        // ENVIO DEL FORMULARIO A GOOGLE SHEETS
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const submitButton = document.getElementById('submit-button');
-            const modal = document.getElementById('modal');
-            const modalLoader = document.getElementById('modal-loader');
-            const modalCloseBtn = document.getElementById('modal-close-btn');
+            document.getElementById('submit-button').disabled = true;
+            document.getElementById('modal').classList.remove('hidden');
 
-            submitButton.disabled = true; submitButton.textContent = 'Enviando...';
-            modal.classList.remove('hidden'); modalLoader.classList.remove('hidden'); modalCloseBtn.classList.add('hidden');
-            document.getElementById('modal-title').textContent = 'Procesando...';
-            document.getElementById('modal-message').textContent = 'Subiendo imagen a Drive y guardando reserva...';
+            const file = document.getElementById('justificante_pago_file').files[0];
+            const reader = new FileReader();
 
-            const fileInput = document.getElementById('justificante_pago_file');
-            let paymentProofData = null;
-            if (fileInput.files.length > 0) {
-                const base64String = await toBase64(fileInput.files[0]);
-                paymentProofData = { name: fileInput.files[0].name, base64: base64String.split(',')[1] };
-            }
-
-            const formData = new FormData(form);
-            const data = {}; formData.forEach((v, k) => { if(k !== 'justificante_pago_file') data[k] = v; });
-
-            try {
-                const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'submitOrder', orderData: data, paymentProof: paymentProofData }) });
-                const result = await response.json();
+            reader.onload = async () => {
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => data[key] = value);
                 
-                modalLoader.classList.add('hidden'); modalCloseBtn.classList.remove('hidden');
-                if (result.success) {
-                    document.getElementById('modal-title').textContent = '¡Reserva Confirmada!';
-                    document.getElementById('modal-message').textContent = 'Tu justificante se guardó en Drive y tus datos en el Excel.';
-                    form.reset();
-                    document.getElementById('direccion-correos').classList.add('hidden');
-                    document.getElementById('punto-inpost').classList.add('hidden');
-                    document.getElementById('firma-container').classList.add('hidden');
-                } else throw new Error();
-            } catch (error) {
-                modalLoader.classList.add('hidden'); modalCloseBtn.classList.remove('hidden');
-                document.getElementById('modal-title').textContent = 'Error';
-                document.getElementById('modal-message').textContent = 'Hubo un problema. Inténtalo de nuevo.';
-            } finally {
-                submitButton.disabled = false; submitButton.textContent = 'Confirmar Reserva';
-            }
-        });
+                // AÑADIR DATOS DINAMICOS DE LA URL PARA QUE LLEGUEN AL EXCEL
+                data.libro_reservado = dynamicTitle;
+                data.precio_pagado = dynamicPrice;
 
-        document.getElementById('modal-close-btn').addEventListener('click', () => document.getElementById('modal').classList.add('hidden'));
+                const payload = {
+                    action: 'submitOrder',
+                    orderData: data,
+                    paymentProof: { fileName: file.name, mimeType: file.type, base64Data: reader.result.split(',')[1] }
+                };
+
+                try {
+                    const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+                    const result = await res.json();
+                    
+                    document.getElementById('modal-loader').classList.add('hidden');
+                    document.getElementById('modal-close-btn').classList.remove('hidden');
+                    
+                    if (result.success) {
+                        document.getElementById('modal-title').textContent = '¡Reserva Confirmada!';
+                        document.getElementById('modal-message').textContent = 'He recibido tus datos correctamente.';
+                    } else throw new Error(result.message);
+                } catch (error) {
+                    document.getElementById('modal-title').textContent = 'Error';
+                    document.getElementById('modal-message').textContent = 'Problema de conexión. Inténtalo de nuevo.';
+                    document.getElementById('submit-button').disabled = false;
+                }
+            };
+            reader.readAsDataURL(file);
+        });
     </script>
 </body>
 </html>
