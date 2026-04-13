@@ -58,9 +58,11 @@
             <section id="sec-libros">
                 <div class="card">
                     <h3>Añadir / Editar Libro</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 20px;">Rellena los datos para añadir un libro nuevo. Para editar uno, búscalo abajo y pulsa "Editar".</p>
+                    
                     <div class="form-grid">
                         <div><label>Título del Libro *</label><input type="text" id="cfg-titulo"></div>
-                        <div><label>Precio (Ej: 20€)</label><input type="text" id="cfg-precio" placeholder="Precio para la preventa"></div>
+                        <div><label>Precio de Preventa (Ej: 20€)</label><input type="text" id="cfg-precio" placeholder="Precio para la reserva"></div>
                         
                         <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px dashed #cbd5e1;">
                             <div>
@@ -84,8 +86,8 @@
                         <div id="amz-input" style="display:none;"><label>Link de Amazon</label><input type="text" id="cfg-amazon"></div>
                         
                         <div style="grid-column: 1 / -1;">
-                            <label>Sinopsis (Descripción)</label>
-                            <textarea id="cfg-sinopsis" rows="5" placeholder="Escribe aquí la historia del libro..."></textarea>
+                            <label>Sinopsis (Descripción de la historia)</label>
+                            <textarea id="cfg-sinopsis" rows="5" placeholder="Escribe aquí de qué trata el libro..."></textarea>
                         </div>
                     </div>
                     <button class="btn btn-save" id="btn-guardar" onclick="guardarLibro()"><i class="fas fa-save"></i> Guardar Cambios</button>
@@ -104,9 +106,9 @@
 
             <section id="sec-pedidos" style="display:none;">
                 <div class="card">
-                    <h3>Lista de Reservas</h3>
+                    <h3>Lista de Reservas y Pedidos</h3>
                     <table>
-                        <thead><tr><th>Cliente</th><th>Envío</th><th>Estado</th></tr></thead>
+                        <thead><tr><th>Cliente</th><th>Método de Envío</th><th>Estado</th></tr></thead>
                         <tbody id="pedidos-body"></tbody>
                     </table>
                 </div>
@@ -115,13 +117,16 @@
     </main>
 
     <script>
+        // TU URL DE GOOGLE APPS SCRIPT
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyU_iiN-H8BzDRFNgZf-v39Pv9iUbA6ih_rm14cscwLwZOTn3hBqiWMr2991hQtrxE/exec";
+        
         let listaLibrosGlobal = []; 
 
         async function login() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
             const btn = document.querySelector('#login-overlay button');
+            
             btn.innerText = "Comprobando...";
             try {
                 const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'login', user, pass }) });
@@ -130,10 +135,13 @@
                     document.getElementById('login-overlay').style.display = 'none'; 
                     cargarCatalogo(); 
                 } else {
-                    alert("Credenciales incorrectas");
+                    alert("Usuario o clave incorrectos");
                     btn.innerText = "Entrar al Panel";
                 }
-            } catch(e) { alert("Error de conexión"); btn.innerText = "Entrar al Panel"; }
+            } catch(e) { 
+                alert("Error de conexión"); 
+                btn.innerText = "Entrar al Panel";
+            }
         }
 
         function nav(sec, el) {
@@ -151,59 +159,71 @@
 
         async function cargarCatalogo() {
             const body = document.getElementById('tabla-libros-body');
-            body.innerHTML = "<tr><td colspan='4'>Actualizando catálogo...</td></tr>";
+            body.innerHTML = "<tr><td colspan='4'>Cargando catálogo...</td></tr>";
+            
             try {
                 const r = await fetch(SCRIPT_URL + "?action=getAllLibros&t=" + new Date().getTime());
                 listaLibrosGlobal = await r.json(); 
+                
                 body.innerHTML = "";
                 if(listaLibrosGlobal.length === 0) {
-                    body.innerHTML = "<tr><td colspan='4'>Catálogo vacío.</td></tr>";
+                    body.innerHTML = "<tr><td colspan='4'>Aún no hay libros en tu catálogo.</td></tr>";
                     return;
                 }
+
                 listaLibrosGlobal.forEach(l => {
                     body.innerHTML += `
                         <tr>
-                            <td><img src="${l.portada}" style="width:45px; height:60px; object-fit:cover; border-radius:4px;"></td>
-                            <td><strong>${l.titulo}</strong></td>
+                            <td><img src="${l.portada}" style="width:45px; height:65px; object-fit:cover; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.2);"></td>
+                            <td><strong>${l.titulo}</strong><br><small style="color:#666;">${l.precio}</small></td>
                             <td><span class="badge badge-${l.estado}">${l.estado}</span></td>
                             <td style="display:flex; gap:10px;">
-                                <button class="btn btn-edit" onclick="prepararEdicion(${l.rowIndex})"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete" onclick="eliminarLibro(${l.rowIndex})"><i class="fas fa-trash"></i></button>
+                                <button class="btn btn-edit" onclick="prepararEdicion(${l.rowIndex})"><i class="fas fa-edit"></i> Editar</button>
+                                <button class="btn btn-delete" onclick="eliminarLibro(${l.rowIndex})"><i class="fas fa-trash"></i> Eliminar</button>
                             </td>
                         </tr>`;
                 });
-            } catch (e) { body.innerHTML = "<tr><td colspan='4'>Error al leer libros.</td></tr>"; }
+            } catch (e) {
+                body.innerHTML = "<tr><td colspan='4'>Error de conexión al cargar libros.</td></tr>";
+            }
         }
 
         function prepararEdicion(rowIndex) {
             const libro = listaLibrosGlobal.find(l => l.rowIndex === rowIndex);
             if(!libro) return;
+
             document.getElementById('cfg-titulo').value = libro.titulo;
-            document.getElementById('cfg-precio').value = libro.precio;
-            document.getElementById('cfg-portada').value = libro.portada;
+            document.getElementById('cfg-precio').value = libro.precio || '';
+            document.getElementById('cfg-portada').value = libro.portada || '';
+            document.getElementById('cfg-portada-file').value = ''; 
             document.getElementById('cfg-estado').value = libro.estado;
             document.getElementById('cfg-amazon').value = libro.amazonUrl || '';
             document.getElementById('cfg-sinopsis').value = libro.sinopsis || '';
+            
             toggleAmz();
             window.scrollTo({ top: 0, behavior: 'smooth' }); 
         }
 
         async function eliminarLibro(idx) {
-            if(!confirm("¿Eliminar este libro?")) return;
+            if(!confirm("¿Seguro que quieres eliminar este libro de forma permanente?")) return;
+            
             await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteLibro', rowIndex: idx }) });
             cargarCatalogo(); 
         }
 
         const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader(); reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result); reader.onerror = error => reject(error);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
         });
 
         async function guardarLibro() {
             const titulo = document.getElementById('cfg-titulo').value;
-            if(!titulo) { alert("Título requerido"); return; }
+            if(!titulo) { alert("¡Debes ponerle al menos un título al libro!"); return; }
+
             const btn = document.getElementById('btn-guardar');
-            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Procesando...";
+            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Guardando...";
             btn.disabled = true;
 
             const fileInput = document.getElementById('cfg-portada-file');
@@ -224,29 +244,34 @@
             };
 
             await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'upsertLibro', data, coverFile }) });
-            alert("¡Cambios guardados!");
+            
+            alert("¡Web actualizada con éxito!");
             btn.innerHTML = "<i class='fas fa-save'></i> Guardar Cambios";
             btn.disabled = false;
+            
+            // Limpiar formulario
             document.getElementById('cfg-titulo').value = '';
             document.getElementById('cfg-precio').value = '';
             document.getElementById('cfg-portada').value = '';
             document.getElementById('cfg-portada-file').value = '';
+            document.getElementById('cfg-amazon').value = '';
             document.getElementById('cfg-sinopsis').value = '';
+            
             cargarCatalogo(); 
         }
 
         async function cargarPedidos() {
             const body = document.getElementById('pedidos-body');
-            body.innerHTML = "<tr><td colspan='3'>Cargando...</td></tr>";
+            body.innerHTML = "<tr><td colspan='3'>Cargando pedidos...</td></tr>";
             try {
                 const r = await fetch(SCRIPT_URL + "?action=getAllOrders&t=" + new Date().getTime());
                 const orders = await r.json();
                 body.innerHTML = "";
                 orders.forEach(o => {
                     if(!o.nombre_y_apellido) return;
-                    body.innerHTML += `<tr><td><strong>${o.nombre_y_apellido}</strong></td><td>${o.metodo_de_envio || 'N/A'}</td><td><span class="badge badge-PREVENTA">${o.estado || 'Pendiente'}</span></td></tr>`;
+                    body.innerHTML += `<tr><td><strong>${o.nombre_y_apellido}</strong><br><small>${o.correo_electronico_obligatorio_para_envios_correos_y_inpost || ''}</small></td><td>${o.metodo_de_envio || 'N/A'}</td><td><span class="badge badge-PREVENTA">${o.estado || 'Pendiente'}</span></td></tr>`;
                 });
-            } catch(e) { body.innerHTML = "<tr><td colspan='3'>Error al leer pedidos.</td></tr>"; }
+            } catch(e) { body.innerHTML = "<tr><td colspan='3'>Error al cargar pedidos.</td></tr>"; }
         }
     </script>
 </body>
