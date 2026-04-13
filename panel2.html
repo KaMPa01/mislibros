@@ -14,218 +14,155 @@
             --bg: #f8fafc;
             --white: #ffffff;
             --text-main: #1e293b;
-            --text-muted: #64748b;
             --border: #e2e8f0;
         }
 
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; }
 
-        /* Login Overlay */
+        /* Login */
         #login-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: var(--white); padding: 2.5rem; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); width: 100%; max-width: 400px; text-align: center; }
-        .login-card h2 { margin-bottom: 1.5rem; color: var(--primary); }
-        .login-card input { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; box-sizing: border-box; }
-        .login-card button { width: 100%; padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; }
+        .login-card { background: var(--white); padding: 2.5rem; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
+        .login-card input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; }
+        .login-card button { width: 100%; padding: 0.8rem; background: var(--primary); color: white; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer; }
 
         /* Sidebar */
         .sidebar { width: var(--sidebar-width); background: var(--secondary); color: white; display: flex; flex-direction: column; }
-        .sidebar-header { padding: 2rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .sidebar-menu { flex: 1; padding: 1rem; }
-        .menu-item { display: flex; align-items: center; padding: 0.8rem 1rem; color: #cbd5e1; text-decoration: none; border-radius: 0.5rem; margin-bottom: 0.5rem; transition: 0.2s; cursor: pointer; }
+        .sidebar-header { padding: 1.5rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .menu-item { padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: 0.2s; color: #cbd5e1; }
         .menu-item:hover, .menu-item.active { background: var(--primary); color: white; }
-        .menu-item i { margin-right: 1rem; width: 20px; text-align: center; }
 
         /* Main Content */
-        .main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        .top-bar { height: 64px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
-        .content { padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .main { flex: 1; display: flex; flex-direction: column; }
+        .top-bar { height: 60px; background: white; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 2rem; justify-content: space-between; }
+        .content { padding: 2rem; overflow-y: auto; }
 
-        /* Sections */
+        /* Cards */
+        .card { background: white; border-radius: 0.8rem; padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
         .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Cards & Forms */
-        .card { background: var(--white); border-radius: 0.75rem; border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 2rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 0.4rem; box-sizing: border-box; }
+        .section.active { display: block; }
         
-        /* Table */
-        .table-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 1rem; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
-        td { padding: 1rem; border-bottom: 1px solid var(--border); }
-        .status-badge { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
-        .status-PREVENTA { background: #fef3c7; color: #92400e; }
-        .status-AMAZON { background: #dcfce7; color: #166534; }
-
-        .btn { padding: 0.6rem 1.2rem; border-radius: 0.4rem; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 0.4rem; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th { text-align: left; padding: 1rem; border-bottom: 2px solid var(--border); font-size: 0.8rem; color: #64748b; }
+        td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        
+        .btn-save { background: #22c55e; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: bold; margin-top: 1rem; }
     </style>
 </head>
 <body>
 
     <div id="login-overlay">
         <div class="login-card">
-            <h2><i class="fas fa-lock"></i> Acceso Admin</h2>
+            <h2 style="color: var(--primary);">Admin Ana Carolina</h2>
             <input type="text" id="username" placeholder="Usuario">
             <input type="password" id="password" placeholder="Contraseña">
-            <button onclick="login()">Iniciar Sesión</button>
+            <button onclick="handleLogin()">Entrar</button>
         </div>
     </div>
 
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <h3>ANA CAROLINA</h3>
-            <small style="opacity: 0.7;">Escritora Admin</small>
-        </div>
-        <nav class="sidebar-menu">
-            <div class="menu-item active" onclick="showSection('libros', this)">
-                <i class="fas fa-book"></i> Gestión de Libros
-            </div>
-            <div class="menu-item" onclick="showSection('pedidos', this)">
-                <i class="fas fa-shopping-cart"></i> Pedidos
-            </div>
-            <div class="menu-item" style="margin-top: auto;" onclick="location.reload()">
-                <i class="fas fa-sign-out-alt"></i> Salir
-            </div>
-        </nav>
+        <div class="sidebar-header"><h3>Panel Pro</h3></div>
+        <div class="menu-item active" onclick="nav('libros', this)"><i class="fas fa-book"></i> Libros</div>
+        <div class="menu-item" onclick="nav('pedidos', this)"><i class="fas fa-list"></i> Pedidos</div>
     </aside>
 
     <main class="main">
         <div class="top-bar">
-            <h2 id="section-title">Gestión de Libros</h2>
-            <div id="status-indicator" style="font-size: 0.9rem; color: var(--text-muted);">
-                <i class="fas fa-circle" style="color: #22c55e;"></i> Sistema Activo
-            </div>
+            <h2 id="page-title">Gestión de Libros</h2>
+            <button onclick="location.reload()" style="border:none; background:none; cursor:pointer; color:var(--primary); font-weight:bold;">Salir</button>
         </div>
 
         <div class="content">
-            <section id="section-libros" class="section active">
+            <section id="sec-libros" class="section active">
                 <div class="card">
-                    <h3>Actualizar Libro en Preventa</h3>
-                    <div class="grid">
-                        <div class="form-group">
-                            <label>Título del Libro</label>
+                    <h3>Configurar Preventa Activa</h3>
+                    <div class="form-grid">
+                        <div>
+                            <label>Título</label>
                             <input type="text" id="cfg-titulo">
                         </div>
-                        <div class="form-group">
-                            <label>URL de Portada</label>
+                        <div>
+                            <label>URL Portada</label>
                             <input type="text" id="cfg-portada">
                         </div>
-                        <div class="form-group">
-                            <label>Estado actual</label>
-                            <select id="cfg-estado" onchange="checkAmazon()">
+                        <div>
+                            <label>Estado</label>
+                            <select id="cfg-estado" onchange="toggleAmz()">
                                 <option value="PREVENTA">Preventa Activa</option>
-                                <option value="AMAZON">Venta en Amazon</option>
+                                <option value="AMAZON">Venta Amazon</option>
                                 <option value="OCULTO">Oculto</option>
                             </select>
                         </div>
-                        <div class="form-group" id="amazon-group" style="display:none;">
-                            <label>Link de Amazon</label>
+                        <div id="amz-div" style="display:none;">
+                            <label>URL Amazon</label>
                             <input type="text" id="cfg-amazon">
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="guardarLibro()">
-                        <i class="fas fa-save"></i> Guardar Cambios en la Web
-                    </button>
+                    <button class="btn-save" onclick="updateLibro()">Actualizar Web</button>
                 </div>
             </section>
 
-            <section id="section-pedidos" class="section">
+            <section id="sec-pedidos" class="section">
                 <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h3>Lista de Pedidos Recibidos</h3>
-                        <button class="btn btn-primary btn-sm" onclick="cargarPedidos()">
-                            <i class="fas fa-sync"></i> Actualizar Lista
-                        </button>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Cliente</th>
-                                    <th>Email</th>
-                                    <th>Método</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="pedidos-body">
-                                <tr><td colspan="5" style="text-align:center;">Inicia sesión para ver datos</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <h3>Últimos Pedidos</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Método</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-pedidos"></tbody>
+                    </table>
                 </div>
             </section>
         </div>
     </main>
 
     <script>
-        // URL de tu script de Google Apps Script
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwt_xwMOsvvf9Gxbt1Hjodc4tf2aCVhNtuqBGEEEfK7vAOdc84-U3Qbyro0EN3WIJJs/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbQZZYXYNi2Q4Kzp6EzjMREZ_vIa8X3JTmKKk_RZ3Fg2apVSnL-3UyOwKjawamzL8_M/exec";
 
-        async function login() {
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            const btn = document.querySelector('.login-card button');
-
-            if (!user || !pass) { alert("Ingresa tus datos"); return; }
-            btn.innerText = "Verificando...";
-
-            try {
-                const resp = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'login', user, pass })
-                });
-                const data = await resp.json();
-                if(data.success) {
-                    document.getElementById('login-overlay').style.display = 'none';
-                    cargarDatosIniciales();
-                } else { 
-                    alert("Usuario o clave incorrectos"); 
-                    btn.innerText = "Iniciar Sesión";
-                }
-            } catch (e) { 
-                alert("Error de conexión con Google Sheets"); 
-                btn.innerText = "Iniciar Sesión";
-            }
-        }
-
-        function showSection(section, el) {
+        function nav(sec, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-            
-            document.getElementById('section-' + section).classList.add('active');
+            document.getElementById('sec-' + sec).classList.add('active');
             el.classList.add('active');
-            document.getElementById('section-title').innerText = el.innerText;
-            
-            if(section === 'pedidos') cargarPedidos();
+            document.getElementById('page-title').innerText = el.innerText;
+            if(sec === 'pedidos') fetchOrders();
         }
 
-        function checkAmazon() {
-            const val = document.getElementById('cfg-estado').value;
-            document.getElementById('amazon-group').style.display = (val === 'AMAZON') ? 'block' : 'none';
+        function toggleAmz() {
+            document.getElementById('amz-div').style.display = (document.getElementById('cfg-estado').value === 'AMAZON') ? 'block' : 'none';
         }
 
-        async function cargarDatosIniciales() {
+        async function handleLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
             try {
-                const resp = await fetch(SCRIPT_URL + "?action=getLibroActivo");
-                const libro = await resp.json();
-                document.getElementById('cfg-titulo').value = libro.titulo || "";
-                document.getElementById('cfg-portada').value = libro.portada || "";
-                document.getElementById('cfg-estado').value = libro.estado || "PREVENTA";
-                document.getElementById('cfg-amazon').value = libro.amazonUrl || "";
-                checkAmazon();
-            } catch (e) { console.error("Error al cargar config inicial"); }
+                const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'login', user, pass }) });
+                const d = await r.json();
+                if(d.success) {
+                    document.getElementById('login-overlay').style.display = 'none';
+                    loadLibro();
+                } else alert("Datos incorrectos");
+            } catch(e) { alert("Error de conexión"); }
         }
 
-        async function guardarLibro() {
-            const btn = document.querySelector('#section-libros .btn');
+        async function loadLibro() {
+            const r = await fetch(SCRIPT_URL + "?action=getLibroActivo");
+            const l = await r.json();
+            document.getElementById('cfg-titulo').value = l.titulo || "";
+            document.getElementById('cfg-portada').value = l.portada || "";
+            document.getElementById('cfg-estado').value = l.estado || "PREVENTA";
+            document.getElementById('cfg-amazon').value = l.amazonUrl || "";
+            toggleAmz();
+        }
+
+        async function updateLibro() {
             const data = {
                 titulo: document.getElementById('cfg-titulo').value,
                 portada: document.getElementById('cfg-portada').value,
@@ -233,53 +170,21 @@
                 amazonUrl: document.getElementById('cfg-amazon').value,
                 precio: "20€"
             };
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
-
-            try {
-                const resp = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'upsertLibro', data })
-                });
-                const res = await resp.json();
-                if(res.success) alert("¡Web actualizada con éxito!");
-            } catch (e) { alert("Error al guardar"); }
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-save"></i> Guardar Cambios en la Web';
+            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'upsertLibro', data }) });
+            const res = await r.json();
+            if(res.success) alert("¡Web sincronizada!");
         }
 
-        async function cargarPedidos() {
-            const body = document.getElementById('pedidos-body');
-            body.innerHTML = "<tr><td colspan='5' style='text-align:center;'><i class='fas fa-spinner fa-spin'></i> Cargando pedidos...</td></tr>";
-            
-            try {
-                const resp = await fetch(SCRIPT_URL);
-                const orders = await resp.json();
-                
-                body.innerHTML = "";
-                if(orders.length === 0) {
-                    body.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No hay pedidos registrados</td></tr>";
-                    return;
-                }
-
-                orders.forEach(o => {
-                    if(!o.nombre_y_apellido) return;
-                    body.innerHTML += `
-                        <tr>
-                            <td><strong>${o.nombre_y_apellido}</strong></td>
-                            <td>${o.correo_electronico_obligatorio_para_envios_correos_y_inpost || '---'}</td>
-                            <td>${o.metodo_de_envio || '---'}</td>
-                            <td><span class="status-badge status-${o.estado || 'Pendiente'}">${o.estado || 'Pendiente'}</span></td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" onclick="alert('Pedido del cliente: ${o.nombre_y_apellido}')">Ver</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            } catch (e) { 
-                body.innerHTML = "<tr><td colspan='5' style='text-align:center; color:red;'>Error al conectar con la base de datos</td></tr>";
-            }
+        async function fetchOrders() {
+            const list = document.getElementById('lista-pedidos');
+            list.innerHTML = "Cargando...";
+            const r = await fetch(SCRIPT_URL);
+            const orders = await r.json();
+            list.innerHTML = "";
+            orders.forEach(o => {
+                if(!o.nombre_y_apellido) return;
+                list.innerHTML += `<tr><td>${o.nombre_y_apellido}</td><td>${o.metodo_de_envio}</td><td>${o.estado || 'Pendiente'}</td></tr>`;
+            });
         }
     </script>
 </body>
