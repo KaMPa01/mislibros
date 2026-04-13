@@ -2,575 +2,257 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Gestión de Pedidos</title>
-    <meta name="robots" content="noindex, nofollow">
+    <title>Panel Pro | Ana Carolina</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Estilos del Login */
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f7f9; display: flex; justify-content: center; align-items: center; z-index: 2000; }
-        .login-box { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; width: 300px; }
-        .login-box h2 { margin-top: 0; }
-        .login-box input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .login-box button { width: 100%; background-color: #3498db; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-size: 1em; }
-        .login-box button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
-        #login-error { color: #e74c3c; margin-top: 10px; display: none; }
+        :root { --primary: #FF1493; --secondary: #34495e; --bg: #f8fafc; --white: #ffffff; --border: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; color: #333; }
         
-        /* Estilos del Panel Principal */
-        #main-content { display: none; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        h1, h2, h3 { color: #2c3e50; }
+        .sidebar { width: 260px; background: var(--secondary); color: white; display: flex; flex-direction: column; }
+        .menu-item { padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; color: #cbd5e1; }
+        .menu-item.active { background: var(--primary); color: white; }
+        .main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        .content { padding: 2rem; }
+
+        .card { background: white; border-radius: 0.8rem; padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th { text-align: left; padding: 0.8rem; border-bottom: 2px solid var(--border); color: #64748b; font-size: 0.85rem; text-transform: uppercase; }
+        td { padding: 0.8rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; vertical-align: middle; }
         
-        /* Estilos para el Menú Lateral */
-        .main-layout { display: flex; flex-direction: row; gap: 30px; }
-        #orders-container { flex-grow: 1; }
-        #filter-menu { flex-basis: 220px; flex-shrink: 0; background-color: #ffffff; border-radius: 8px; padding: 20px; height: fit-content; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        #filter-menu h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        #filter-menu ul { list-style: none; padding: 0; margin: 0; }
-        #filter-menu li a { display: block; padding: 10px 15px; text-decoration: none; color: #34495e; border-radius: 5px; transition: background-color 0.2s; }
-        #filter-menu li a:hover { background-color: #f2f2f2; }
-        #filter-menu li a.active { background-color: #3498db; color: white; font-weight: bold; }
-
-        .loading { text-align: center; padding: 50px; font-size: 1.2em; }
-        .order-list { list-style: none; padding: 0; }
-        .order-item { background-color: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: box-shadow 0.2s; }
-        .order-item:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-        .order-item.status-enviado { background-color: #e8f5e9; border-left: 5px solid #4CAF50; }
-        .order-details { flex-grow: 1; }
-        .order-details strong { font-size: 1.1em; }
-        .order-actions button { background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
-
-        /* Estilos de la Ventana de Detalles */
-        .details-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: flex-start; z-index: 1000; overflow-y: auto; padding: 40px 20px; box-sizing: border-box; }
-        .details-content { background: white; padding: 40px; width: 100%; max-width: 800px; box-shadow: 0 0 20px rgba(0,0,0,0.2); border-radius: 8px; }
-        .details-header { display: flex; justify-content: space-between; border-bottom: 2px solid #ccc; padding-bottom: 20px; align-items: flex-start; }
-        .details-header .sender-info { text-align: right; }
-        .details-section { margin-top: 25px; }
-        .details-section .info-block { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 10px; }
-        .info-block p { margin: 5px 0; }
-        .bizum-link a { font-weight: bold; color: #16a085; text-decoration: none; }
-        .albaran-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .albaran-table th, .albaran-table td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        .albaran-table th { background-color: #f2f2f2; }
-        .albaran-table th:nth-child(1), .albaran-table td:nth-child(1) { width: 55%; }
-        .details-controls { text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
-        .details-controls button { background-color: #2ecc71; color: white; padding: 12px 20px; font-size: 1em; margin: 5px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.2s; }
-        .details-controls .close-btn { background-color: #e74c3c; }
-        .tracking-number { background-color: #eaf2f8; border-left: 4px solid #3498db; padding: 10px; margin-top: 10px; font-weight: bold;}
+        .btn { padding: 0.6rem 1.2rem; border-radius: 0.4rem; border: none; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: 0.2s; }
+        .btn:hover { opacity: 0.8; }
+        .btn-save { background: #22c55e; color: white; }
+        .btn-edit { background: #3498db; color: white; font-size: 0.85rem; }
+        .btn-delete { background: #e74c3c; color: white; font-size: 0.85rem; }
         
-        /* Estilos para Gemini */
-        .gemini-assistant { border: 2px dashed #a5b4fc; padding: 20px; border-radius: 8px; margin-top: 10px; }
-        .gemini-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 15px; font-size: 0.9em; border-radius: 5px; cursor: pointer; margin-right: 10px; }
-        .gemini-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
-        #gemini-result-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2500; }
-        .gemini-result-box { background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 600px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
-        .gemini-result-box h3 { margin-top: 0; }
-        #gemini-result-textarea { width: 100%; height: 200px; margin-top: 15px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; font-family: inherit; box-sizing: border-box; }
-        .gemini-result-controls { margin-top: 15px; text-align: right; }
-        .gemini-result-controls button { margin-left: 10px; }
-
-        /* Estilos para la Ventana de Confirmación y Prompt */
-        .dialog-box { background: white; padding: 30px; border-radius: 8px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
-        .dialog-controls { margin-top: 20px; }
-        .dialog-controls button { padding: 10px 20px; font-size: 1em; }
-        #prompt-input { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-
-        @media (max-width: 900px) { .main-layout { flex-direction: column-reverse; } }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        label { display: block; font-weight: bold; font-size: 0.9rem; margin-bottom: 0.5rem; color: #475569; }
+        input, select, textarea { width: 100%; padding: 0.7rem; border: 1px solid var(--border); border-radius: 0.4rem; box-sizing: border-box; font-family: inherit; }
         
-        /* --- REGLAS DE IMPRESIÓN DEFINITIVAS --- */
-        #printable-albaran {
-            display: none;
-        }
-
-        @media print {
-            body > *:not(#printable-albaran) {
-                display: none !important;
-            }
-            #printable-albaran, #printable-albaran * {
-                display: block !important;
-            }
-        }
+        #login-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .badge { padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+        .badge-PREVENTA { background: #fef3c7; color: #92400e; }
+        .badge-AMAZON { background: #dcfce7; color: #166534; }
+        .badge-OCULTO { background: #f1f5f9; color: #475569; }
     </style>
 </head>
 <body>
+
     <div id="login-overlay">
-        <div class="login-box"><h2>Acceso al Panel</h2><p>Introduce tus credenciales</p><input type="text" id="username" placeholder="Usuario" required><input type="password" id="password" placeholder="Contraseña" required><button id="login-btn">Entrar</button><p id="login-error">Usuario o contraseña incorrectos.</p></div>
-    </div>
-    <div id="main-content">
-        <div class="container">
-            <div class="main-layout">
-                <div id="orders-container">
-                    <h1>Panel de Pedidos</h1>
-                    <p>Aquí se muestran los pedidos recibidos desde el formulario de preventa.</p>
-                    <div id="loader" class="loading">Cargando pedidos...</div>
-                    <ul id="order-list" class="order-list"></ul>
-                </div>
-                <aside id="filter-menu">
-                    <h3>Filtrar Pedidos</h3>
-                    <ul>
-                        <li><a href="#" class="filter-btn active" data-filter="todos">Todos</a></li>
-                        <li><a href="#" class="filter-btn" data-filter="pendiente">No Enviados</a></li>
-                        <li><a href="#" class="filter-btn" data-filter="enviado">Enviados</a></li>
-                    </ul>
-                </aside>
-            </div>
+        <div style="background: white; padding: 2.5rem; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 320px; text-align: center;">
+            <h2 style="color: var(--primary); margin-top: 0;">Panel Escritora</h2>
+            <input type="text" id="username" placeholder="Usuario" style="margin-bottom: 1rem;">
+            <input type="password" id="password" placeholder="Contraseña" style="margin-bottom: 1.5rem;">
+            <button class="btn btn-save" style="width: 100%; justify-content: center;" onclick="login()">Entrar al Panel</button>
         </div>
-        <div id="details-overlay" class="details-overlay">
-            <div id="details-content" class="details-content">
-                <div class="details-header">
-                    <div class="logo">
-                        <h2>Detalle del Pedido</h2>
-                        <p>Ana Carolina - Autora</p>
+    </div>
+
+    <aside class="sidebar">
+        <div style="padding: 2rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);"><h3>ANA CAROLINA</h3></div>
+        <div class="menu-item active" onclick="nav('libros', this)"><i class="fas fa-book"></i> Gestión de Libros</div>
+        <div class="menu-item" onclick="nav('pedidos', this)"><i class="fas fa-shopping-cart"></i> Pedidos</div>
+    </aside>
+
+    <main class="main">
+        <div class="content">
+            
+            <section id="sec-libros">
+                <div class="card">
+                    <h3>Añadir / Editar Libro</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 20px;">Rellena los datos para añadir un libro nuevo. Para editar uno, búscalo abajo y pulsa "Editar".</p>
+                    
+                    <div class="form-grid">
+                        <div><label>Título del Libro</label><input type="text" id="cfg-titulo" placeholder="Ej: La chica del primer asalto"></div>
+                        <div><label>URL de la Portada</label><input type="text" id="cfg-portada" placeholder="Link de la imagen"></div>
+                        <div>
+                            <label>Estado en la Web</label>
+                            <select id="cfg-estado" onchange="toggleAmz()">
+                                <option value="PREVENTA">Preventa Activa (Botón Reservar)</option>
+                                <option value="AMAZON">Venta en Amazon (Botón Comprar)</option>
+                                <option value="OCULTO">Ocultar de la Web</option>
+                            </select>
+                        </div>
+                        <div id="amz-input" style="display:none;"><label>Link de Amazon</label><input type="text" id="cfg-amazon" placeholder="https://amazon.es/..."></div>
+                        
+                        <div style="grid-column: 1 / -1;">
+                            <label>Sinopsis (Descripción de la historia)</label>
+                            <textarea id="cfg-sinopsis" rows="5" placeholder="Escribe aquí de qué trata el libro..."></textarea>
+                        </div>
                     </div>
-                    <div class="sender-info"><strong>Pedido #: <span id="details-order-id"></span></strong><br>Fecha: <span id="details-date"></span></div>
+                    <button class="btn btn-save" id="btn-guardar" onclick="guardarLibro()"><i class="fas fa-save"></i> Guardar Cambios en la Web</button>
                 </div>
 
-                <div class="details-section">
-                    <h3>Datos del Cliente</h3>
-                    <div class="info-block"><p><strong>Nombre:</strong> <span id="details-name"></span></p><p><strong>Email:</strong> <span id="details-email"></span></p><p><strong>Teléfono:</strong> <span id="details-phone"></span></p></div>
-                </div>
-                <div class="details-section">
-                    <h3>Detalles del Libro y Firma</h3>
-                    <div class="info-block"><p><strong>¿Quiere el libro firmado?:</strong> <span id="details-signed"></span></p><p><strong>Nombre para la dedicatoria:</strong> <span id="details-dedication"></span></p></div>
-                </div>
-                <div class="details-section">
-                    <h3>Producto</h3>
-                    <table class="albaran-table">
-                        <thead><tr><th>Descripción</th><th>Cantidad</th><th>Precio Unitario</th><th>Total</th></tr></thead>
-                        <tbody><tr><td>Libro "YO ANTES Y DESPUÉS DE TI"</td><td>1</td><td>20 €</td><td>20 €</td></tr></tbody>
+                <div class="card">
+                    <h3>Mi Catálogo Actual</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Portada</th>
+                                <th>Título</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-libros-body"></tbody>
                     </table>
                 </div>
-                <div class="details-section">
-                    <h3>Información de Envío</h3>
-                    <div id="shipping-info-block" class="info-block"></div>
+            </section>
+
+            <section id="sec-pedidos" style="display:none;">
+                <div class="card">
+                    <h3>Lista de Reservas y Pedidos</h3>
+                    <table>
+                        <thead><tr><th>Cliente</th><th>Método de Envío</th><th>Estado</th></tr></thead>
+                        <tbody id="pedidos-body"></tbody>
+                    </table>
                 </div>
-
-                <div class="details-section payment-proof-section">
-                    <h3>Justificante de Pago (Bizum)</h3>
-                    <div class="info-block bizum-link">
-                        <p><a id="details-payment-proof" href="#" target="_blank" rel="noopener noreferrer">VER JUSTIFICANTE DE PAGO</a></p>
-                    </div>
-                </div>
-
-                <div class="details-section gemini-section">
-                    <h3>Asistente Mágico</h3>
-                    <div class="info-block gemini-assistant">
-                        <button id="gemini-dedication-btn" class="gemini-btn" disabled>✨ Sugerir Dedicatoria</button>
-                        <button id="gemini-email-btn" class="gemini-btn" disabled>✨ Redactar Email de Envío</button>
-                    </div>
-                </div>
-
-                <div id="details-controls" class="details-controls">
-                    <button id="print-btn">Imprimir / Guardar PDF</button>
-                    <button id="mark-sent-btn">Marcar como Enviado</button>
-                    <button id="close-btn" class="close-btn">Cerrar</button>
-                </div>
-            </div>
+            </section>
         </div>
-    </div>
-    
-    <div id="gemini-result-overlay">
-        <div class="gemini-result-box">
-            <h3 id="gemini-result-title">Sugerencia Mágica</h3>
-            <textarea id="gemini-result-textarea" readonly></textarea>
-            <div class="gemini-result-controls">
-                <button id="gemini-copy-btn" class="order-actions-button">Copiar Texto</button>
-                <button id="gemini-close-btn" class="details-controls-button close-btn">Cerrar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="confirm-overlay" class="details-overlay" style="z-index: 3000; display: none;">
-        <div class="dialog-box">
-            <h3 id="confirm-title">¿Estás seguro?</h3>
-            <p id="confirm-text">Esta acción no se puede deshacer.</p>
-            <div class="dialog-controls">
-                <button id="confirm-yes-btn">Sí, continuar</button>
-                <button id="confirm-no-btn" class="close-btn">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="prompt-overlay" class="details-overlay" style="z-index: 3000; display: none;">
-        <div class="dialog-box">
-            <h3 id="prompt-title">Introduce el dato</h3>
-            <p id="prompt-text">Por favor, introduce la información solicitada.</p>
-            <input type="text" id="prompt-input">
-            <div class="dialog-controls">
-                <button id="prompt-ok-btn">Aceptar</button>
-                <button id="prompt-cancel-btn" class="close-btn">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- --- DIV OCULTO SOLO PARA IMPRESIÓN --- -->
-    <div id="printable-albaran"></div>
+    </main>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5h4YbUvydEVw3uMWq--C4A631mJduMMLy0Yy3KSUw1ilZ1XQHuenkfHC50xaKpapQ/exec";
-
-        // --- SECCIÓN DE LOGIN ---
-        const loginOverlay = document.getElementById('login-overlay');
-        const mainContent = document.getElementById('main-content');
-        const loginBtn = document.getElementById('login-btn');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const loginError = document.getElementById('login-error');
-        loginBtn.addEventListener('click', attemptLogin);
-        passwordInput.addEventListener('keypress', (e) => e.key === 'Enter' && attemptLogin());
+        // TU URL DE GOOGLE APPS SCRIPT
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZZYXYNi2Q4Kzp6EzjMREZ_vIa8X3JTmKKk_RZ3Fg2apVSnL-3UyOwKjawamzL8_M/exec";
         
-        function attemptLogin() {
-            loginBtn.disabled = true; loginBtn.textContent = 'Verificando...'; loginError.style.display = 'none';
-            const payload = { action: 'login', user: usernameInput.value, pass: passwordInput.value };
-            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
-            .then(response => response.json()).then(data => {
-                if (data.success) { loginOverlay.style.display = 'none'; mainContent.style.display = 'block'; loadOrders(); } 
-                else { loginError.textContent = 'Usuario o contraseña incorrectos.'; loginError.style.display = 'block'; loginBtn.disabled = false; loginBtn.textContent = 'Entrar'; }
-            }).catch(error => { console.error('Error en el login:', error); loginError.textContent = 'Error de conexión. Revisa la URL y la implementación del script.'; loginError.style.display = 'block'; loginBtn.disabled = false; loginBtn.textContent = 'Entrar'; });
-        }
+        let listaLibrosGlobal = []; // Guarda los libros para poder editarlos fácilmente
 
-        // --- SECCIÓN DE LA APP DE PEDIDOS ---
-        const loader = document.getElementById('loader');
-        const orderList = document.getElementById('order-list');
-        const detailsOverlay = document.getElementById('details-overlay');
-        let allOrders = []; 
-        let currentOrderElement = null;
-        let currentOpenOrder = null; // Variable para guardar el pedido abierto
-
-        const geminiResultOverlay = document.getElementById('gemini-result-overlay');
-        const geminiResultTitle = document.getElementById('gemini-result-title');
-        const geminiResultTextarea = document.getElementById('gemini-result-textarea');
-        const geminiCopyBtn = document.getElementById('gemini-copy-btn');
-        const geminiCloseBtn = document.getElementById('gemini-close-btn');
-
-        async function callGemini(prompt, title) {
-            geminiResultTitle.textContent = title;
-            geminiResultTextarea.value = "Generando respuesta...";
-            geminiResultOverlay.style.display = 'flex';
-            const apiKey = ""; 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            const payload = { contents: [{ parts: [{ text: prompt }] }] };
+        // LOGIN
+        async function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const btn = document.querySelector('#login-overlay button');
+            
+            btn.innerText = "Comprobando...";
             try {
-                const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                if (!response.ok) { throw new Error(`Error en la API: ${response.statusText}`); }
-                const result = await response.json();
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                geminiResultTextarea.value = text || "No se pudo generar una respuesta. Inténtalo de nuevo.";
-            } catch (error) {
-                console.error("Error llamando a Gemini:", error);
-                geminiResultTextarea.value = `Error de conexión con el asistente. Detalles: ${error.message}`;
+                const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'login', user, pass }) });
+                const d = await r.json();
+                if(d.success) { 
+                    document.getElementById('login-overlay').style.display = 'none'; 
+                    cargarCatalogo(); 
+                } else {
+                    alert("Usuario o clave incorrectos");
+                    btn.innerText = "Entrar al Panel";
+                }
+            } catch(e) { 
+                alert("Error de conexión"); 
+                btn.innerText = "Entrar al Panel";
             }
         }
 
-        geminiCopyBtn.addEventListener('click', () => {
-            geminiResultTextarea.select();
-            document.execCommand('copy');
-            geminiCopyBtn.textContent = '¡Copiado!';
-            setTimeout(() => { geminiCopyBtn.textContent = 'Copiar Texto'; }, 2000);
-        });
-        geminiCloseBtn.addEventListener('click', () => geminiResultOverlay.style.display = 'none');
-        
-        function showConfirm(title, text) {
-            return new Promise((resolve) => {
-                const confirmOverlay = document.getElementById('confirm-overlay');
-                document.getElementById('confirm-title').textContent = title;
-                document.getElementById('confirm-text').textContent = text;
-                confirmOverlay.style.display = 'flex';
-                const yesBtn = document.getElementById('confirm-yes-btn');
-                const noBtn = document.getElementById('confirm-no-btn');
-                const cleanup = () => { yesBtn.removeEventListener('click', yesListener); noBtn.removeEventListener('click', noListener); };
-                const yesListener = () => { confirmOverlay.style.display = 'none'; cleanup(); resolve(true); };
-                const noListener = () => { confirmOverlay.style.display = 'none'; cleanup(); resolve(false); };
-                yesBtn.addEventListener('click', yesListener, { once: true });
-                noBtn.addEventListener('click', noListener, { once: true });
-            });
+        // NAVEGACIÓN
+        function nav(sec, el) {
+            document.querySelectorAll('section').forEach(s => s.style.display = 'none');
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            document.getElementById('sec-' + sec).style.display = 'block';
+            el.classList.add('active');
+            if(sec === 'pedidos') cargarPedidos();
+            if(sec === 'libros') cargarCatalogo();
         }
 
-        function showPrompt(title, text, defaultValue = "") {
-            return new Promise((resolve) => {
-                const promptOverlay = document.getElementById('prompt-overlay');
-                document.getElementById('prompt-title').textContent = title;
-                document.getElementById('prompt-text').textContent = text;
-                const input = document.getElementById('prompt-input');
-                input.value = defaultValue;
-                promptOverlay.style.display = 'flex';
-                input.focus();
-                const okBtn = document.getElementById('prompt-ok-btn');
-                const cancelBtn = document.getElementById('prompt-cancel-btn');
-                const cleanup = () => { okBtn.removeEventListener('click', okListener); cancelBtn.removeEventListener('click', cancelListener); input.removeEventListener('keypress', enterListener); };
-                const okListener = () => { promptOverlay.style.display = 'none'; cleanup(); resolve(input.value); };
-                const cancelListener = () => { promptOverlay.style.display = 'none'; cleanup(); resolve(null); };
-                const enterListener = (e) => { if (e.key === 'Enter') { okListener(); } };
-                okBtn.addEventListener('click', okListener, { once: true });
-                cancelBtn.addEventListener('click', cancelListener, { once: true });
-                input.addEventListener('keypress', enterListener);
-            });
+        function toggleAmz() {
+            document.getElementById('amz-input').style.display = (document.getElementById('cfg-estado').value === 'AMAZON') ? 'block' : 'none';
         }
 
-        function loadOrders() {
-            loader.style.display = 'block';
-            orderList.innerHTML = '';
-            fetch(SCRIPT_URL).then(response => response.json()).then(data => {
-                loader.style.display = 'none';
-                allOrders = data;
-                filterOrders(document.querySelector('.filter-btn.active').dataset.filter);
-            }).catch(error => { loader.textContent = "Error al cargar los pedidos."; console.error('Error fetching orders:', error); });
-        }
-
-        function filterOrders(filter) {
-            let filteredOrders;
-            if (filter === 'todos') { filteredOrders = allOrders; } 
-            else if (filter === 'enviado') { filteredOrders = allOrders.filter(order => order.estado && order.estado.trim().toLowerCase() === 'enviado'); } 
-            else { filteredOrders = allOrders.filter(order => !order.estado || order.estado.trim().toLowerCase() !== 'enviado'); }
-            renderOrders(filteredOrders);
-        }
-
-        function renderOrders(orders) {
-            orderList.innerHTML = '';
-            if (orders.length === 0) { orderList.innerHTML = '<p style="text-align: center; color: #777;">No hay pedidos en esta categoría.</p>'; }
-            orders.forEach(order => {
-                if (!order.marca_temporal) return; 
-                const li = document.createElement('li');
-                li.className = 'order-item';
-                if (order.estado && order.estado.trim().toLowerCase() === 'enviado') li.classList.add('status-enviado');
-                li.innerHTML = `
-                    <div class="order-details">
-                        <strong>${order.nombre_y_apellido || 'Sin nombre'}</strong> - ${order.metodo_de_envio || 'Sin método envío'}<br>
-                        <small>Pedido el: ${new Date(order.marca_temporal).toLocaleString('es-ES')}</small>
-                    </div>
-                    <div class="order-actions"><button>Ver Detalles</button></div>`;
-                orderList.appendChild(li);
-                li.querySelector('button').addEventListener('click', (e) => {
-                    currentOrderElement = e.target.closest('.order-item');
-                    showOrderDetails(order);
-                });
-            });
-        }
-        
-        function populateModal(order) {
-            document.getElementById('details-order-id').textContent = order.rowIndex;
-            document.getElementById('details-date').textContent = new Date(order.marca_temporal).toLocaleDateString('es-ES');
-            document.getElementById('details-name').textContent = order.nombre_y_apellido || 'No especificado';
-            document.getElementById('details-email').textContent = order.correo_electronico_obligatorio_para_envios_correos_y_inpost || 'No especificado';
-            document.getElementById('details-phone').textContent = order.telefono_obligatorio_para_envio_correos_y_inpost || order.telefono_698982882 || 'No especificado';
-            document.getElementById('details-signed').textContent = order.quieres_firmado || 'No especificado';
-            document.getElementById('details-dedication').textContent = order.nombre_para_la_firma || 'No aplica';
+        // CARGAR CATÁLOGO Y TABLA
+        async function cargarCatalogo() {
+            const body = document.getElementById('tabla-libros-body');
+            body.innerHTML = "<tr><td colspan='4'>Cargando catálogo...</td></tr>";
             
-            const shippingBlock = document.getElementById('shipping-info-block');
-            const shippingMethod = order.metodo_de_envio || '';
-            let shippingHTML = `<p><strong>Método de Envío:</strong> ${shippingMethod}</p>`;
-            if (shippingMethod.toLowerCase().includes('correos')) { 
-                shippingHTML += `
-                    <p><strong>Dirección:</strong> ${order.para_envios_por_correos_direccion || 'No especificado'}</p>
-                    <p><strong>Código Postal:</strong> ${order.codigo_postal_obligatorio_para_envio_correos || 'No especificado'}</p>
-                    <p><strong>Población:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || 'No especificado'}</p>
-                    <p><strong>Provincia:</strong> ${order.provincia || 'No especificado'}</p>
-                `;
-            } 
-            else if (shippingMethod.toLowerCase().includes('inpost')) { shippingHTML += `<p><strong>Punto Inpost:</strong> ${order.punto_inpost || 'No especificado'}</p><p><strong>Población:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || 'No especificado'}</p>`; } 
-            else if (shippingMethod.toLowerCase().includes('vinted')) { shippingHTML += `<p><strong>Punto Vinted:</strong> ${order.punto_vinted || 'No especificado'}</p>`; } 
-            else { shippingHTML += `<p>No se ha especificado una dirección válida para este método.</p>`; }
-            if (order.numero_de_envio) { shippingHTML += `<div class="tracking-number">Nº Envío: ${order.numero_de_envio}</div>`; }
-            shippingBlock.innerHTML = shippingHTML;
-
-            const paymentLink = document.getElementById('details-payment-proof');
-            const paymentSection = document.querySelector('.payment-proof-section');
-            const proofUrl = order.pago_mediante_bizum_y_justificante_de_pago_telefono_698982882 || '';
-            if (proofUrl) {
-                paymentLink.href = proofUrl;
-                paymentSection.style.display = 'block';
-            } else {
-                paymentLink.href = '#';
-                paymentSection.style.display = 'none';
-            }
-            
-            const markSentBtn = document.getElementById('mark-sent-btn');
-            markSentBtn.dataset.rowIndex = order.rowIndex;
-            const currentState = (order.estado || 'Pendiente').trim().toLowerCase();
-            markSentBtn.dataset.currentState = currentState;
-            if (currentState === 'enviado') { markSentBtn.textContent = 'Desmarcar Envío'; markSentBtn.style.backgroundColor = '#f39c12'; } 
-            else { markSentBtn.textContent = 'Marcar como Enviado'; markSentBtn.style.backgroundColor = '#2ecc71'; }
-
-            const dedicationBtn = document.getElementById('gemini-dedication-btn');
-            const emailBtn = document.getElementById('gemini-email-btn');
-            const bookTitle = 'YO ANTES Y DESPUÉS DE TI';
-            const dedicationName = order.nombre_para_la_firma;
-            if (dedicationName && dedicationName.trim() !== '') {
-                dedicationBtn.disabled = false;
-                dedicationBtn.onclick = () => {
-                    const prompt = `Actúa como la autora de romance erótico Ana Carolina. Escribe 3 opciones de dedicatorias cortas, cálidas y personales para mi libro "${bookTitle}", dedicadas a un lector llamado "${dedicationName}". El tono debe ser cercano y agradecido.`;
-                    callGemini(prompt, 'Sugerencias de Dedicatoria');
-                };
-            } else {
-                dedicationBtn.disabled = true;
-                dedicationBtn.onclick = null;
-            }
-            const trackingNumber = order.numero_de_envio;
-            if (currentState === 'enviado' && trackingNumber) {
-                emailBtn.disabled = false;
-                emailBtn.onclick = () => {
-                    const customerName = order.nombre_y_apellido;
-                    const prompt = `Redacta un email corto, informal y amigable en español para un cliente llamado "${customerName}". El propósito es notificarle que su libro "${bookTitle}" ha sido enviado. Menciona que su número de seguimiento con ${shippingMethod} es ${trackingNumber}. Agradece su apoyo y firma como "Ana Carolina".`;
-                    callGemini(prompt, 'Borrador de Email de Envío');
-                };
-            } else {
-                emailBtn.disabled = true;
-                emailBtn.onclick = null;
-            }
-        }
-        
-        function showOrderDetails(order) {
-            currentOpenOrder = order;
-            populateModal(order); // Popula el modal visible
-            detailsOverlay.style.display = 'flex';
-        }
-
-        document.getElementById('print-btn').addEventListener('click', () => {
-            // Popula el div imprimible justo antes de llamar a la impresión
-            populatePrintableAlbaran(currentOpenOrder);
-            // Pequeña pausa para asegurar que el DOM se actualice
-            setTimeout(() => window.print(), 100); 
-        });
-
-        // --- NUEVA FUNCIÓN PARA POPULAR EL ALBARÁN IMPRIMIBLE ---
-        function populatePrintableAlbaran(order) {
-            const printableDiv = document.getElementById('printable-albaran');
-            const shippingMethod = order.metodo_de_envio || '';
-            let shippingHTML = `<p><strong>Método de Envío:</strong> ${shippingMethod}</p>`;
-            if (shippingMethod.toLowerCase().includes('correos')) { 
-                shippingHTML += `
-                    <p><strong>Dirección:</strong> ${order.para_envios_por_correos_direccion || 'No especificado'}</p>
-                    <p><strong>Código Postal:</strong> ${order.codigo_postal_obligatorio_para_envio_correos || 'No especificado'}</p>
-                    <p><strong>Población:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || 'No especificado'}</p>
-                    <p><strong>Provincia:</strong> ${order.provincia || 'No especificado'}</p>
-                `;
-            } 
-            else if (shippingMethod.toLowerCase().includes('inpost')) { shippingHTML += `<p><strong>Punto Inpost:</strong> ${order.punto_inpost || 'No especificado'}</p><p><strong>Población:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || 'No especificado'}</p>`; } 
-            else if (shippingMethod.toLowerCase().includes('vinted')) { shippingHTML += `<p><strong>Punto Vinted:</strong> ${order.punto_vinted || 'No especificado'}</p>`; } 
-            if (order.numero_de_envio) { shippingHTML += `<div class="tracking-number">Nº Envío: ${order.numero_de_envio}</div>`; }
-            
-            printableDiv.innerHTML = `
-                <div class="details-content">
-                    <div class="details-header">
-                        <div class="logo">
-                            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGIcHBxQfHh0iJCUnJjYrHicqKiooJDs2OTY3ODk6MP/wAARCAA7AKADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAECA//EABwQAQEBAAIDAQEAAAAAAAAAAAABEQISAyExQf/EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAHBEBAQEAAwEBAQEAAAAAAAAAAAERAgMhMRIT/9oADAMBAAIRAxEAPwD2UA0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL0A0yAAqgCoAKgAqAAqgCoAKgIqAAqAAqAAqgCoAKgAqAAqAAqgL-OT/9oADAMBAAIAAwAAABDzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzjetc etc" alt="Logo Ana Carolina" class="albaran-logo">
-                        </div>
-                        <div class="sender-info"><strong>Pedido #: ${order.rowIndex}</strong><br>Fecha: ${new Date(order.marca_temporal).toLocaleDateString('es-ES')}</div>
-                    </div>
-                    <div class="details-section">
-                        <h3>Datos del Cliente</h3>
-                        <div class="info-block">
-                            <p><strong>Nombre:</strong> ${order.nombre_y_apellido || 'No especificado'}</p>
-                            <p><strong>Email:</strong> ${order.correo_electronico_obligatorio_para_envios_correos_y_inpost || 'No especificado'}</p>
-                        </div>
-                    </div>
-                    <div class="details-section">
-                        <h3>Detalles del Libro y Firma</h3>
-                        <div class="info-block">
-                            <p><strong>¿Quiere el libro firmado?:</strong> ${order.quieres_firmado || 'No especificado'}</p>
-                            <p><strong>Nombre para la dedicatoria:</strong> ${order.nombre_para_la_firma || 'No aplica'}</p>
-                        </div>
-                    </div>
-                    <div class="details-section">
-                        <h3>Producto</h3>
-                        <table class="albaran-table">
-                            <thead><tr><th>Descripción</th><th>Cantidad</th><th>Precio Unitario</th><th>Total</th></tr></thead>
-                            <tbody><tr><td>Libro "YO ANTES Y DESPUÉS DE TI"</td><td>1</td><td>20 €</td><td>20 €</td></tr></tbody>
-                        </table>
-                    </div>
-                    <div class="details-section">
-                        <h3>Información de Envío</h3>
-                        <div class="info-block">${shippingHTML}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        document.getElementById('close-btn').addEventListener('click', () => detailsOverlay.style.display = 'none');
-        
-        document.getElementById('mark-sent-btn').addEventListener('click', async (e) => {
-            const button = e.target;
-            const rowIndex = button.dataset.rowIndex;
-            const currentState = button.dataset.currentState;
-            let payload;
-            
-            if (currentState === 'enviado') {
-                const confirmed = await showConfirm("Confirmar Acción", "Se borrará el número de seguimiento. ¿Estás seguro de que quieres desmarcar este pedido?");
-                if (confirmed) {
-                    payload = { action: 'updateStatus', rowIndex: rowIndex, status: 'Pendiente', tracking: '', sendEmail: false };
-                } else { return; }
-            } else {
-                const trackingNumber = await showPrompt("Marcar como Enviado", "Introduce el número de envío/seguimiento:");
-                if (trackingNumber === null) { return; }
-                const sendEmailConfirmed = await showConfirm("Enviar Email", "¿Quieres enviar un email de notificación al cliente?");
+            try {
+                const r = await fetch(SCRIPT_URL + "?action=getAllLibros");
+                listaLibrosGlobal = await r.json(); // Guardamos en memoria global
                 
-                payload = { 
-                    action: 'updateStatus', 
-                    rowIndex: rowIndex, 
-                    status: 'Enviado', 
-                    tracking: trackingNumber,
-                    sendEmail: sendEmailConfirmed,
-                    orderData: { // Enviamos los datos necesarios para el email
-                        customerName: currentOpenOrder.nombre_y_apellido,
-                        customerEmail: currentOpenOrder.correo_electronico_obligatorio_para_envios_correos_y_inpost,
-                        bookTitle: 'YO ANTES Y DESPUÉS DE TI',
-                        shippingMethod: currentOpenOrder.metodo_de_envio,
-                        trackingNumber: trackingNumber,
-                        bookPrice: '20 €' // Precio añadido
-                    }
-                };
+                body.innerHTML = "";
+                if(listaLibrosGlobal.length === 0) {
+                    body.innerHTML = "<tr><td colspan='4'>Aún no hay libros en tu catálogo.</td></tr>";
+                    return;
+                }
+
+                listaLibrosGlobal.forEach(l => {
+                    body.innerHTML += `
+                        <tr>
+                            <td><img src="${l.portada}" style="width:45px; height:65px; object-fit:cover; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.2);"></td>
+                            <td><strong>${l.titulo}</strong></td>
+                            <td><span class="badge badge-${l.estado}">${l.estado}</span></td>
+                            <td style="display:flex; gap:10px;">
+                                <button class="btn btn-edit" onclick="prepararEdicion(${l.rowIndex})"><i class="fas fa-edit"></i> Editar</button>
+                                <button class="btn btn-delete" onclick="eliminarLibro(${l.rowIndex})"><i class="fas fa-trash"></i> Eliminar</button>
+                            </td>
+                        </tr>`;
+                });
+            } catch (e) {
+                body.innerHTML = "<tr><td colspan='4'>Error de conexión al cargar libros.</td></tr>";
             }
+        }
 
-            button.disabled = true; button.textContent = 'Actualizando...';
-            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
-            .then(response => response.json()).then(result => {
-                if (result.success) { alert('¡Estado del pedido actualizado!'); detailsOverlay.style.display = 'none'; loadOrders(); } 
-                else { alert('Error al actualizar: ' + result.message); }
-                button.disabled = false;
-            }).catch(error => { console.error('Error updating status:', error); alert('Error de conexión.'); button.disabled = false; });
-        });
+        // EDITAR (Rellena el formulario buscando el libro en memoria)
+        function prepararEdicion(rowIndex) {
+            const libro = listaLibrosGlobal.find(l => l.rowIndex === rowIndex);
+            if(!libro) return;
 
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelector('.filter-btn.active').classList.remove('active');
-                e.target.classList.add('active');
-                filterOrders(e.target.dataset.filter);
-            });
-        });
+            document.getElementById('cfg-titulo').value = libro.titulo;
+            document.getElementById('cfg-portada').value = libro.portada;
+            document.getElementById('cfg-estado').value = libro.estado;
+            document.getElementById('cfg-amazon').value = libro.amazonUrl || '';
+            document.getElementById('cfg-sinopsis').value = libro.sinopsis || '';
+            
+            toggleAmz();
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Sube la pantalla arriba
+        }
+
+        // ELIMINAR
+        async function eliminarLibro(idx) {
+            if(!confirm("¿Seguro que quieres eliminar este libro de forma permanente?")) return;
+            
+            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteLibro', rowIndex: idx }) });
+            cargarCatalogo(); // Recarga la tabla
+        }
+
+        // GUARDAR LIBRO NUEVO O EDITADO
+        async function guardarLibro() {
+            const data = {
+                titulo: document.getElementById('cfg-titulo').value,
+                portada: document.getElementById('cfg-portada').value,
+                estado: document.getElementById('cfg-estado').value,
+                amazonUrl: document.getElementById('cfg-amazon').value,
+                sinopsis: document.getElementById('cfg-sinopsis').value
+            };
+            
+            if(!data.titulo) { alert("¡Debes ponerle al menos un título al libro!"); return; }
+
+            const btn = document.getElementById('btn-guardar');
+            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Guardando...";
+            btn.disabled = true;
+
+            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'upsertLibro', data }) });
+            
+            alert("¡Web actualizada con éxito!");
+            btn.innerHTML = "<i class='fas fa-save'></i> Guardar Cambios en la Web";
+            btn.disabled = false;
+            
+            // Limpiar formulario
+            document.getElementById('cfg-titulo').value = '';
+            document.getElementById('cfg-portada').value = '';
+            document.getElementById('cfg-amazon').value = '';
+            document.getElementById('cfg-sinopsis').value = '';
+            
+            cargarCatalogo(); // Recargar tabla inferior
+        }
+
+        // CARGAR PEDIDOS
+        async function cargarPedidos() {
+            const body = document.getElementById('pedidos-body');
+            body.innerHTML = "<tr><td colspan='3'>Cargando pedidos...</td></tr>";
+            try {
+                const r = await fetch(SCRIPT_URL);
+                const orders = await r.json();
+                body.innerHTML = "";
+                orders.forEach(o => {
+                    if(!o.nombre_y_apellido) return;
+                    body.innerHTML += `<tr><td><strong>${o.nombre_y_apellido}</strong><br><small>${o.correo_electronico_obligatorio_para_envios_correos_y_inpost || ''}</small></td><td>${o.metodo_de_envio || 'N/A'}</td><td><span class="badge badge-PREVENTA">${o.estado || 'Pendiente'}</span></td></tr>`;
+                });
+            } catch(e) { body.innerHTML = "<tr><td colspan='3'>Error al cargar pedidos.</td></tr>"; }
+        }
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
