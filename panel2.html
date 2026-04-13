@@ -3,159 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Gestión de Pedidos - Ana Carolina</title>
-    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Panel | Ana Carolina</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #3498db;
-            --success: #2ecc71;
-            --warning: #f1c40f;
-            --danger: #e74c3c;
-            --dark: #2c3e50;
-            --light: #f4f7f9;
+            --sidebar-width: 260px;
+            --primary: #FF1493;
+            --primary-dark: #C71585;
+            --secondary: #34495e;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--light); margin: 0; padding: 20px; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+
+        /* Login Overlay */
+        #login-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: var(--white); padding: 2.5rem; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); width: 100%; max-width: 400px; text-align: center; }
+        .login-card h2 { margin-bottom: 1.5rem; color: var(--primary); }
+        .login-card input { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; box-sizing: border-box; }
+        .login-card button { width: 100%; padding: 0.75rem; background: var(--primary); color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; }
+
+        /* Sidebar */
+        .sidebar { width: var(--sidebar-width); background: var(--secondary); color: white; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 2rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-menu { flex: 1; padding: 1rem; }
+        .menu-item { display: flex; align-items: center; padding: 0.8rem 1rem; color: #cbd5e1; text-decoration: none; border-radius: 0.5rem; margin-bottom: 0.5rem; transition: 0.2s; cursor: pointer; }
+        .menu-item:hover, .menu-item.active { background: var(--primary); color: white; }
+        .menu-item i { margin-right: 1rem; width: 20px; text-align: center; }
+
+        /* Main Content */
+        .main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        .top-bar { height: 64px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; }
+        .content { padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+
+        /* Sections */
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Cards & Forms */
+        .card { background: var(--white); border-radius: 0.75rem; border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 0.4rem; box-sizing: border-box; }
         
-        /* Estilos del Login */
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--light); display: flex; justify-content: center; align-items: center; z-index: 2000; }
-        .login-box { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 320px; }
-        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .login-box button { width: 100%; background-color: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* Table */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 1rem; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+        td { padding: 1rem; border-bottom: 1px solid var(--border); }
+        .status-badge { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+        .status-PREVENTA { background: #fef3c7; color: #92400e; }
+        .status-AMAZON { background: #dcfce7; color: #166534; }
 
-        /* Contenedor Principal */
-        #main-content { display: none; max-width: 1200px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-
-        /* SECCIÓN GESTIÓN DE LIBRO (NUEVA) */
-        .config-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 30px; border-top: 5px solid var(--success); }
-        .config-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px; }
-        .input-group { display: flex; flex-direction: column; }
-        .input-group label { font-weight: bold; margin-bottom: 8px; color: var(--dark); }
-        .input-group input, .input-group select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-        .btn-save { background: var(--success); color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-save:hover { background: #27ae60; transform: scale(1.02); }
-
-        /* Tabla de Pedidos */
-        .orders-table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .orders-table th { background: var(--dark); color: white; padding: 15px; text-align: left; }
-        .orders-table td { padding: 15px; border-bottom: 1px solid #eee; }
-        .status-pill { padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
-        .status-pendiente { background: #fff3cd; color: #856404; }
-        .status-pagado { background: #d4edda; color: #155724; }
-        
-        #loader { text-align: center; padding: 40px; font-size: 1.2em; color: #666; }
+        .btn { padding: 0.6rem 1.2rem; border-radius: 0.4rem; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
     <div id="login-overlay">
-        <div class="login-box">
-            <h2>Panel Administrativo</h2>
+        <div class="login-card">
+            <h2><i class="fas fa-lock"></i> Acceso Admin</h2>
             <input type="text" id="username" placeholder="Usuario">
             <input type="password" id="password" placeholder="Contraseña">
-            <button id="login-btn">Entrar al Panel</button>
+            <button onclick="login()">Iniciar Sesión</button>
         </div>
     </div>
 
-    <div id="main-content">
-        <div class="header">
-            <h1>Gestión de Pedidos y Web</h1>
-            <button onclick="location.reload()" style="background:#eee; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;">Cerrar Sesión</button>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h3>ANA CAROLINA</h3>
+            <small style="opacity: 0.7;">Escritora Admin</small>
         </div>
-
-        <div class="config-card">
-            <h3>⚙️ Configuración del Libro y Preventa</h3>
-            <p style="font-size: 0.9em; color: #666; margin-bottom: 20px;">Controla qué libro aparece en la web y si está en preventa o venta directa.</p>
-            
-            <div class="config-grid">
-                <div class="input-group">
-                    <label>Título del Libro:</label>
-                    <input type="text" id="cfg-titulo" placeholder="Ej: Yo antes y después de ti">
-                </div>
-                <div class="input-group">
-                    <label>URL Imagen Portada:</label>
-                    <input type="text" id="cfg-portada" placeholder="https://tusitio.com/imagen.jpg">
-                </div>
-                <div class="input-group">
-                    <label>Estado de la Web:</label>
-                    <select id="cfg-estado" onchange="toggleAmazonInput()">
-                        <option value="PREVENTA">Preventa Activa (Formulario)</option>
-                        <option value="AMAZON">Venta en Amazon (Botón Comprar)</option>
-                        <option value="OCULTO">Ocultar de la Web</option>
-                    </select>
-                </div>
-                <div class="input-group" id="amazon-div" style="display:none;">
-                    <label>Enlace de Amazon:</label>
-                    <input type="text" id="cfg-amazon" placeholder="https://amazon.es/tu-libro">
-                </div>
+        <nav class="sidebar-menu">
+            <div class="menu-item active" onclick="showSection('libros', this)">
+                <i class="fas fa-book"></i> Gestión de Libros
             </div>
-            <button class="btn-save" onclick="guardarConfiguracionWeb()">
-                <i class="fas fa-save"></i> ACTUALIZAR WEB AHORA
-            </button>
+            <div class="menu-item" onclick="showSection('pedidos', this)">
+                <i class="fas fa-shopping-cart"></i> Pedidos
+            </div>
+            <div class="menu-item" style="margin-top: auto;" onclick="location.reload()">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </div>
+        </nav>
+    </aside>
+
+    <main class="main">
+        <div class="top-bar">
+            <h2 id="section-title">Gestión de Libros</h2>
+            <div id="status-indicator" style="font-size: 0.9rem; color: var(--text-muted);">
+                <i class="fas fa-circle" style="color: #22c55e;"></i> Sistema Activo
+            </div>
         </div>
 
-        <h2>Pedidos Recibidos</h2>
-        <div id="loader">Cargando información de Google Sheets...</div>
-        <table class="orders-table" id="orders-table" style="display:none;">
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Cliente</th>
-                    <th>Método</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="orders-body">
-                </tbody>
-        </table>
-    </div>
+        <div class="content">
+            <section id="section-libros" class="section active">
+                <div class="card">
+                    <h3>Actualizar Libro en Preventa</h3>
+                    <div class="grid">
+                        <div class="form-group">
+                            <label>Título del Libro</label>
+                            <input type="text" id="cfg-titulo">
+                        </div>
+                        <div class="form-group">
+                            <label>URL de Portada</label>
+                            <input type="text" id="cfg-portada">
+                        </div>
+                        <div class="form-group">
+                            <label>Estado actual</label>
+                            <select id="cfg-estado" onchange="checkAmazon()">
+                                <option value="PREVENTA">Preventa Activa</option>
+                                <option value="AMAZON">Venta en Amazon</option>
+                                <option value="OCULTO">Oculto</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="amazon-group" style="display:none;">
+                            <label>Link de Amazon</label>
+                            <input type="text" id="cfg-amazon">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="guardarLibro()">
+                        <i class="fas fa-save"></i> Guardar Cambios en la Web
+                    </button>
+                </div>
+            </section>
+
+            <section id="section-pedidos" class="section">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3>Lista de Pedidos Recibidos</h3>
+                        <button class="btn btn-primary btn-sm" onclick="cargarPedidos()">
+                            <i class="fas fa-sync"></i> Actualizar Lista
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Email</th>
+                                    <th>Método</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pedidos-body">
+                                <tr><td colspan="5" style="text-align:center;">Inicia sesión para ver datos</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
 
     <script>
-        // URL DE TU SCRIPT (LA NUEVA QUE GENERASTE)
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZZYXYNi2Q4Kzp6EzjMREZ_vIa8X3JTmKKk_RZ3Fg2apVSnL-3UyOwKjawamzL8_M/exec";
+        // URL de tu script de Google Apps Script
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwt_xwMOsvvf9Gxbt1Hjodc4tf2aCVhNtuqBGEEEfK7vAOdc84-U3Qbyro0EN3WIJJs/exec";
 
-        // LÓGICA DE LOGIN (Usando tu sistema anterior que sí funciona)
-        document.getElementById('login-btn').addEventListener('click', async () => {
+        async function login() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
-            const btn = document.getElementById('login-btn');
+            const btn = document.querySelector('.login-card button');
 
-            btn.disabled = true;
+            if (!user || !pass) { alert("Ingresa tus datos"); return; }
             btn.innerText = "Verificando...";
 
             try {
-                const response = await fetch(SCRIPT_URL, {
+                const resp = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: 'login', user: user, pass: pass })
+                    body: JSON.stringify({ action: 'login', user, pass })
                 });
-                const data = await response.json();
-
-                if (data.success) {
+                const data = await resp.json();
+                if(data.success) {
                     document.getElementById('login-overlay').style.display = 'none';
-                    document.getElementById('main-content').style.display = 'block';
-                    cargarDatosPanel();
-                } else {
-                    alert("Credenciales incorrectas. Revisa las propiedades del script.");
-                    btn.disabled = false;
-                    btn.innerText = "Entrar al Panel";
+                    cargarDatosIniciales();
+                } else { 
+                    alert("Usuario o clave incorrectos"); 
+                    btn.innerText = "Iniciar Sesión";
                 }
-            } catch (e) {
-                alert("Error de conexión: " + e.message);
-                btn.disabled = false;
-                btn.innerText = "Entrar al Panel";
+            } catch (e) { 
+                alert("Error de conexión con Google Sheets"); 
+                btn.innerText = "Iniciar Sesión";
             }
-        });
-
-        function toggleAmazonInput() {
-            const estado = document.getElementById('cfg-estado').value;
-            document.getElementById('amazon-div').style.display = (estado === 'AMAZON') ? 'block' : 'none';
         }
 
-        // GUARDAR CONFIGURACIÓN DEL LIBRO
-        async function guardarConfiguracionWeb() {
-            const config = {
+        function showSection(section, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            
+            document.getElementById('section-' + section).classList.add('active');
+            el.classList.add('active');
+            document.getElementById('section-title').innerText = el.innerText;
+            
+            if(section === 'pedidos') cargarPedidos();
+        }
+
+        function checkAmazon() {
+            const val = document.getElementById('cfg-estado').value;
+            document.getElementById('amazon-group').style.display = (val === 'AMAZON') ? 'block' : 'none';
+        }
+
+        async function cargarDatosIniciales() {
+            try {
+                const resp = await fetch(SCRIPT_URL + "?action=getLibroActivo");
+                const libro = await resp.json();
+                document.getElementById('cfg-titulo').value = libro.titulo || "";
+                document.getElementById('cfg-portada').value = libro.portada || "";
+                document.getElementById('cfg-estado').value = libro.estado || "PREVENTA";
+                document.getElementById('cfg-amazon').value = libro.amazonUrl || "";
+                checkAmazon();
+            } catch (e) { console.error("Error al cargar config inicial"); }
+        }
+
+        async function guardarLibro() {
+            const btn = document.querySelector('#section-libros .btn');
+            const data = {
                 titulo: document.getElementById('cfg-titulo').value,
                 portada: document.getElementById('cfg-portada').value,
                 estado: document.getElementById('cfg-estado').value,
@@ -163,66 +234,52 @@
                 precio: "20€"
             };
 
-            if(!config.titulo || !config.portada) {
-                alert("Por favor, rellena título y portada.");
-                return;
-            }
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
 
             try {
                 const resp = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: 'upsertLibro', data: config })
+                    body: JSON.stringify({ action: 'upsertLibro', data })
                 });
                 const res = await resp.json();
-                if(res.success) alert("¡Web actualizada correctamente! Los cambios ya son visibles.");
-            } catch(e) {
-                alert("Error al guardar: " + e.message);
-            }
+                if(res.success) alert("¡Web actualizada con éxito!");
+            } catch (e) { alert("Error al guardar"); }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Guardar Cambios en la Web';
         }
 
-        // CARGAR PEDIDOS Y CONFIGURACIÓN ACTUAL
-        async function cargarDatosPanel() {
+        async function cargarPedidos() {
+            const body = document.getElementById('pedidos-body');
+            body.innerHTML = "<tr><td colspan='5' style='text-align:center;'><i class='fas fa-spinner fa-spin'></i> Cargando pedidos...</td></tr>";
+            
             try {
-                // 1. Cargar pedidos
-                const respOrders = await fetch(SCRIPT_URL);
-                const orders = await respOrders.json();
+                const resp = await fetch(SCRIPT_URL);
+                const orders = await resp.json();
                 
-                // 2. Cargar configuración actual del libro (para rellenar los inputs)
-                const respLibro = await fetch(SCRIPT_URL + "?action=getLibroActivo");
-                const libro = await respLibro.json();
-
-                if(libro.titulo) {
-                    document.getElementById('cfg-titulo').value = libro.titulo;
-                    document.getElementById('cfg-portada').value = libro.portada;
-                    document.getElementById('cfg-estado').value = libro.estado;
-                    document.getElementById('cfg-amazon').value = libro.amazonUrl || "";
-                    toggleAmazonInput();
+                body.innerHTML = "";
+                if(orders.length === 0) {
+                    body.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No hay pedidos registrados</td></tr>";
+                    return;
                 }
 
-                renderOrders(orders);
-            } catch (e) {
-                console.error("Error cargando datos:", e);
+                orders.forEach(o => {
+                    if(!o.nombre_y_apellido) return;
+                    body.innerHTML += `
+                        <tr>
+                            <td><strong>${o.nombre_y_apellido}</strong></td>
+                            <td>${o.correo_electronico_obligatorio_para_envios_correos_y_inpost || '---'}</td>
+                            <td>${o.metodo_de_envio || '---'}</td>
+                            <td><span class="status-badge status-${o.estado || 'Pendiente'}">${o.estado || 'Pendiente'}</span></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" onclick="alert('Pedido del cliente: ${o.nombre_y_apellido}')">Ver</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (e) { 
+                body.innerHTML = "<tr><td colspan='5' style='text-align:center; color:red;'>Error al conectar con la base de datos</td></tr>";
             }
-        }
-
-        function renderOrders(orders) {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('orders-table').style.display = 'table';
-            const body = document.getElementById('orders-body');
-            body.innerHTML = "";
-
-            orders.forEach(order => {
-                if(!order.nombre_y_apellido) return;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${order.timestamp ? new Date(order.timestamp).toLocaleDateString() : '---'}</td>
-                    <td><strong>${order.nombre_y_apellido}</strong><br><small>${order.email || ''}</small></td>
-                    <td>${order.metodo_de_envio || 'No especificado'}</td>
-                    <td><span class="status-pill status-pendiente">${order.estado || 'Recibido'}</span></td>
-                    <td><button onclick="alert('Ver detalles pronto...')" style="cursor:pointer;">Ver</button></td>
-                `;
-                body.appendChild(tr);
-            });
         }
     </script>
 </body>
