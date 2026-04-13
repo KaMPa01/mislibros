@@ -6,50 +6,32 @@
     <title>Admin Panel | Ana Carolina</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --sidebar-width: 260px;
-            --primary: #FF1493;
-            --primary-dark: #C71585;
-            --secondary: #34495e;
-            --bg: #f8fafc;
-            --white: #ffffff;
-            --text-main: #1e293b;
-            --border: #e2e8f0;
-        }
-
+        :root { --sidebar-width: 260px; --primary: #FF1493; --secondary: #34495e; --bg: #f8fafc; --white: #ffffff; --text-main: #1e293b; --border: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; }
-
-        /* Login */
         #login-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .login-card { background: var(--white); padding: 2.5rem; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
         .login-card input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; }
         .login-card button { width: 100%; padding: 0.8rem; background: var(--primary); color: white; border: none; border-radius: 0.5rem; font-weight: bold; cursor: pointer; }
-
-        /* Sidebar */
         .sidebar { width: var(--sidebar-width); background: var(--secondary); color: white; display: flex; flex-direction: column; }
         .sidebar-header { padding: 1.5rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .menu-item { padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: 0.2s; color: #cbd5e1; }
         .menu-item:hover, .menu-item.active { background: var(--primary); color: white; }
-
-        /* Main Content */
         .main { flex: 1; display: flex; flex-direction: column; }
         .top-bar { height: 60px; background: white; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 2rem; justify-content: space-between; }
         .content { padding: 2rem; overflow-y: auto; }
-
-        /* Cards */
         .card { background: white; border-radius: 0.8rem; padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
-        .section { display: none; }
-        .section.active { display: block; }
-        
+        .section { display: none; } .section.active { display: block; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
         input, select { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 0.4rem; }
-        
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th { text-align: left; padding: 1rem; border-bottom: 2px solid var(--border); font-size: 0.8rem; color: #64748b; }
         td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        
         .btn-save { background: #22c55e; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: bold; margin-top: 1rem; }
+        .badge { padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .badge-preventa { background: #fef3c7; color: #92400e; }
+        .badge-amazon { background: #dcfce7; color: #166534; }
+        .badge-oculto { background: #f1f5f9; color: #475569; }
     </style>
 </head>
 <body>
@@ -77,12 +59,14 @@
 
         <div class="content">
             <section id="sec-libros" class="section active">
+                
                 <div class="card">
-                    <h3>Configurar Preventa Activa</h3>
+                    <h3>Añadir o Editar Libro</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Si el título ya existe en la lista de abajo, se actualizará su estado. Si es nuevo, se añadirá a la lista.</p>
                     <div class="form-grid">
                         <div>
-                            <label>Título</label>
-                            <input type="text" id="cfg-titulo">
+                            <label>Título del Libro</label>
+                            <input type="text" id="cfg-titulo" placeholder="Ej: La chica del primer asalto">
                         </div>
                         <div>
                             <label>URL Portada</label>
@@ -101,7 +85,24 @@
                             <input type="text" id="cfg-amazon">
                         </div>
                     </div>
-                    <button class="btn-save" onclick="updateLibro()">Actualizar Web</button>
+                    <button class="btn-save" onclick="updateLibro()"><i class="fas fa-save"></i> Guardar Libro</button>
+                </div>
+
+                <div class="card">
+                    <h3>Catálogo de Libros Guardados</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Portada</th>
+                                <th>Título</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-libros">
+                            <tr><td colspan="4">Cargando catálogo...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
@@ -124,7 +125,7 @@
     </main>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzc7oNrnmj0TUHEqSeaest-sJ_F30CKjePg_hzXs4QqYCDgDvNNAjobf8CHBbtzfxB9/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQZZYXYNi2Q4Kzp6EzjMREZ_vIa8X3JTmKKk_RZ3Fg2apVSnL-3UyOwKjawamzL8_M/exec";
 
         function nav(sec, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -133,6 +134,7 @@
             el.classList.add('active');
             document.getElementById('page-title').innerText = el.innerText;
             if(sec === 'pedidos') fetchOrders();
+            if(sec === 'libros') loadCatalog();
         }
 
         function toggleAmz() {
@@ -147,19 +149,45 @@
                 const d = await r.json();
                 if(d.success) {
                     document.getElementById('login-overlay').style.display = 'none';
-                    loadLibro();
+                    loadCatalog(); // Cargamos la tabla al entrar
                 } else alert("Datos incorrectos");
             } catch(e) { alert("Error de conexión"); }
         }
 
-        async function loadLibro() {
-            const r = await fetch(SCRIPT_URL + "?action=getLibroActivo");
-            const l = await r.json();
-            document.getElementById('cfg-titulo').value = l.titulo || "";
-            document.getElementById('cfg-portada').value = l.portada || "";
-            document.getElementById('cfg-estado').value = l.estado || "PREVENTA";
-            document.getElementById('cfg-amazon').value = l.amazonUrl || "";
+        // NUEVO: Cargar tabla de libros
+        async function loadCatalog() {
+            const list = document.getElementById('lista-libros');
+            try {
+                const r = await fetch(SCRIPT_URL + "?action=getAllLibros");
+                const libros = await r.json();
+                list.innerHTML = "";
+                if(libros.length === 0) list.innerHTML = "<tr><td colspan='4'>No hay libros guardados aún.</td></tr>";
+                
+                libros.forEach(l => {
+                    let badgeClass = "badge-oculto";
+                    if(l.estado === "PREVENTA") badgeClass = "badge-preventa";
+                    if(l.estado === "AMAZON") badgeClass = "badge-amazon";
+
+                    list.innerHTML += `
+                        <tr>
+                            <td><img src="${l.portada}" style="width:40px; border-radius:4px;"></td>
+                            <td><strong>${l.titulo}</strong></td>
+                            <td><span class="badge ${badgeClass}">${l.estado}</span></td>
+                            <td><button onclick="editForm('${l.titulo}', '${l.portada}', '${l.estado}', '${l.amazonUrl || ''}')" style="cursor:pointer; padding:5px 10px; border:1px solid #ccc; background:white; border-radius:4px;">Editar</button></td>
+                        </tr>
+                    `;
+                });
+            } catch(e) { list.innerHTML = "<tr><td colspan='4'>Error al cargar el catálogo</td></tr>"; }
+        }
+
+        // NUEVO: Llenar formulario al dar a Editar
+        function editForm(tit, port, est, amz) {
+            document.getElementById('cfg-titulo').value = tit;
+            document.getElementById('cfg-portada').value = port;
+            document.getElementById('cfg-estado').value = est;
+            document.getElementById('cfg-amazon').value = amz;
             toggleAmz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         async function updateLibro() {
@@ -167,17 +195,26 @@
                 titulo: document.getElementById('cfg-titulo').value,
                 portada: document.getElementById('cfg-portada').value,
                 estado: document.getElementById('cfg-estado').value,
-                amazonUrl: document.getElementById('cfg-amazon').value,
-                precio: "20€"
+                amazonUrl: document.getElementById('cfg-amazon').value
             };
+            if(!data.titulo) { alert("El título es obligatorio"); return; }
+            
+            document.querySelector('.btn-save').innerText = "Guardando...";
             const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'upsertLibro', data }) });
             const res = await r.json();
-            if(res.success) alert("¡Web sincronizada!");
+            if(res.success) {
+                alert("¡Guardado correctamente!");
+                document.querySelector('.btn-save').innerHTML = "<i class='fas fa-save'></i> Guardar Libro";
+                // Limpiar form y recargar tabla
+                document.getElementById('cfg-titulo').value = "";
+                document.getElementById('cfg-portada').value = "";
+                loadCatalog(); 
+            }
         }
 
         async function fetchOrders() {
             const list = document.getElementById('lista-pedidos');
-            list.innerHTML = "Cargando...";
+            list.innerHTML = "<tr><td colspan='3'>Cargando...</td></tr>";
             const r = await fetch(SCRIPT_URL);
             const orders = await r.json();
             list.innerHTML = "";
