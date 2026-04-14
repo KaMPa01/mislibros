@@ -9,7 +9,6 @@
     <meta name="author" content="Ana Carolina">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -107,17 +106,15 @@
     </div>
     
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGkBHFlopJd13kw9Iv71kWEVB4sqLOcowHZH2Vc6Gtb_8iS-wkFGZKSQoV-1_C25Im/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5h4YbUvydEVw3uMWq--C4A631mJduMMLy0Yy3KSUw1ilZ1XQHuenkfHC50xaKpapQ/exec"; 
 
         async function loadBooks() {
             try {
                 const response = await fetch(SCRIPT_URL + "?action=getBooks");
                 let books = await response.json();
                 
-                // BLINDAJE: Filtrar filas vacías
-                books = books.filter(book => book.titulo && book.titulo !== 'undefined' && book.titulo.toString().trim() !== "");
-
-                // INVERTIMOS EL ARRAY PARA QUE LOS MÁS NUEVOS SALGAN PRIMERO
+                // Filtramos las filas de Excel que estén vacías o defectuosas
+                books = books.filter(book => book.titulo && book.titulo.toString().trim() !== "");
                 books.reverse(); 
 
                 const container = document.getElementById('dynamic-books-container');
@@ -132,11 +129,8 @@
                     const bookDiv = document.createElement('div');
                     bookDiv.className = 'book';
                     
-                    // --- ARREGLO: LECTURA PERFECTA DE LA PREVENTA EN ESPAÑOL ---
-                    const valPrev = String(book.es_preventa).trim().toLowerCase();
-                    const esPreventa = (valPrev === "true" || valPrev === "verdadero" || valPrev === "1" || book.es_preventa === true);
+                    const esPreventa = String(book.es_preventa).toLowerCase() === "true";
                     
-                    // Extraer versiones
                     let versiones = [];
                     try { 
                         const parsed = JSON.parse(book.precio); 
@@ -149,28 +143,30 @@
                         versiones = [{nombre: 'Edición Estándar', precio: book.precio || "0"}]; 
                     }
 
-                    // Determinar el precio a mostrar
                     let displayPrice = versiones[0].precio;
                     if (versiones.length > 1) {
                         displayPrice = `Desde ${Math.min(...versiones.map(v => parseFloat(v.precio) || 0))}`;
                     }
 
-                    const portadaUrl = (book.portada_url && book.portada_url !== 'undefined' && book.portada_url.trim() !== '') 
+                    const portadaUrl = book.portada_url && book.portada_url.trim() !== "" 
                         ? book.portada_url 
                         : "https://via.placeholder.com/220x330?text=Sin+Portada";
 
-                    // Generar botón
                     let buttonHtml = '';
                     if (esPreventa) {
                         const safeVersions = encodeURIComponent(JSON.stringify(versiones));
-                        buttonHtml = `<a href="reserva.html?libro=${encodeURIComponent(book.titulo)}&portada=${encodeURIComponent(portadaUrl)}&versiones=${safeVersions}" class="soon-button">RESERVAR (${displayPrice}€)</a>`;
+                        // IMPORTANTE: Mantenemos el href en una sola línea unida
+                        buttonHtml = `
+                            <a href="reserva.html?libro=${encodeURIComponent(book.titulo)}&portada=${encodeURIComponent(portadaUrl)}&versiones=${safeVersions}" 
+                               class="soon-button">
+                               RESERVAR (${displayPrice}€)
+                            </a>`;
                     } else {
-                        const amazonUrl = (book.amazon_url && book.amazon_url !== 'undefined' && book.amazon_url.trim() !== '') ? book.amazon_url : "#";
-                        if (amazonUrl === "#") {
-                            buttonHtml = `<a href="#" onclick="alert('Enlace de compra no disponible aún.'); return false;" class="buy-button">COMPRAR AHORA</a>`;
-                        } else {
-                            buttonHtml = `<a href="${amazonUrl}" target="_blank" class="buy-button">COMPRAR AHORA</a>`;
-                        }
+                        const amazonUrl = book.amazon_url && book.amazon_url.trim() !== "" ? book.amazon_url : "#";
+                        
+                        buttonHtml = amazonUrl === "#" 
+                            ? `<a href="#" onclick="alert('Enlace no disponible aún.'); return false;" class="buy-button">COMPRAR AHORA</a>`
+                            : `<a href="${amazonUrl}" target="_blank" class="buy-button">COMPRAR AHORA</a>`;
                     }
 
                     bookDiv.innerHTML = `
