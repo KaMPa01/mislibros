@@ -204,7 +204,7 @@
     <div id="printable-albaran"></div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybcXAzzvQUJhOeqcwV96-Ti6ZCH1tUz4GJc4W-rnDWUkt0tpXukFqwFgmfvHBAsoKW/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5h4YbUvydEVw3uMWq--C4A631mJduMMLy0Yy3KSUw1ilZ1XQHuenkfHC50xaKpapQ/exec";
 
         // --- SISTEMA DE LOGIN Y NAVEGACIÓN ---
         document.getElementById('login-btn').addEventListener('click', attemptLogin);
@@ -314,12 +314,16 @@
                         else precioLabel = `Desde ${Math.min(...parsed.map(p=>p.precio))}€ (${parsed.length} versiones)`;
                     } catch(e) {}
 
+                    // --- BLINDAJE CLAVE PARA RECONOCER LA PREVENTA CORRECTAMENTE ---
+                    const valPrev = String(book.es_preventa).trim().toLowerCase();
+                    const esPreventa = (valPrev === "true" || valPrev === "verdadero" || valPrev === "1" || book.es_preventa === true);
+
                     const li = document.createElement('li');
                     li.className = 'order-item';
                     li.innerHTML = `
                         <div class="order-details">
                             <strong>${book.titulo}</strong> - ${precioLabel} <br>
-                            <small>${book.es_preventa === true || book.es_preventa === "true" ? 'En Preventa' : 'Venta Directa'}</small>
+                            <small style="color:${esPreventa ? '#9370DB' : '#7f8c8d'}; font-weight:bold;">${esPreventa ? 'En Preventa' : 'Venta Directa'}</small>
                         </div>
                         <div class="order-actions"><button>Editar</button></div>`;
                     li.querySelector('button').onclick = () => editBook(book);
@@ -329,7 +333,6 @@
         }
 
         function editBook(book) {
-            // BLINDAJE: Transformamos los "undefined" en vacíos limpios
             const titulo = (book.titulo !== 'undefined' && book.titulo) ? book.titulo : '';
             const descripcion = (book.descripcion !== 'undefined' && book.descripcion) ? book.descripcion : '';
             const amazonUrl = (book.amazon_url !== 'undefined' && book.amazon_url && book.amazon_url !== 'null') ? book.amazon_url : '';
@@ -342,11 +345,13 @@
             document.getElementById('book-desc').value = descripcion;
             document.getElementById('book-amazon').value = amazonUrl;
             
-            // Evaluamos la preventa y bloqueamos la url de amazon si es necesario
-            document.getElementById('book-preorder').checked = (book.es_preventa === true || book.es_preventa === "true");
+            // --- BLINDAJE CLAVE PARA RECONOCER LA PREVENTA EN LA EDICIÓN ---
+            const valPrev = String(book.es_preventa).trim().toLowerCase();
+            const esPreventa = (valPrev === "true" || valPrev === "verdadero" || valPrev === "1" || book.es_preventa === true);
+            document.getElementById('book-preorder').checked = esPreventa;
+            
             toggleAmazonInput();
             
-            // Cargar versiones
             let parsedVersions = [];
             try { parsedVersions = JSON.parse(book.precio); } 
             catch(e) { parsedVersions = [{nombre: 'Edición Estándar', precio: book.precio || ''}]; }
@@ -367,7 +372,6 @@
             document.getElementById('book-id').value = "";
             renderVersionsInputs([{nombre: 'Edición Estándar', precio: ''}]);
             
-            // Restaurar estados normales
             toggleAmazonInput(); 
             
             document.getElementById('save-book-btn').textContent = "Guardar Libro";
@@ -412,6 +416,8 @@
                 descripcion: document.getElementById('book-desc').value,
                 precio: JSON.stringify(versiones),
                 amazon_url: amazonFinalUrl,
+                // Al enviar el checkbox, viaja como boolean (true o false). 
+                // En Sheets puede convertirse a VERDADERO/FALSO, pero ahora nuestro panel lo entiende.
                 es_preventa: document.getElementById('book-preorder').checked,
                 coverFile: coverData,
                 currentCover: document.getElementById('book-current-cover').value
@@ -419,7 +425,7 @@
 
             fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
             .then(res => res.json()).then(result => {
-                if(result.success) { alert('¡Libro guardado!'); document.getElementById('cancel-edit-btn').click(); loadBooksAdmin(); }
+                if(result.success) { alert('¡Libro guardado con éxito!'); document.getElementById('cancel-edit-btn').click(); loadBooksAdmin(); }
                 else alert('Error: ' + result.message);
                 btn.disabled = false;
             });
@@ -453,7 +459,6 @@
             e.preventDefault(); document.querySelector('.filter-btn.active').classList.remove('active'); e.target.classList.add('active'); filterOrders(e.target.dataset.filter);
         });
 
-        // ... MANTENEMOS EL RESTO DE FUNCIONES DE MOSTRAR PEDIDOS EXACTAMENTE IGUAL ...
         function showConfirm(title, text) {
             return new Promise((resolve) => {
                 const confirmOverlay = document.getElementById('confirm-overlay');
