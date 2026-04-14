@@ -6,7 +6,6 @@
     <title>Panel de Gestión de Pedidos</title>
     <meta name="robots" content="noindex, nofollow">
     <style>
-        /* Estilos del Login */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f7f9; display: flex; justify-content: center; align-items: center; z-index: 2000; }
         .login-box { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; width: 300px; }
         .login-box h2 { margin-top: 0; }
@@ -14,14 +13,10 @@
         .login-box button { width: 100%; background-color: #3498db; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-size: 1em; }
         .login-box button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
         #login-error { color: #e74c3c; margin-top: 10px; display: none; }
-        
-        /* Estilos del Panel Principal */
         #main-content { display: none; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; color: #333; margin: 0; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
         h1, h2, h3 { color: #2c3e50; }
-        
-        /* Estilos para el Menú Lateral */
         .main-layout { display: flex; flex-direction: row; gap: 30px; }
         #orders-container { flex-grow: 1; }
         #filter-menu { flex-basis: 220px; flex-shrink: 0; background-color: #ffffff; border-radius: 8px; padding: 20px; height: fit-content; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -30,7 +25,6 @@
         #filter-menu li a { display: block; padding: 10px 15px; text-decoration: none; color: #34495e; border-radius: 5px; transition: background-color 0.2s; }
         #filter-menu li a:hover { background-color: #f2f2f2; }
         #filter-menu li a.active { background-color: #3498db; color: white; font-weight: bold; }
-
         .loading { text-align: center; padding: 50px; font-size: 1.2em; }
         .order-list { list-style: none; padding: 0; }
         .order-item { background-color: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: box-shadow 0.2s; }
@@ -39,8 +33,6 @@
         .order-details { flex-grow: 1; }
         .order-details strong { font-size: 1.1em; }
         .order-actions button { background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
-
-        /* Estilos de la Ventana de Detalles */
         .details-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: flex-start; z-index: 1000; overflow-y: auto; padding: 40px 20px; box-sizing: border-box; }
         .details-content { background: white; padding: 40px; width: 100%; max-width: 800px; box-shadow: 0 0 20px rgba(0,0,0,0.2); border-radius: 8px; }
         .details-header { display: flex; justify-content: space-between; border-bottom: 2px solid #ccc; padding-bottom: 20px; align-items: flex-start; }
@@ -57,32 +49,13 @@
         .details-controls button { background-color: #2ecc71; color: white; padding: 12px 20px; font-size: 1em; margin: 5px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.2s; }
         .details-controls .close-btn { background-color: #e74c3c; }
         .tracking-number { background-color: #eaf2f8; border-left: 4px solid #3498db; padding: 10px; margin-top: 10px; font-weight: bold;}
-        
-        /* Estilos para Gemini */
-        .gemini-assistant { border: 2px dashed #a5b4fc; padding: 20px; border-radius: 8px; margin-top: 10px; }
-        .gemini-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 15px; font-size: 0.9em; border-radius: 5px; cursor: pointer; margin-right: 10px; }
-        .gemini-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
-        #gemini-result-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2500; }
-        .gemini-result-box { background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 600px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
-        .gemini-result-box h3 { margin-top: 0; }
-        #gemini-result-textarea { width: 100%; height: 200px; margin-top: 15px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; font-family: inherit; box-sizing: border-box; }
-        .gemini-result-controls { margin-top: 15px; text-align: right; }
-        .gemini-result-controls button { margin-left: 10px; }
-
-        /* Estilos para la Ventana de Confirmación y Prompt */
         .dialog-box { background: white; padding: 30px; border-radius: 8px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
         .dialog-controls { margin-top: 20px; }
-        .dialog-controls button { padding: 10px 20px; font-size: 1em; }
+        .dialog-controls button { padding: 10px 20px; font-size: 1em; margin: 0 5px; }
         #prompt-input { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-
         @media (max-width: 900px) { .main-layout { flex-direction: column-reverse; } }
-        
-        /* --- REGLAS DE IMPRESIÓN DEFINITIVAS --- */
         #printable-albaran { display: none; }
-        @media print {
-            body > *:not(#printable-albaran) { display: none !important; }
-            #printable-albaran, #printable-albaran * { display: block !important; }
-        }
+        @media print { body > *:not(#printable-albaran) { display: none !important; } #printable-albaran, #printable-albaran * { display: block !important; } }
     </style>
 </head>
 <body>
@@ -112,7 +85,6 @@
                         <form id="add-book-form">
                             <input type="hidden" id="book-id">
                             <input type="hidden" id="book-current-cover">
-                            
                             <input type="text" id="book-title" placeholder="Título del libro" required style="width:100%; margin-bottom:10px; padding:10px; border:1px solid #ccc; border-radius:5px;">
                             <textarea id="book-desc" placeholder="Sinopsis" required style="width:100%; height:100px; margin-bottom:10px; padding:10px; border:1px solid #ccc; border-radius:5px;"></textarea>
                             
@@ -126,7 +98,6 @@
                                     <label style="display:block; margin-bottom:15px; font-weight:bold; color: #2c3e50;">
                                         <input type="checkbox" id="book-preorder"> Es preventa (Habilita reservas)
                                     </label>
-
                                     <label style="display:block; font-size:0.9em; font-weight:bold; margin-bottom:10px;">URL Amazon (Si no es preventa)</label>
                                     <input type="url" id="book-amazon" placeholder="https://amazon..." style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; transition: background-color 0.2s;">
                                 </div>
@@ -199,14 +170,13 @@
         </div>
     </div>
     
-    <div id="confirm-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="confirm-title">¿Estás seguro?</h3><p id="confirm-text">Esta acción no se puede deshacer.</p><div class="dialog-controls"><button id="confirm-yes-btn">Sí, continuar</button><button id="confirm-no-btn" class="close-btn">Cancelar</button></div></div></div>
-    <div id="prompt-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="prompt-title">Introduce el dato</h3><p id="prompt-text">Por favor, introduce la información solicitada.</p><input type="text" id="prompt-input"><div class="dialog-controls"><button id="prompt-ok-btn">Aceptar</button><button id="prompt-cancel-btn" class="close-btn">Cancelar</button></div></div></div>
+    <div id="confirm-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="confirm-title">¿Estás seguro?</h3><p id="confirm-text">Esta acción no se puede deshacer.</p><div class="dialog-controls"><button id="confirm-yes-btn">Sí</button><button id="confirm-no-btn" class="close-btn">Cancelar</button></div></div></div>
+    <div id="prompt-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="prompt-title">Introduce el dato</h3><p id="prompt-text"></p><input type="text" id="prompt-input"><div class="dialog-controls"><button id="prompt-ok-btn">Aceptar</button><button id="prompt-cancel-btn" class="close-btn">Cancelar</button></div></div></div>
     <div id="printable-albaran"></div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGkBHFlopJd13kw9Iv71kWEVB4sqLOcowHZH2Vc6Gtb_8iS-wkFGZKSQoV-1_C25Im/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7AvPH2JJ9DEePkRh8BAabJ7RHSxcM-koTbh8s-0F3A3NNIGA0ldXCcxB_QIjPuOtm/exec";
 
-        // --- SISTEMA DE LOGIN Y NAVEGACIÓN ---
         document.getElementById('login-btn').addEventListener('click', attemptLogin);
         function attemptLogin() {
             const btn = document.getElementById('login-btn');
@@ -240,26 +210,23 @@
             loadBooksAdmin();
         });
 
-        // --- FUNCIONALIDAD PARA BLOQUEAR LA CAJA DE URL SI ES PREVENTA ---
         const preorderCheckbox = document.getElementById('book-preorder');
         const amazonInput = document.getElementById('book-amazon');
 
         function toggleAmazonInput() {
             if (preorderCheckbox.checked) {
-                amazonInput.value = ''; // Vaciamos el enlace automáticamente
-                amazonInput.disabled = true; // Bloqueamos la caja
-                amazonInput.style.backgroundColor = '#f0f0f0'; // La ponemos gris
+                amazonInput.value = '';
+                amazonInput.disabled = true;
+                amazonInput.style.backgroundColor = '#f0f0f0';
                 amazonInput.placeholder = 'No requerida en preventa';
             } else {
-                amazonInput.disabled = false; // Desbloqueamos
-                amazonInput.style.backgroundColor = '#fff'; // La volvemos blanca
+                amazonInput.disabled = false;
+                amazonInput.style.backgroundColor = '#fff';
                 amazonInput.placeholder = 'https://amazon...';
             }
         }
-        
         preorderCheckbox.addEventListener('change', toggleAmazonInput);
 
-        // --- GESTIÓN DINÁMICA DE VERSIONES DE LIBROS ---
         function renderVersionsInputs(versionsArray) {
             const wrapper = document.getElementById('versions-wrapper');
             wrapper.innerHTML = '';
@@ -279,7 +246,7 @@
             const div = document.createElement('div');
             div.style.display = 'flex'; div.style.gap = '5px'; div.style.marginBottom = '8px';
             div.innerHTML = `
-                <input type="text" class="v-name" placeholder="Ej. Edición Coleccionista" required style="flex:2; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                <input type="text" class="v-name" placeholder="Ej. Edición Especial" required style="flex:2; padding:8px; border:1px solid #ccc; border-radius:4px;">
                 <input type="number" class="v-price" placeholder="Precio" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
                 <button type="button" onclick="this.parentElement.remove()" style="background:#e74c3c; color:white; border:none; border-radius:4px; cursor:pointer; padding:0 10px; font-weight:bold;">X</button>
             `;
@@ -288,7 +255,6 @@
 
         renderVersionsInputs([{nombre: 'Edición Estándar', precio: ''}]); 
 
-        // --- GESTIÓN DE LIBROS (CRUD) ---
         async function loadBooksAdmin() {
             const list = document.getElementById('items-libros');
             document.getElementById('loader-books').style.display = 'block';
@@ -297,12 +263,9 @@
             try {
                 const res = await fetch(SCRIPT_URL + "?action=getBooks");
                 let books = await res.json();
-                
-                // BLINDAJE: Filtramos los libros vacíos y "undefined"
-                books = books.filter(book => book.titulo && book.titulo !== 'undefined' && book.titulo.toString().trim() !== "");
-                
+                books = books.filter(book => book.titulo && book.titulo.toString().trim() !== "");
                 books.reverse();
-
+                
                 document.getElementById('loader-books').style.display = 'none';
                 if (books.length === 0) list.innerHTML = '<p style="text-align:center;">No hay libros.</p>';
                 
@@ -314,9 +277,7 @@
                         else precioLabel = `Desde ${Math.min(...parsed.map(p=>p.precio))}€ (${parsed.length} versiones)`;
                     } catch(e) {}
 
-                    // --- BLINDAJE CLAVE PARA RECONOCER LA PREVENTA CORRECTAMENTE ---
-                    const valPrev = String(book.es_preventa).trim().toLowerCase();
-                    const esPreventa = (valPrev === "true" || valPrev === "verdadero" || valPrev === "1" || book.es_preventa === true);
+                    const esPreventa = String(book.es_preventa).toLowerCase() === "true";
 
                     const li = document.createElement('li');
                     li.className = 'order-item';
@@ -333,9 +294,9 @@
         }
 
         function editBook(book) {
-            const titulo = (book.titulo !== 'undefined' && book.titulo) ? book.titulo : '';
-            const descripcion = (book.descripcion !== 'undefined' && book.descripcion) ? book.descripcion : '';
-            const amazonUrl = (book.amazon_url !== 'undefined' && book.amazon_url && book.amazon_url !== 'null') ? book.amazon_url : '';
+            const titulo = book.titulo || '';
+            const descripcion = book.descripcion || '';
+            const amazonUrl = book.amazon_url || '';
             
             document.getElementById('form-book-title').textContent = "Editando: " + titulo;
             document.getElementById('book-id').value = book.id;
@@ -345,11 +306,8 @@
             document.getElementById('book-desc').value = descripcion;
             document.getElementById('book-amazon').value = amazonUrl;
             
-            // --- BLINDAJE CLAVE PARA RECONOCER LA PREVENTA EN LA EDICIÓN ---
-            const valPrev = String(book.es_preventa).trim().toLowerCase();
-            const esPreventa = (valPrev === "true" || valPrev === "verdadero" || valPrev === "1" || book.es_preventa === true);
+            const esPreventa = String(book.es_preventa).toLowerCase() === "true";
             document.getElementById('book-preorder').checked = esPreventa;
-            
             toggleAmazonInput();
             
             let parsedVersions = [];
@@ -371,7 +329,6 @@
             document.getElementById('form-book-title').textContent = "Añadir Nuevo Libro";
             document.getElementById('book-id').value = "";
             renderVersionsInputs([{nombre: 'Edición Estándar', precio: ''}]);
-            
             toggleAmazonInput(); 
             
             document.getElementById('save-book-btn').textContent = "Guardar Libro";
@@ -416,8 +373,6 @@
                 descripcion: document.getElementById('book-desc').value,
                 precio: JSON.stringify(versiones),
                 amazon_url: amazonFinalUrl,
-                // Al enviar el checkbox, viaja como boolean (true o false). 
-                // En Sheets puede convertirse a VERDADERO/FALSO, pero ahora nuestro panel lo entiende.
                 es_preventa: document.getElementById('book-preorder').checked,
                 coverFile: coverData,
                 currentCover: document.getElementById('book-current-cover').value
@@ -431,7 +386,6 @@
             });
         });
 
-        // --- GESTIÓN DE PEDIDOS ---
         let allOrders = []; let currentOpenOrder = null;
 
         function loadOrders() {
