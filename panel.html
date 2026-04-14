@@ -123,8 +123,9 @@
                                     <button type="button" id="add-version-btn" style="background:#f39c12; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:0.85em; margin-top:5px; font-weight:bold;">+ Añadir edición especial</button>
                                 </div>
                                 <div style="flex:1; min-width:250px;">
-                                    <label style="display:block; font-size:0.9em; font-weight:bold; margin-bottom:10px;">URL Amazon (Si no es preventa)</label>
+                                    <label style="display:block; font-size:0.9em; font-weight:bold; margin-bottom:10px;">URL Amazon (Opcional si es preventa)</label>
                                     <input type="url" id="book-amazon" placeholder="https://amazon..." style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;">
+                                    
                                     <label style="display:block; margin-top:15px; font-weight:bold;">
                                         <input type="checkbox" id="book-preorder"> Es preventa (Habilita botón reservar)
                                     </label>
@@ -204,7 +205,7 @@
     <div id="printable-albaran"></div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybcXAzzvQUJhOeqcwV96-Ti6ZCH1tUz4GJc4W-rnDWUkt0tpXukFqwFgmfvHBAsoKW/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5h4YbUvydEVw3uMWq--C4A631mJduMMLy0Yy3KSUw1ilZ1XQHuenkfHC50xaKpapQ/exec"; 
 
         // --- SISTEMA DE LOGIN Y NAVEGACIÓN ---
         document.getElementById('login-btn').addEventListener('click', attemptLogin);
@@ -267,7 +268,7 @@
             document.getElementById('versions-wrapper').appendChild(div);
         });
 
-        renderVersionsInputs([{nombre: 'Edición Estándar', precio: ''}]); // Default setup
+        renderVersionsInputs([{nombre: 'Edición Estándar', precio: ''}]); 
 
         // --- GESTIÓN DE LIBROS (CRUD) ---
         async function loadBooksAdmin() {
@@ -277,7 +278,10 @@
             
             try {
                 const res = await fetch(SCRIPT_URL + "?action=getBooks");
-                const books = await res.json();
+                let books = await res.json();
+                
+                // BLINDAJE: Filtramos los libros vacíos y "undefined" para que no salgan en tu lista
+                books = books.filter(book => book.titulo && book.titulo !== 'undefined' && book.titulo.toString().trim() !== "");
                 
                 // INVERTIMOS LA LISTA PARA VER LOS ÚLTIMOS PRIMERO
                 books.reverse();
@@ -286,7 +290,7 @@
                 if (books.length === 0) list.innerHTML = '<p style="text-align:center;">No hay libros.</p>';
                 
                 books.forEach(book => {
-                    // Interpretar el precio (puede ser legacy o array de versiones)
+                    // Interpretar el precio
                     let precioLabel = book.precio;
                     try {
                         const parsed = JSON.parse(book.precio);
@@ -309,18 +313,24 @@
         }
 
         function editBook(book) {
-            document.getElementById('form-book-title').textContent = "Editando: " + book.titulo;
+            // BLINDAJE: Si algún campo está "undefined", lo dejamos vacío (cadena de texto vacía '')
+            const titulo = (book.titulo !== 'undefined' && book.titulo) ? book.titulo : '';
+            const descripcion = (book.descripcion !== 'undefined' && book.descripcion) ? book.descripcion : '';
+            const amazonUrl = (book.amazon_url !== 'undefined' && book.amazon_url) ? book.amazon_url : '';
+            
+            document.getElementById('form-book-title').textContent = "Editando: " + titulo;
             document.getElementById('book-id').value = book.id;
             document.getElementById('book-current-cover').value = book.portada_url;
-            document.getElementById('book-title').value = book.titulo;
-            document.getElementById('book-desc').value = book.descripcion;
-            document.getElementById('book-amazon').value = book.amazon_url;
+            
+            document.getElementById('book-title').value = titulo;
+            document.getElementById('book-desc').value = descripcion;
+            document.getElementById('book-amazon').value = amazonUrl;
             document.getElementById('book-preorder').checked = (book.es_preventa === true || book.es_preventa === "true");
             
             // Cargar versiones
             let parsedVersions = [];
             try { parsedVersions = JSON.parse(book.precio); } 
-            catch(e) { parsedVersions = [{nombre: 'Edición Estándar', precio: book.precio}]; }
+            catch(e) { parsedVersions = [{nombre: 'Edición Estándar', precio: book.precio || ''}]; }
             renderVersionsInputs(parsedVersions);
 
             document.getElementById('save-book-btn').textContent = "Actualizar Libro";
@@ -376,7 +386,7 @@
                 id: id,
                 titulo: document.getElementById('book-title').value,
                 descripcion: document.getElementById('book-desc').value,
-                precio: JSON.stringify(versiones), // Guardamos el array como texto JSON en la columna precio
+                precio: JSON.stringify(versiones),
                 amazon_url: document.getElementById('book-amazon').value,
                 es_preventa: document.getElementById('book-preorder').checked,
                 coverFile: coverData,
