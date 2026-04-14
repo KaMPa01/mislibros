@@ -93,13 +93,21 @@
         async function loadBooks() {
             try {
                 const response = await fetch(SCRIPT_URL + "?action=getBooks");
-                const books = await response.json();
+                let books = await response.json();
                 
-                // INVERTIMOS EL ARRAY PARA QUE LOS MÁS NUEVOS SALGAN PRIMERO
+                // 1. BLINDAJE: Filtrar filas vacías de Excel que no tengan título
+                books = books.filter(book => book.titulo && book.titulo.toString().trim() !== "");
+
+                // 2. INVERTIMOS EL ARRAY PARA QUE LOS MÁS NUEVOS SALGAN PRIMERO
                 books.reverse(); 
 
                 const container = document.getElementById('dynamic-books-container');
                 container.innerHTML = ''; 
+
+                if (books.length === 0) {
+                    container.innerHTML = '<p style="text-align:center; width:100%;">Mi catálogo estará disponible muy pronto.</p>';
+                    return;
+                }
 
                 books.forEach(book => {
                     const bookDiv = document.createElement('div');
@@ -107,42 +115,50 @@
                     
                     const esPreventa = (book.es_preventa === true || book.es_preventa === "true");
                     
-                    // Extraer versiones
+                    // 3. BLINDAJE: Extraer versiones de forma segura
                     let versiones = [];
                     try { 
-                        versiones = JSON.parse(book.precio); 
+                        const parsed = JSON.parse(book.precio); 
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            versiones = parsed;
+                        } else {
+                            versiones = [{nombre: 'Edición Estándar', precio: book.precio || "0"}];
+                        }
                     } catch(e) { 
-                        // Si es un libro antiguo (solo tiene un número), lo convertimos al nuevo formato
-                        versiones = [{nombre: 'Edición Estándar', precio: book.precio}]; 
+                        versiones = [{nombre: 'Edición Estándar', precio: book.precio || "0"}]; 
                     }
 
                     // Determinar el precio a mostrar en el botón
                     let displayPrice = versiones[0].precio;
                     if (versiones.length > 1) {
-                        displayPrice = `Desde ${Math.min(...versiones.map(v => v.precio))}`;
+                        displayPrice = `Desde ${Math.min(...versiones.map(v => parseFloat(v.precio) || 0))}`;
                     }
+
+                    // 4. BLINDAJE: Evitar imagen rota si falta la portada
+                    const portadaUrl = book.portada_url ? book.portada_url : "https://via.placeholder.com/220x330?text=Sin+Portada";
 
                     // Generar botón
                     let buttonHtml = '';
                     if (esPreventa) {
                         // Pasamos el array de versiones por la URL de forma segura
                         const safeVersions = encodeURIComponent(JSON.stringify(versiones));
-                        buttonHtml = `<a href="reserva.html?libro=${encodeURIComponent(book.titulo)}&portada=${encodeURIComponent(book.portada_url)}&versiones=${safeVersions}" class="soon-button">RESERVAR (${displayPrice}€)</a>`;
+                        buttonHtml = `<a href="reserva.html?libro=${encodeURIComponent(book.titulo)}&portada=${encodeURIComponent(portadaUrl)}&versiones=${safeVersions}" class="soon-button">RESERVAR (${displayPrice}€)</a>`;
                     } else {
-                        buttonHtml = `<a href="${book.amazon_url}" target="_blank" class="buy-button">COMPRAR AHORA</a>`;
+                        const amazonUrl = book.amazon_url ? book.amazon_url : "#";
+                        buttonHtml = `<a href="${amazonUrl}" target="_blank" class="buy-button">COMPRAR AHORA</a>`;
                     }
 
                     bookDiv.innerHTML = `
                         <h3>${book.titulo.toUpperCase()}</h3>
-                        <img src="${book.portada_url}" alt="Portada de ${book.titulo}" class="book-cover">
-                        <p class="book-description">${book.descripcion.replace(/\n/g, '<br>')}</p>
+                        <img src="${portadaUrl}" alt="Portada de ${book.titulo}" class="book-cover">
+                        <p class="book-description">${(book.descripcion || "").replace(/\n/g, '<br>')}</p>
                         ${buttonHtml}
                     `;
                     container.appendChild(bookDiv);
                 });
             } catch (error) {
                 console.error("Error cargando libros", error);
-                document.getElementById('dynamic-books-container').innerHTML = '<p>Error de conexión con el catálogo.</p>';
+                document.getElementById('dynamic-books-container').innerHTML = '<p>Error de conexión con el catálogo. Por favor, refresca la página.</p>';
             }
         }
         
