@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --color-cielo: #87CEEB; --color-titulo-rosa: #FF1493; --color-texto-oscuro: #2D3945; --color-tulipan-coral: #FF7F50; --color-tulipan-morado: #9370DB; --color-fondo-suave: #F0F8FF; --color-blanco-puro: #FFFFFF; }
+        :root { --color-cielo: #87CEEB; --color-titulo-rosa: #FF1493; --color-texto-oscuro: #2D3945; --color-tulipan-coral: #FF7F50; --color-tulipan-morado: #9370DB; --color-fondo-suave: #F0F8FF; }
         body { font-family: 'Inter', sans-serif; background-color: var(--color-fondo-suave); }
         .header-title { color: var(--color-titulo-rosa); }
         .header-subtitle, .form-label, h3 { color: var(--color-texto-oscuro); }
@@ -20,10 +20,11 @@
         .file-btn:hover { background-color: color-mix(in srgb, var(--color-tulipan-morado) 25%, transparent); }
         .loader { border-top-color: var(--color-tulipan-coral); border: 4px solid #f3f3f3; border-top: 4px solid var(--color-tulipan-coral); animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .sold-out-warning { background-color: color-mix(in srgb, var(--color-tulipan-coral) 15%, transparent); border: 2px solid var(--color-tulipan-coral); color: var(--color-texto-oscuro); text-align: center; }
+        .sold-out-warning strong { color: var(--color-tulipan-coral); }
     </style>
 </head>
 <body>
-
     <div class="container mx-auto p-4 md:p-8 max-w-3xl">
         <header class="text-center mb-8">
             <h1 class="text-4xl font-bold header-title">Preventa</h1>
@@ -34,26 +35,35 @@
             <img src="" id="header-book-cover" class="rounded-lg shadow-lg max-w-xs md:max-w-sm lg:max-w-md">
         </div>
 
+        <div id="sold-out-message" class="sold-out-warning p-6 rounded-lg mb-8 hidden"> 
+            <p class="text-xl font-bold mb-2">¡PREVENTA AGOTADA! 🚨</p>
+            <p class="text-lg">Se está preparando una **segunda entrega de preventa**.</p>
+            <p class="text-lg">**PRÓXIMAMENTE** habrá más unidades disponibles.</p>
+        </div>
+
         <div id="reservation-form-container">
-            
             <div class="info-box p-4 rounded-md mb-8">
                 <div class="flex">
                     <div class="py-1"><svg class="fill-current h-6 w-6 mr-4 text-[--color-cielo]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-1-11V5h2v4h-2zm0 6v-2h2v2h-2z"/></svg></div>
                     <div>
                         <p class="font-bold">Instrucciones de Pago</p>
-                        <p class="text-sm" id="bizum-instruction">Cargando instrucciones de pago...</p>
+                        <p class="text-sm" id="bizum-instruction">Cargando instrucciones...</p>
                     </div>
                 </div>
             </div>
 
             <div class="bg-white p-6 md:p-10 rounded-lg shadow-lg">
                 <form id="reserva-form">
+                    
+                    <div id="version-selector-container" class="mb-8 p-4 bg-gray-50 border border-gray-200 rounded-lg hidden">
+                        <label class="form-label block mb-2 font-bold text-[--color-titulo-rosa]">✨ ¡Este libro tiene ediciones especiales! Elige la tuya:</label>
+                        <select id="version_elegida" class="form-input w-full p-2 border rounded-md bg-white font-semibold text-gray-800 cursor-pointer">
+                        </select>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <div class="mb-4">
-                                <label class="form-label block mb-2">Nombre y Apellido *</label>
-                                <input type="text" name="nombre_apellido" required class="form-input w-full p-2 border rounded-md">
-                            </div>
+                            <div class="mb-4"><label class="form-label block mb-2">Nombre y Apellido *</label><input type="text" name="nombre_apellido" required class="form-input w-full p-2 border rounded-md"></div>
                             <div class="mb-4">
                                 <label class="form-label block mb-2">¿Quieres el libro firmado? *</label>
                                 <div class="flex items-center space-x-4">
@@ -61,10 +71,7 @@
                                     <label class="flex items-center"><input type="radio" name="firmado" value="No" class="mr-2"> No</label>
                                 </div>
                             </div>
-                            <div id="firma-container" class="mb-4 hidden">
-                                <label class="form-label block mb-2">Nombre para la dedicatoria</label>
-                                <input type="text" name="nombre_firma" class="form-input w-full p-2 border rounded-md">
-                            </div>
+                            <div id="firma-container" class="mb-4 hidden"><label class="form-label block mb-2">Nombre para la dedicatoria</label><input type="text" name="nombre_firma" class="form-input w-full p-2 border rounded-md"></div>
                             <div class="mb-4">
                                 <label class="form-label block mb-2">Método de Envío *</label>
                                 <select id="metodo_envio" name="metodo_envio" required class="form-input w-full p-2 border rounded-md bg-white">
@@ -75,18 +82,9 @@
                             </div>
                         </div>
                         <div>
-                            <div class="mb-4">
-                                <label class="form-label block mb-2">Correo Electrónico *</label>
-                                <input type="email" name="email" required class="form-input w-full p-2 border rounded-md">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label block mb-2">Teléfono *</label>
-                                <input type="tel" name="telefono" required class="form-input w-full p-2 border rounded-md">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label block mb-2">Adjuntar justificante de pago *</label>
-                                <input type="file" id="justificante_pago_file" required class="form-input w-full text-sm file-btn file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold" accept="image/*, application/pdf">
-                            </div>
+                            <div class="mb-4"><label class="form-label block mb-2">Correo Electrónico *</label><input type="email" name="email" required class="form-input w-full p-2 border rounded-md"></div>
+                            <div class="mb-4"><label class="form-label block mb-2">Teléfono *</label><input type="tel" name="telefono" required class="form-input w-full p-2 border rounded-md"></div>
+                            <div class="mb-4"><label class="form-label block mb-2">Adjuntar justificante de pago *</label><input type="file" id="justificante_pago_file" required class="form-input w-full text-sm file-btn file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold" accept="image/*, application/pdf"></div>
                         </div>
                     </div>
 
@@ -120,22 +118,65 @@
     </div>
 
     <script>
-        // ¡¡IMPORTANTE!! URL DE SCRIPT
+        // TRUE si quieres cerrar las ventas. FALSE para permitir reservas.
+        const IS_SOLD_OUT = false; 
+        
+        const formContainer = document.getElementById('reservation-form-container');
+        const soldOutMessage = document.getElementById('sold-out-message');
+
+        if (IS_SOLD_OUT) {
+            formContainer.classList.add('hidden');
+            soldOutMessage.classList.remove('hidden'); 
+        }
+
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybcXAzzvQUJhOeqcwV96-Ti6ZCH1tUz4GJc4W-rnDWUkt0tpXukFqwFgmfvHBAsoKW/exec";
 
         // LECTURA DINÁMICA DE LA URL
         const urlParams = new URLSearchParams(window.location.search);
-        const dynamicTitle = urlParams.get('libro') || "YO ANTES Y DESPUÉS DE TI";
-        const dynamicPrice = urlParams.get('precio') || "20";
+        const dynamicTitle = urlParams.get('libro') || "Libro";
         const dynamicCover = urlParams.get('portada') || "imagenes/portada3.jpg";
+        
+        // GESTIÓN DE LAS VERSIONES
+        const versionesParam = urlParams.get('versiones');
+        let versionesObj = [];
+        if (versionesParam) {
+            try { versionesObj = JSON.parse(versionesParam); } 
+            catch(e) { versionesObj = [{nombre: 'Edición Estándar', precio: urlParams.get('precio') || "20"}]; }
+        } else {
+            versionesObj = [{nombre: 'Edición Estándar', precio: urlParams.get('precio') || "20"}];
+        }
 
         // CONFIGURAR INTERFAZ
         document.getElementById('header-book-title').textContent = `"${dynamicTitle}"`;
         document.title = `Reserva - ${dynamicTitle}`;
         document.getElementById('header-book-cover').src = dynamicCover;
-        document.getElementById('bizum-instruction').innerHTML = `Para confirmar tu reserva, realiza un Bizum de <strong>${dynamicPrice} €</strong> al número <strong>698 982 882</strong>. Después, adjunta el justificante de pago aquí abajo.`;
 
-        // LOGICA DE CAMPOS DEL FORMULARIO
+        const versionContainer = document.getElementById('version-selector-container');
+        const versionSelect = document.getElementById('version_elegida');
+        const bizumInstruction = document.getElementById('bizum-instruction');
+
+        function updateBizumText(precio) {
+            bizumInstruction.innerHTML = `Para confirmar tu reserva, realiza un Bizum de <strong>${precio} €</strong> al número <strong>698 982 882</strong>. Después, adjunta el justificante de pago en el formulario.`;
+        }
+
+        // Si hay más de una versión, mostramos el desplegable
+        if (versionesObj.length > 1) {
+            versionContainer.classList.remove('hidden');
+            versionesObj.forEach((v, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = `${v.nombre} - ${v.precio} €`;
+                versionSelect.appendChild(opt);
+            });
+            versionSelect.addEventListener('change', (e) => {
+                updateBizumText(versionesObj[e.target.value].precio);
+            });
+            updateBizumText(versionesObj[0].precio); // Inicializamos con la primera
+        } else {
+            updateBizumText(versionesObj[0].precio);
+        }
+
+        // LÓGICA DE CAMPOS DEL FORMULARIO
         const form = document.getElementById('reserva-form');
         document.querySelectorAll('input[name="firmado"]').forEach(r => r.addEventListener('change', e => document.getElementById('firma-container').classList.toggle('hidden', e.target.value !== 'Sí')));
         
@@ -150,6 +191,8 @@
         // ENVIO DEL FORMULARIO A GOOGLE SHEETS
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (IS_SOLD_OUT) return;
+
             document.getElementById('submit-button').disabled = true;
             document.getElementById('modal').classList.remove('hidden');
 
@@ -161,9 +204,18 @@
                 const data = {};
                 formData.forEach((value, key) => data[key] = value);
                 
-                // AÑADIR DATOS DINAMICOS DE LA URL PARA QUE LLEGUEN AL EXCEL
-                data.libro_reservado = dynamicTitle;
-                data.precio_pagado = dynamicPrice;
+                // --- INYECCIÓN DEL TÍTULO Y EL PRECIO FINAL ---
+                let finalTitle = dynamicTitle;
+                let finalPrice = versionesObj[0].precio;
+
+                if (versionesObj.length > 1) {
+                    const selectedVersion = versionesObj[versionSelect.value];
+                    finalTitle = `${dynamicTitle} (${selectedVersion.nombre})`;
+                    finalPrice = selectedVersion.precio;
+                }
+                
+                data.libro_reservado = finalTitle;
+                data.precio_pagado = finalPrice;
 
                 const payload = {
                     action: 'submitOrder',
@@ -172,7 +224,13 @@
                 };
 
                 try {
-                    const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+                    // TRUCO CLAVE: Enviamos como text/plain para evitar error de conexión (CORS)
+                    const res = await fetch(SCRIPT_URL, { 
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(payload) 
+                    });
                     const result = await res.json();
                     
                     document.getElementById('modal-loader').classList.add('hidden');
@@ -181,10 +239,13 @@
                     if (result.success) {
                         document.getElementById('modal-title').textContent = '¡Reserva Confirmada!';
                         document.getElementById('modal-message').textContent = 'He recibido tus datos correctamente.';
+                        form.reset();
                     } else throw new Error(result.message);
                 } catch (error) {
                     document.getElementById('modal-title').textContent = 'Error';
-                    document.getElementById('modal-message').textContent = 'Problema de conexión. Inténtalo de nuevo.';
+                    document.getElementById('modal-message').textContent = 'Problema de conexión o archivo muy pesado. Inténtalo de nuevo.';
+                    document.getElementById('modal-loader').classList.add('hidden');
+                    document.getElementById('modal-close-btn').classList.remove('hidden');
                     document.getElementById('submit-button').disabled = false;
                 }
             };
