@@ -118,25 +118,24 @@
     </div>
 
     <script>
-        // TRUE si quieres cerrar las ventas. FALSE para permitir reservas.
         const IS_SOLD_OUT = false; 
-        
         const formContainer = document.getElementById('reservation-form-container');
         const soldOutMessage = document.getElementById('sold-out-message');
 
         if (IS_SOLD_OUT) {
             formContainer.classList.add('hidden');
             soldOutMessage.classList.remove('hidden'); 
+        } else {
+            formContainer.classList.remove('hidden');
+            soldOutMessage.classList.add('hidden');
         }
 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGkBHFlopJd13kw9Iv71kWEVB4sqLOcowHZH2Vc6Gtb_8iS-wkFGZKSQoV-1_C25Im/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7AvPH2JJ9DEePkRh8BAabJ7RHSxcM-koTbh8s-0F3A3NNIGA0ldXCcxB_QIjPuOtm/exec";
 
-        // LECTURA DINÁMICA DE LA URL
         const urlParams = new URLSearchParams(window.location.search);
         const dynamicTitle = urlParams.get('libro') || "Libro";
-        const dynamicCover = urlParams.get('portada') || "imagenes/portada3.jpg";
+        const dynamicCover = urlParams.get('portada') || "https://via.placeholder.com/220x330?text=Sin+Portada";
         
-        // GESTIÓN DE LAS VERSIONES
         const versionesParam = urlParams.get('versiones');
         let versionesObj = [];
         if (versionesParam) {
@@ -146,20 +145,17 @@
             versionesObj = [{nombre: 'Edición Estándar', precio: urlParams.get('precio') || "20"}];
         }
 
-        // CONFIGURAR INTERFAZ
         document.getElementById('header-book-title').textContent = `"${dynamicTitle}"`;
         document.title = `Reserva - ${dynamicTitle}`;
         document.getElementById('header-book-cover').src = dynamicCover;
 
         const versionContainer = document.getElementById('version-selector-container');
         const versionSelect = document.getElementById('version_elegida');
-        const bizumInstruction = document.getElementById('bizum-instruction');
-
+        
         function updateBizumText(precio) {
-            bizumInstruction.innerHTML = `Para confirmar tu reserva, realiza un Bizum de <strong>${precio} €</strong> al número <strong>698 982 882</strong>. Después, adjunta el justificante de pago en el formulario.`;
+            document.querySelector('.info-box p.text-sm').innerHTML = `Para confirmar tu reserva, realiza un Bizum de <strong>${precio} €</strong> al número <strong>698 982 882</strong>. Después, adjunta el justificante de pago en el formulario.`;
         }
 
-        // Si hay más de una versión, mostramos el desplegable
         if (versionesObj.length > 1) {
             versionContainer.classList.remove('hidden');
             versionesObj.forEach((v, idx) => {
@@ -171,85 +167,137 @@
             versionSelect.addEventListener('change', (e) => {
                 updateBizumText(versionesObj[e.target.value].precio);
             });
-            updateBizumText(versionesObj[0].precio); // Inicializamos con la primera
+            updateBizumText(versionesObj[0].precio); 
         } else {
             updateBizumText(versionesObj[0].precio);
         }
 
-        // LÓGICA DE CAMPOS DEL FORMULARIO
         const form = document.getElementById('reserva-form');
-        document.querySelectorAll('input[name="firmado"]').forEach(r => r.addEventListener('change', e => document.getElementById('firma-container').classList.toggle('hidden', e.target.value !== 'Sí')));
-        
-        document.getElementById('metodo_envio').addEventListener('change', e => {
-            const v = e.target.value.toLowerCase();
-            document.getElementById('direccion-correos').classList.toggle('hidden', !v.includes('correos'));
-            document.getElementById('punto-inpost').classList.toggle('hidden', !v.includes('inpost'));
-            document.getElementById('direccion').required = document.getElementById('poblacion').required = document.getElementById('provincia').required = document.getElementById('cp').required = v.includes('correos');
-            document.getElementById('inpost_point').required = v.includes('inpost');
+        const firmadoRadios = document.querySelectorAll('input[name="firmado"]');
+        const firmaContainer = document.getElementById('firma-container');
+        const metodoEnvio = document.getElementById('metodo_envio');
+
+        firmadoRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                firmaContainer.classList.toggle('hidden', e.target.value !== 'Sí');
+            });
         });
 
-        // ENVIO DEL FORMULARIO A GOOGLE SHEETS
+        metodoEnvio.addEventListener('change', () => {
+            const selected = metodoEnvio.value.toLowerCase();
+            const isCorreos = selected.includes('correos');
+            const isInpost = selected.includes('inpost');
+
+            document.getElementById('direccion-correos').classList.toggle('hidden', !isCorreos);
+            document.getElementById('punto-inpost').classList.toggle('hidden', !isInpost);
+
+            document.getElementById('direccion').required = isCorreos;
+            document.getElementById('poblacion').required = isCorreos;
+            document.getElementById('provincia').required = isCorreos;
+            document.getElementById('cp').required = isCorreos;
+            document.getElementById('inpost_point').required = isInpost;
+        });
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (IS_SOLD_OUT) return;
+            if (formContainer.classList.contains('hidden')) return; 
+            
+            const submitButton = document.getElementById('submit-button');
+            const modal = document.getElementById('modal');
+            const modalLoader = document.getElementById('modal-loader');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
 
-            document.getElementById('submit-button').disabled = true;
-            document.getElementById('modal').classList.remove('hidden');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Enviando...';
+            
+            modal.classList.remove('hidden');
+            modalLoader.classList.remove('hidden');
+            modalCloseBtn.classList.add('hidden');
+            modalTitle.textContent = 'Procesando...';
+            modalMessage.textContent = 'Estamos guardando tu reserva. Por favor, espera.';
 
-            const file = document.getElementById('justificante_pago_file').files[0];
-            const reader = new FileReader();
+            const fileInput = document.getElementById('justificante_pago_file');
+            let paymentProofData = null;
 
-            reader.onload = async () => {
-                const formData = new FormData(form);
-                const data = {};
-                formData.forEach((value, key) => data[key] = value);
-                
-                // --- INYECCIÓN DEL TÍTULO Y EL PRECIO FINAL ---
-                let finalTitle = dynamicTitle;
-                let finalPrice = versionesObj[0].precio;
-
-                if (versionesObj.length > 1) {
-                    const selectedVersion = versionesObj[versionSelect.value];
-                    finalTitle = `${dynamicTitle} (${selectedVersion.nombre})`;
-                    finalPrice = selectedVersion.precio;
-                }
-                
-                data.libro_reservado = finalTitle;
-                data.precio_pagado = finalPrice;
-
-                const payload = {
-                    action: 'submitOrder',
-                    orderData: data,
-                    paymentProof: { fileName: file.name, mimeType: file.type, base64Data: reader.result.split(',')[1] }
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const base64String = await toBase64(file);
+                paymentProofData = {
+                    fileName: file.name,
+                    mimeType: file.type,
+                    base64Data: base64String.split(',')[1]
                 };
+            }
 
-                try {
-                    // TRUCO CLAVE: Enviamos como text/plain para evitar error de conexión (CORS)
-                    const res = await fetch(SCRIPT_URL, { 
-                        method: 'POST',
-                        mode: 'cors',
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify(payload) 
-                    });
-                    const result = await res.json();
-                    
-                    document.getElementById('modal-loader').classList.add('hidden');
-                    document.getElementById('modal-close-btn').classList.remove('hidden');
-                    
-                    if (result.success) {
-                        document.getElementById('modal-title').textContent = '¡Reserva Confirmada!';
-                        document.getElementById('modal-message').textContent = 'He recibido tus datos correctamente.';
-                        form.reset();
-                    } else throw new Error(result.message);
-                } catch (error) {
-                    document.getElementById('modal-title').textContent = 'Error';
-                    document.getElementById('modal-message').textContent = 'Problema de conexión o archivo muy pesado. Inténtalo de nuevo.';
-                    document.getElementById('modal-loader').classList.add('hidden');
-                    document.getElementById('modal-close-btn').classList.remove('hidden');
-                    document.getElementById('submit-button').disabled = false;
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key !== 'justificante_pago_file') {
+                    data[key] = value;
                 }
+            });
+
+            let finalTitle = dynamicTitle;
+            let finalPrice = versionesObj[0].precio;
+
+            if (versionesObj.length > 1) {
+                const selectedVersion = versionesObj[versionSelect.value];
+                finalTitle = `${dynamicTitle} (${selectedVersion.nombre})`;
+                finalPrice = selectedVersion.precio;
+            }
+            
+            data.libro_reservado = finalTitle;
+            data.precio_pagado = finalPrice;
+
+            const payload = {
+                action: 'submitOrder',
+                orderData: data,
+                paymentProof: paymentProofData
             };
-            reader.readAsDataURL(file);
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                modalLoader.classList.add('hidden');
+                modalCloseBtn.classList.remove('hidden');
+
+                if (result.success) {
+                    modalTitle.textContent = '¡Reserva Confirmada!';
+                    modalMessage.textContent = 'Gracias por tu pedido. He recibido tus datos correctamente.';
+                    form.reset();
+                    document.getElementById('direccion-correos').classList.add('hidden');
+                    document.getElementById('punto-inpost').classList.add('hidden');
+                    firmaContainer.classList.add('hidden');
+                } else {
+                    throw new Error(result.message || 'Error desconocido');
+                }
+            } catch (error) {
+                modalTitle.textContent = 'Error en la Reserva';
+                modalMessage.textContent = `Hubo un problema al procesar tu pedido. Por favor, revisa el peso de la imagen e inténtalo de nuevo.`;
+                modalLoader.classList.add('hidden');
+                modalCloseBtn.classList.remove('hidden');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Confirmar Reserva';
+            }
+        });
+
+        document.getElementById('modal-close-btn').addEventListener('click', () => {
+            document.getElementById('modal').classList.add('hidden');
         });
     </script>
 </body>
