@@ -450,39 +450,61 @@
             });
         }
 
-        function showOrderDetails(order) {
+function showOrderDetails(order) {
             currentOpenOrder = order;
             document.getElementById('details-order-id').textContent = order.rowIndex;
-            document.getElementById('details-date').textContent = new Date(order.marca_temporal).toLocaleDateString('es-ES');
-            document.getElementById('details-name').textContent = order.nombre_y_apellido;
-            document.getElementById('details-email').textContent = order.correo_electronico_obligatorio_para_envios_correos_y_inpost;
-            document.getElementById('details-phone').textContent = order.telefono_obligatorio_para_envio_correos_y_inpost;
             
-            document.getElementById('details-book-name').textContent = order.libro_reservado || "Libro Básico";
-            document.getElementById('details-book-price').textContent = order.precio_pagado || "0";
-            document.getElementById('details-signed').textContent = order.quieres_firmado;
+            // Blindaje por si falta la fecha
+            document.getElementById('details-date').textContent = order.marca_temporal ? new Date(order.marca_temporal).toLocaleDateString('es-ES') : 'N/A';
+            
+            // Datos del cliente
+            document.getElementById('details-name').textContent = order.nombre_y_apellido || 'Anónimo';
+            document.getElementById('details-email').textContent = order.correo_electronico_obligatorio_para_envios_correos_y_inpost || 'N/A';
+            document.getElementById('details-phone').textContent = order.telefono_obligatorio_para_envio_correos_y_inpost || 'N/A';
+            
+            // Detalles de la firma
+            document.getElementById('details-signed').textContent = order.quieres_firmado || 'No';
             document.getElementById('details-dedication').textContent = order.nombre_para_la_firma || 'N/A';
             
+            // --- ARREGLO: Alimentar la tabla del Albarán en lugar de las etiquetas borradas ---
             document.getElementById('product-desc-table').textContent = `Libro "${order.libro_reservado || 'Básico'}"`;
             document.getElementById('product-price-table').textContent = `${order.precio_pagado || 0} €`;
             document.getElementById('product-total-table').textContent = `${order.precio_pagado || 0} €`;
 
-            let shipHTML = `<p><strong>Método:</strong> ${order.metodo_de_envio}</p>`;
-            if(order.para_envios_por_correos_direccion) shipHTML += `<p><strong>Dir:</strong> ${order.para_envios_por_correos_direccion}</p><p><strong>CP:</strong> ${order.codigo_postal_obligatorio_para_envio_correos}</p><p><strong>Pob:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost}</p>`;
-            if(order.punto_inpost) shipHTML += `<p><strong>Inpost:</strong> ${order.punto_inpost}</p>`;
-            if(order.numero_de_envio) shipHTML += `<div class="tracking-number">Nº Envío: ${order.numero_de_envio}</div>`;
+            // Construir la dirección dinámicamente
+            let shipHTML = `<p><strong>Método:</strong> ${order.metodo_de_envio || 'No especificado'}</p>`;
+            if(order.para_envios_por_correos_direccion) {
+                shipHTML += `<p><strong>Dir:</strong> ${order.para_envios_por_correos_direccion}</p>
+                             <p><strong>CP:</strong> ${order.codigo_postal_obligatorio_para_envio_correos || ''}</p>
+                             <p><strong>Pob:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || ''}</p>`;
+            }
+            if(order.punto_inpost) {
+                shipHTML += `<p><strong>Punto Inpost:</strong> ${order.punto_inpost}</p>`;
+            }
+            if(order.numero_de_envio) {
+                shipHTML += `<div class="tracking-number">Nº Envío: ${order.numero_de_envio}</div>`;
+            }
             document.getElementById('shipping-info-block').innerHTML = shipHTML;
 
+            // Gestión del justificante Bizum
             const proofUrl = order.pago_mediante_bizum_y_justificante_de_pago_telefono_698982882;
-            document.getElementById('details-payment-proof').href = proofUrl || '#';
-            document.querySelector('.payment-proof-section').style.display = proofUrl ? 'block' : 'none';
+            const proofLink = document.getElementById('details-payment-proof');
+            if (proofUrl && proofUrl !== 'undefined' && proofUrl !== '') {
+                proofLink.href = proofUrl;
+                document.querySelector('.payment-proof-section').style.display = 'block';
+            } else {
+                proofLink.href = '#';
+                document.querySelector('.payment-proof-section').style.display = 'none';
+            }
 
+            // Preparar el botón de Marcar Enviado
             const btnSent = document.getElementById('mark-sent-btn');
             btnSent.dataset.rowIndex = order.rowIndex;
             btnSent.dataset.currentState = (order.estado || '').toLowerCase();
             btnSent.textContent = btnSent.dataset.currentState === 'enviado' ? 'Desmarcar Envío' : 'Marcar como Enviado';
             btnSent.style.background = btnSent.dataset.currentState === 'enviado' ? '#f39c12' : '#2ecc71';
 
+            // Mostrar la ventana
             document.getElementById('details-overlay').style.display = 'flex';
         }
 
