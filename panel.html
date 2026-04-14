@@ -77,7 +77,7 @@
 
         @media (max-width: 900px) { .main-layout { flex-direction: column-reverse; } }
         
-        /* Reglas Impresión */
+        /* --- REGLAS DE IMPRESIÓN DEFINITIVAS --- */
         #printable-albaran { display: none; }
         @media print {
             body > *:not(#printable-albaran) { display: none !important; }
@@ -123,12 +123,12 @@
                                     <button type="button" id="add-version-btn" style="background:#f39c12; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:0.85em; margin-top:5px; font-weight:bold;">+ Añadir edición especial</button>
                                 </div>
                                 <div style="flex:1; min-width:250px;">
-                                    <label style="display:block; font-size:0.9em; font-weight:bold; margin-bottom:10px;">URL Amazon (Opcional si es preventa)</label>
-                                    <input type="url" id="book-amazon" placeholder="https://amazon..." style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;">
-                                    
-                                    <label style="display:block; margin-top:15px; font-weight:bold;">
-                                        <input type="checkbox" id="book-preorder"> Es preventa (Habilita botón reservar)
+                                    <label style="display:block; margin-bottom:15px; font-weight:bold; color: #2c3e50;">
+                                        <input type="checkbox" id="book-preorder"> Es preventa (Habilita reservas)
                                     </label>
+
+                                    <label style="display:block; font-size:0.9em; font-weight:bold; margin-bottom:10px;">URL Amazon (Si no es preventa)</label>
+                                    <input type="url" id="book-amazon" placeholder="https://amazon..." style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; transition: background-color 0.2s;">
                                 </div>
                             </div>
                             
@@ -167,32 +167,31 @@
                     <div class="logo"><h2>Detalle del Pedido</h2><p>Ana Carolina - Autora</p></div>
                     <div class="sender-info"><strong>Pedido #: <span id="details-order-id"></span></strong><br>Fecha: <span id="details-date"></span></div>
                 </div>
-
                 <div class="details-section">
                     <h3>Datos del Cliente</h3>
                     <div class="info-block"><p><strong>Nombre:</strong> <span id="details-name"></span></p><p><strong>Email:</strong> <span id="details-email"></span></p><p><strong>Teléfono:</strong> <span id="details-phone"></span></p></div>
                 </div>
                 <div class="details-section">
-                    <h3>Detalles de Compra</h3>
-                    <div class="info-block">
-                        <p><strong>Libro Reservado:</strong> <span id="details-book-name" style="font-weight:bold; color:#FF1493;"></span></p>
-                        <p><strong>Precio Pagado:</strong> <span id="details-book-price"></span> €</p>
-                        <p><strong>¿Quiere el libro firmado?:</strong> <span id="details-signed"></span></p>
-                        <p><strong>Nombre para la dedicatoria:</strong> <span id="details-dedication"></span></p>
-                    </div>
+                    <h3>Detalles del Libro y Firma</h3>
+                    <div class="info-block"><p><strong>¿Quiere el libro firmado?:</strong> <span id="details-signed"></span></p><p><strong>Nombre para la dedicatoria:</strong> <span id="details-dedication"></span></p></div>
+                </div>
+                <div class="details-section">
+                    <h3>Producto</h3>
+                    <table class="albaran-table">
+                        <thead><tr><th>Descripción</th><th>Cantidad</th><th>Precio Unitario</th><th>Total</th></tr></thead>
+                        <tbody><tr><td id="product-desc-table">Libro</td><td>1</td><td id="product-price-table">20 €</td><td id="product-total-table">20 €</td></tr></tbody>
+                    </table>
                 </div>
                 <div class="details-section">
                     <h3>Información de Envío</h3>
                     <div id="shipping-info-block" class="info-block"></div>
                 </div>
-
                 <div class="details-section payment-proof-section">
                     <h3>Justificante de Pago (Bizum)</h3>
-                    <div class="info-block bizum-link"><p><a id="details-payment-proof" href="#" target="_blank">VER JUSTIFICANTE DE PAGO</a></p></div>
+                    <div class="info-block bizum-link"><p><a id="details-payment-proof" href="#" target="_blank" rel="noopener noreferrer">VER JUSTIFICANTE DE PAGO</a></p></div>
                 </div>
-
                 <div id="details-controls" class="details-controls">
-                    <button id="print-btn" style="background:#95a5a6;">Imprimir Albarán</button>
+                    <button id="print-btn">Imprimir / Guardar PDF</button>
                     <button id="mark-sent-btn">Marcar como Enviado</button>
                     <button id="close-btn" class="close-btn">Cerrar</button>
                 </div>
@@ -200,12 +199,12 @@
         </div>
     </div>
     
-    <div id="confirm-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="confirm-title">¿Estás seguro?</h3><p id="confirm-text"></p><div><button id="confirm-yes-btn">Sí</button><button id="confirm-no-btn">Cancelar</button></div></div></div>
-    <div id="prompt-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="prompt-title">Introduce dato</h3><p id="prompt-text"></p><input type="text" id="prompt-input"><div><button id="prompt-ok-btn">Aceptar</button><button id="prompt-cancel-btn">Cancelar</button></div></div></div>
+    <div id="confirm-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="confirm-title">¿Estás seguro?</h3><p id="confirm-text">Esta acción no se puede deshacer.</p><div class="dialog-controls"><button id="confirm-yes-btn">Sí, continuar</button><button id="confirm-no-btn" class="close-btn">Cancelar</button></div></div></div>
+    <div id="prompt-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="prompt-title">Introduce el dato</h3><p id="prompt-text">Por favor, introduce la información solicitada.</p><input type="text" id="prompt-input"><div class="dialog-controls"><button id="prompt-ok-btn">Aceptar</button><button id="prompt-cancel-btn" class="close-btn">Cancelar</button></div></div></div>
     <div id="printable-albaran"></div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybcXAzzvQUJhOeqcwV96-Ti6ZCH1tUz4GJc4W-rnDWUkt0tpXukFqwFgmfvHBAsoKW/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybcXAzzvQUJhOeqcwV96-Ti6ZCH1tUz4GJc4W-rnDWUkt0tpXukFqwFgmfvHBAsoKW/exec";
 
         // --- SISTEMA DE LOGIN Y NAVEGACIÓN ---
         document.getElementById('login-btn').addEventListener('click', attemptLogin);
@@ -240,6 +239,25 @@
             e.target.classList.add('active');
             loadBooksAdmin();
         });
+
+        // --- FUNCIONALIDAD PARA BLOQUEAR LA CAJA DE URL SI ES PREVENTA ---
+        const preorderCheckbox = document.getElementById('book-preorder');
+        const amazonInput = document.getElementById('book-amazon');
+
+        function toggleAmazonInput() {
+            if (preorderCheckbox.checked) {
+                amazonInput.value = ''; // Vaciamos el enlace automáticamente
+                amazonInput.disabled = true; // Bloqueamos la caja
+                amazonInput.style.backgroundColor = '#f0f0f0'; // La ponemos gris
+                amazonInput.placeholder = 'No requerida en preventa';
+            } else {
+                amazonInput.disabled = false; // Desbloqueamos
+                amazonInput.style.backgroundColor = '#fff'; // La volvemos blanca
+                amazonInput.placeholder = 'https://amazon...';
+            }
+        }
+        
+        preorderCheckbox.addEventListener('change', toggleAmazonInput);
 
         // --- GESTIÓN DINÁMICA DE VERSIONES DE LIBROS ---
         function renderVersionsInputs(versionsArray) {
@@ -280,17 +298,15 @@
                 const res = await fetch(SCRIPT_URL + "?action=getBooks");
                 let books = await res.json();
                 
-                // BLINDAJE: Filtramos los libros vacíos y "undefined" para que no salgan en tu lista
+                // BLINDAJE: Filtramos los libros vacíos y "undefined"
                 books = books.filter(book => book.titulo && book.titulo !== 'undefined' && book.titulo.toString().trim() !== "");
                 
-                // INVERTIMOS LA LISTA PARA VER LOS ÚLTIMOS PRIMERO
                 books.reverse();
 
                 document.getElementById('loader-books').style.display = 'none';
                 if (books.length === 0) list.innerHTML = '<p style="text-align:center;">No hay libros.</p>';
                 
                 books.forEach(book => {
-                    // Interpretar el precio
                     let precioLabel = book.precio;
                     try {
                         const parsed = JSON.parse(book.precio);
@@ -313,10 +329,10 @@
         }
 
         function editBook(book) {
-            // BLINDAJE: Si algún campo está "undefined", lo dejamos vacío (cadena de texto vacía '')
+            // BLINDAJE: Transformamos los "undefined" en vacíos limpios
             const titulo = (book.titulo !== 'undefined' && book.titulo) ? book.titulo : '';
             const descripcion = (book.descripcion !== 'undefined' && book.descripcion) ? book.descripcion : '';
-            const amazonUrl = (book.amazon_url !== 'undefined' && book.amazon_url) ? book.amazon_url : '';
+            const amazonUrl = (book.amazon_url !== 'undefined' && book.amazon_url && book.amazon_url !== 'null') ? book.amazon_url : '';
             
             document.getElementById('form-book-title').textContent = "Editando: " + titulo;
             document.getElementById('book-id').value = book.id;
@@ -325,7 +341,10 @@
             document.getElementById('book-title').value = titulo;
             document.getElementById('book-desc').value = descripcion;
             document.getElementById('book-amazon').value = amazonUrl;
+            
+            // Evaluamos la preventa y bloqueamos la url de amazon si es necesario
             document.getElementById('book-preorder').checked = (book.es_preventa === true || book.es_preventa === "true");
+            toggleAmazonInput();
             
             // Cargar versiones
             let parsedVersions = [];
@@ -347,6 +366,10 @@
             document.getElementById('form-book-title').textContent = "Añadir Nuevo Libro";
             document.getElementById('book-id').value = "";
             renderVersionsInputs([{nombre: 'Edición Estándar', precio: ''}]);
+            
+            // Restaurar estados normales
+            toggleAmazonInput(); 
+            
             document.getElementById('save-book-btn').textContent = "Guardar Libro";
             document.getElementById('save-book-btn').style.backgroundColor = "#2ecc71";
             document.getElementById('cancel-edit-btn').style.display = "none";
@@ -370,7 +393,6 @@
                 });
             }
 
-            // Recopilar versiones
             const versionElements = document.querySelectorAll('#versions-wrapper > div');
             const versiones = [];
             versionElements.forEach(el => {
@@ -381,13 +403,15 @@
             });
 
             const id = document.getElementById('book-id').value;
+            const amazonFinalUrl = document.getElementById('book-amazon').disabled ? "" : document.getElementById('book-amazon').value;
+
             const payload = {
                 action: id ? 'updateBook' : 'addBook',
                 id: id,
                 titulo: document.getElementById('book-title').value,
                 descripcion: document.getElementById('book-desc').value,
                 precio: JSON.stringify(versiones),
-                amazon_url: document.getElementById('book-amazon').value,
+                amazon_url: amazonFinalUrl,
                 es_preventa: document.getElementById('book-preorder').checked,
                 coverFile: coverData,
                 currentCover: document.getElementById('book-current-cover').value
@@ -429,6 +453,44 @@
             e.preventDefault(); document.querySelector('.filter-btn.active').classList.remove('active'); e.target.classList.add('active'); filterOrders(e.target.dataset.filter);
         });
 
+        // ... MANTENEMOS EL RESTO DE FUNCIONES DE MOSTRAR PEDIDOS EXACTAMENTE IGUAL ...
+        function showConfirm(title, text) {
+            return new Promise((resolve) => {
+                const confirmOverlay = document.getElementById('confirm-overlay');
+                document.getElementById('confirm-title').textContent = title;
+                document.getElementById('confirm-text').textContent = text;
+                confirmOverlay.style.display = 'flex';
+                const yesBtn = document.getElementById('confirm-yes-btn');
+                const noBtn = document.getElementById('confirm-no-btn');
+                const cleanup = () => { yesBtn.removeEventListener('click', yesListener); noBtn.removeEventListener('click', noListener); };
+                const yesListener = () => { confirmOverlay.style.display = 'none'; cleanup(); resolve(true); };
+                const noListener = () => { confirmOverlay.style.display = 'none'; cleanup(); resolve(false); };
+                yesBtn.addEventListener('click', yesListener, { once: true });
+                noBtn.addEventListener('click', noListener, { once: true });
+            });
+        }
+
+        function showPrompt(title, text, defaultValue = "") {
+            return new Promise((resolve) => {
+                const promptOverlay = document.getElementById('prompt-overlay');
+                document.getElementById('prompt-title').textContent = title;
+                document.getElementById('prompt-text').textContent = text;
+                const input = document.getElementById('prompt-input');
+                input.value = defaultValue;
+                promptOverlay.style.display = 'flex';
+                input.focus();
+                const okBtn = document.getElementById('prompt-ok-btn');
+                const cancelBtn = document.getElementById('prompt-cancel-btn');
+                const cleanup = () => { okBtn.removeEventListener('click', okListener); cancelBtn.removeEventListener('click', cancelListener); input.removeEventListener('keypress', enterListener); };
+                const okListener = () => { promptOverlay.style.display = 'none'; cleanup(); resolve(input.value); };
+                const cancelListener = () => { promptOverlay.style.display = 'none'; cleanup(); resolve(null); };
+                const enterListener = (e) => { if (e.key === 'Enter') { okListener(); } };
+                okBtn.addEventListener('click', okListener, { once: true });
+                cancelBtn.addEventListener('click', cancelListener, { once: true });
+                input.addEventListener('keypress', enterListener);
+            });
+        }
+
         function showOrderDetails(order) {
             currentOpenOrder = order;
             document.getElementById('details-order-id').textContent = order.rowIndex;
@@ -441,6 +503,10 @@
             document.getElementById('details-book-price').textContent = order.precio_pagado || "0";
             document.getElementById('details-signed').textContent = order.quieres_firmado;
             document.getElementById('details-dedication').textContent = order.nombre_para_la_firma || 'N/A';
+            
+            document.getElementById('product-desc-table').textContent = `Libro "${order.libro_reservado || 'Básico'}"`;
+            document.getElementById('product-price-table').textContent = `${order.precio_pagado || 0} €`;
+            document.getElementById('product-total-table').textContent = `${order.precio_pagado || 0} €`;
 
             let shipHTML = `<p><strong>Método:</strong> ${order.metodo_de_envio}</p>`;
             if(order.para_envios_por_correos_direccion) shipHTML += `<p><strong>Dir:</strong> ${order.para_envios_por_correos_direccion}</p><p><strong>CP:</strong> ${order.codigo_postal_obligatorio_para_envio_correos}</p><p><strong>Pob:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost}</p>`;
@@ -463,23 +529,37 @@
 
         document.getElementById('close-btn').onclick = () => document.getElementById('details-overlay').style.display = 'none';
 
-        document.getElementById('mark-sent-btn').onclick = async (e) => {
-            const btn = e.target; const rowIndex = btn.dataset.rowIndex;
+        document.getElementById('mark-sent-btn').addEventListener('click', async (e) => {
+            const button = e.target;
+            const rowIndex = button.dataset.rowIndex;
+            const currentState = button.dataset.currentState;
             let payload;
-            if (btn.dataset.currentState === 'enviado') {
-                if(!confirm("¿Desmarcar este pedido?")) return;
-                payload = { action: 'updateStatus', rowIndex: rowIndex, status: 'Pendiente', tracking: '', sendEmail: false };
+            
+            if (currentState === 'enviado') {
+                const confirmed = await showConfirm("Confirmar Acción", "Se borrará el número de seguimiento. ¿Estás seguro de que quieres desmarcar este pedido?");
+                if (confirmed) { payload = { action: 'updateStatus', rowIndex: rowIndex, status: 'Pendiente', tracking: '', sendEmail: false }; } else { return; }
             } else {
-                const track = prompt("Introduce el número de seguimiento:"); if(track === null) return;
-                const sendM = confirm("¿Enviar email de notificación al cliente?");
-                payload = { action: 'updateStatus', rowIndex: rowIndex, status: 'Enviado', tracking: track, sendEmail: sendM, orderData: { customerName: currentOpenOrder.nombre_y_apellido, customerEmail: currentOpenOrder.correo_electronico_obligatorio_para_envios_correos_y_inpost, bookTitle: currentOpenOrder.libro_reservado, shippingMethod: currentOpenOrder.metodo_de_envio, trackingNumber: track }};
+                const trackingNumber = await showPrompt("Marcar como Enviado", "Introduce el número de envío/seguimiento:");
+                if (trackingNumber === null) { return; }
+                const sendEmailConfirmed = await showConfirm("Enviar Email", "¿Quieres enviar un email de notificación al cliente?");
+                
+                payload = { 
+                    action: 'updateStatus', rowIndex: rowIndex, status: 'Enviado', tracking: trackingNumber, sendEmail: sendEmailConfirmed,
+                    orderData: { 
+                        customerName: currentOpenOrder.nombre_y_apellido, customerEmail: currentOpenOrder.correo_electronico_obligatorio_para_envios_correos_y_inpost, 
+                        bookTitle: currentOpenOrder.libro_reservado, shippingMethod: currentOpenOrder.metodo_de_envio, trackingNumber: trackingNumber, bookPrice: currentOpenOrder.precio_pagado 
+                    }
+                };
             }
-            btn.disabled = true;
-            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json()).then(res => {
-                if(res.success) { alert('Actualizado'); document.getElementById('details-overlay').style.display = 'none'; loadOrders(); }
-                btn.disabled = false;
-            });
-        };
+
+            button.disabled = true; button.textContent = 'Actualizando...';
+            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
+            .then(res => res.json()).then(result => {
+                if (result.success) { alert('¡Estado del pedido actualizado!'); document.getElementById('details-overlay').style.display = 'none'; loadOrders(); } 
+                else { alert('Error al actualizar: ' + result.message); }
+                button.disabled = false;
+            }).catch(error => { alert('Error de conexión.'); button.disabled = false; });
+        });
         
         document.getElementById('print-btn').onclick = () => {
             document.getElementById('printable-albaran').innerHTML = document.querySelector('.details-content').innerHTML;
