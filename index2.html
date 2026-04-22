@@ -68,6 +68,34 @@
         .bio-content h2 { font-size: 2rem; margin-top: 0; color: var(--color-tulipan-morado); }
         .close-button { background: var(--color-tulipan-coral); color: var(--color-blanco-puro); border: none; padding: 10px 20px; cursor: pointer; margin-top: 20px; border-radius: 25px; transition: background-color 0.3s ease, transform 0.2s ease; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .close-button:hover { background: #FF6347; transform: scale(1.05); }
+    ```css
+        /* ESTILOS DEL FOOTER */
+        footer {
+            background-color: var(--color-texto-oscuro);
+            color: var(--color-blanco-puro);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px; /* Separa el footer del contenido de arriba */
+            border-top: 5px solid var(--color-tulipan-morado); /* Un toque de color de tu paleta */
+        }
+        
+        .footer-content p {
+            margin: 10px 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        .footer-link {
+            color: var(--color-tulipan-coral);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--color-titulo-rosa);
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -122,8 +150,14 @@
         </p>
         <button id="closeBio" class="close-button">Cerrar</button>
     </div>
-    
-    <script>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Ana Carolina. Todos los derechos reservados.</p>
+            <p>¿Tienes alguna consulta? <a href="mailto:tuemail@ejemplo.com" class="footer-link">Envíame un correo</a></p>
+        </div>
+    </footer>
+    ```
+        <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7AvPH2JJ9DEePkRh8BAabJ7RHSxcM-koTbh8s-0F3A3NNIGA0ldXCcxB_QIjPuOtm/exec"; 
 
         async function loadBooks() {
