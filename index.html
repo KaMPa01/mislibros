@@ -109,6 +109,9 @@
     <img src="imagenes/header.png" alt="Separador decorativo" class="separator">
     <section>
         <h2>Mis Libros</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 20px; padding: 0 20px;">
+            Sumérgete en mis novelas de romance erótico. Historias llenas de pasión, seducción y personajes inolvidables. Descubre mi catálogo completo y reserva tus próximas lecturas.
+        </p>
         <div class="book-container" id="dynamic-books-container">
             <p style="text-align:center; width:100%; font-size:1.2rem; font-weight:bold; color:var(--color-tulipan-morado);">Cargando mi biblioteca mágica...</p>
         </div>
@@ -229,7 +232,7 @@
                 });
             } catch (error) {
                 console.error("Error cargando libros", error);
-                document.getElementById('dynamic-books-container').innerHTML = '<p>Error de conexión con el catálogo. Refresca la página.</p>';
+                document.getElementById('dynamic-books-container').innerHTML = '<p style="text-align:center; width:100%;">¡Vaya! Los duendes de internet están tardando en colocar los libros en las estanterías. <br><br>Mientras tanto, puedes ver todas mis novedades directamente en <a href="https://www.instagram.com/anacaro.li.na" style="color:var(--color-tulipan-morado); font-weight:bold;">mi Instagram</a>.</p>';
             }
         }
         
@@ -253,3 +256,5 @@
             document.getElementById('bioContent').classList.remove('show');
         });
     </script>
+</body>
+</html>
