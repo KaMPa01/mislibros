@@ -17,7 +17,25 @@
         :root { --color-cielo: #87CEEB; --color-titulo-rosa: #FF1493; --color-texto-oscuro: #2D3945; --color-tulipan-coral: #FF7F50; --color-tulipan-morado: #9370DB; --color-cesped-verde: #8FBC8F; --color-fondo-suave: #F0F8FF; --color-blanco-puro: #FFFFFF; }
         body { font-family: 'Open Sans', sans-serif; background-color: var(--color-fondo-suave); color: var(--color-texto-oscuro); margin: 0; padding: 0; font-size: 16px; }
         header { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, var(--color-cielo), #B0E0E6); position: relative; overflow: hidden; color: var(--color-blanco-puro); }
-        h1 { font-family: 'Montserrat', sans-serif; font-size: 3.5rem; color: var(--color-blanco-puro); text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4); margin: 0; position: relative; z-index: 2; }
+        
+        /* NUEVOS ESTILOS DEL ENCABEZADO */
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px; 
+            position: relative;
+            z-index: 2; 
+        }
+        
+        .header-logo {
+            height: 90px; 
+            width: auto;
+            border-radius: 50%; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+        }
+
+        h1 { font-family: 'Montserrat', sans-serif; font-size: 3.5rem; color: var(--color-blanco-puro); text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4); margin: 0; }
         h2 { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; color: var(--color-tulipan-morado); text-align: center; margin-top: 40px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); }
         h3 { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; color: var(--color-texto-oscuro); margin: 15px 0 10px; text-align: center; }
         .separator { width: 100%; height: auto; display: block; opacity: 0.8; }
@@ -55,7 +73,10 @@
 <body>
     <header>
         <div class="header-pattern"></div>
-        <h1>Bienvenidos a mi mundo literario</h1>
+        <div class="header-content">
+            <img src="imagenes/logo-ana.png" alt="Logotipo de Ana Carolina" class="header-logo">
+            <h1>Ana Carolina</h1>
+        </div>
     </header>
     <img src="imagenes/header.png" alt="Separador decorativo" class="separator">
     <section>
@@ -65,7 +86,7 @@
         </div>
 
         <div style="text-align: center; margin-top: 30px; margin-bottom: 50px;">
-            <a href="https://www.instagram.com/ana.caro.li.na" target="_blank" class="instagram-button">
+            <a href="https://www.instagram.com/anacaro.li.na?igsh=MTVtNXQ1bXdjY3IyNA%3D%3D&utm_source=qr" target="_blank" class="instagram-button">
                 <i class="fab fa-instagram"></i> ¡Sígueme en Instagram!
             </a>
         </div>
@@ -85,15 +106,12 @@
                 <img src="imagenes/panditalectora.jpg" alt="Foto de perfil de Booksgramer 2">
                 <a href="https://www.instagram.com/pandita.lectora" target="_blank" class="instagram-button"><i class="fab fa-instagram"></i></a>
             </div>
-            <div class="booksgramer">
-                <img src="imagenes/pame.jpg" alt="Foto de perfil de Booksgramer 3">
-                <a href="https://www.instagram.com/fpamelagarcia" target="_blank" class="instagram-button"><i class="fab fa-instagram"></i></a>
-            </div>
+                        </div>
         </div>
     </section>
     
     <button id="bioButton" class="bio-button">
-        <img src="imagenes/biografia.jpg" alt="Foto de la autora">
+        <img src="imagenes/logo-ana.png" alt="Foto de la autora">
     </button>
     
     <div id="bioContent" class="bio-content">
