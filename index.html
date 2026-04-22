@@ -68,6 +68,34 @@
         .bio-content h2 { font-size: 2rem; margin-top: 0; color: var(--color-tulipan-morado); }
         .close-button { background: var(--color-tulipan-coral); color: var(--color-blanco-puro); border: none; padding: 10px 20px; cursor: pointer; margin-top: 20px; border-radius: 25px; transition: background-color 0.3s ease, transform 0.2s ease; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .close-button:hover { background: #FF6347; transform: scale(1.05); }
+
+        /* ESTILOS DEL FOOTER */
+        footer {
+            background-color: var(--color-texto-oscuro);
+            color: var(--color-blanco-puro);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px; /* Separa el footer del contenido de arriba */
+            border-top: 5px solid var(--color-tulipan-morado); /* Un toque de color de tu paleta */
+        }
+        
+        .footer-content p {
+            margin: 10px 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        .footer-link {
+            color: var(--color-tulipan-coral);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--color-titulo-rosa);
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -106,7 +134,6 @@
                 <img src="imagenes/panditalectora.jpg" alt="Foto de perfil de Booksgramer 2">
                 <a href="https://www.instagram.com/pandita.lectora" target="_blank" class="instagram-button"><i class="fab fa-instagram"></i></a>
             </div>
-                        </div>
         </div>
     </section>
     
@@ -115,14 +142,19 @@
     </button>
     
     <div id="bioContent" class="bio-content">
-        <img src="imagenes/ana-carolina.jpg" alt="Foto de la autora" class="bio-photo">
+        <img src="imagenes/logo-ana.png" alt="Foto de la autora" class="bio-photo">
         <h2>Biografía</h2>
         <p>
             Ana Carolina, creo que ahora soy del mundo... De cualquier lugar. Llegué a España hace unos cuantos años, mi obligación de aprender castellano por estudios se convirtió en leer muchos libros, demasiados. Y es una de mis pasiones, después de BTS claramente... seguido de una mala leche tremenda, y ser creo que... un poco malhablada. Algunas veces ni siquiera se en que idioma hablo. Mientras se me entienda... 
         </p>
         <button id="closeBio" class="close-button">Cerrar</button>
     </div>
-    
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Ana Carolina. Todos los derechos reservados.</p>
+            <p>¿Tienes alguna consulta? <a href="mailto:caeolinadeana.autora@gmail.com" class="footer-link">Envíame un correo</a></p>
+        </div>
+    </footer>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7AvPH2JJ9DEePkRh8BAabJ7RHSxcM-koTbh8s-0F3A3NNIGA0ldXCcxB_QIjPuOtm/exec"; 
 
@@ -221,5 +253,3 @@
             document.getElementById('bioContent').classList.remove('show');
         });
     </script>
-</body>
-</html>
