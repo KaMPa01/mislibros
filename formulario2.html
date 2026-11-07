@@ -102,7 +102,7 @@
         // Libro y portada por defecto (la imagen debe estar en la carpeta imagenes/ del repo)
         const urlParams = new URLSearchParams(window.location.search);
         const LIBRO = urlParams.get('libro') || "El arte de romperme";
-        const PORTADA = urlParams.get('portada') || "imagenes/formulario.jpg";
+        const PORTADA = urlParams.get('portada') || "imagenes/formulario.jpeg";
 
         document.getElementById('header-book-title').textContent = `"${LIBRO}"`;
         document.title = `Preventa - ${LIBRO}`;
