@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VX8FDVKEVP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VX8FDVKEVP');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Ana Carolina - Autora de romances eroticos</title>
-    <meta name="description" content="Explora el mundo literario de Ana Carolina, autora de romances eroticos. Descubre sus libros, historias y más. ¡Sígueme en Instagram para estar al día!">
+    <title>Página de Ana Carolina - Autora de romance erotico</title>
+    <meta name="description" content="Explora el mundo literario de Ana Carolina, autora de romance erotico. Descubre sus libros, historias y más. ¡Sígueme en Instagram para estar al día!">
     <meta name="keywords" content="libros, literatura, Ana Carolina, Seducción, autor, escritora, Instagram, comprar libros">
     <meta name="author" content="Ana Carolina">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="imagenes/favico.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -96,6 +105,59 @@
             color: var(--color-titulo-rosa);
             text-decoration: underline;
         }
+
+        /* ESTILOS DEL ANUNCIO (POPUP) */
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(45, 57, 69, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 3000;
+        }
+        .popup-overlay.show { display: flex; animation: popupFade 0.35s ease; }
+        @keyframes popupFade { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popupRise { from { opacity: 0; transform: translateY(25px) scale(0.97); } to { opacity: 1; transform: none; } }
+        .popup-box {
+            position: relative;
+            background: var(--color-blanco-puro);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 400px;
+            max-height: 92vh;
+            overflow-y: auto;
+            padding: 30px 25px 25px;
+            box-sizing: border-box;
+            text-align: center;
+            border-top: 6px solid var(--color-titulo-rosa);
+            animation: popupRise 0.45s ease;
+        }
+        .popup-x {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            line-height: 1;
+            color: var(--color-texto-oscuro);
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+        .popup-x:hover { color: var(--color-titulo-rosa); }
+        .popup-tag { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-tulipan-morado); margin: 0 0 10px; }
+        .popup-cover { width: 100%; max-width: 200px; max-height: 40vh; object-fit: contain; border-radius: 12px; box-shadow: 0 5px 14px rgba(0, 0, 0, 0.3); margin: 0 auto 18px; display: block; }
+        .popup-title { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; color: var(--color-titulo-rosa); margin: 0 0 8px; text-align: center; }
+        .popup-text { margin: 0 0 20px; line-height: 1.5; }
+        .popup-cta { display: block; background-color: var(--color-titulo-rosa); color: var(--color-blanco-puro); text-decoration: none; font-weight: 700; padding: 14px 20px; border-radius: 35px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: background-color 0.3s ease, transform 0.2s ease; }
+        .popup-cta:hover { background-color: #E6007A; transform: scale(1.04); }
+        .popup-close { background: none; border: none; color: var(--color-texto-oscuro); opacity: 0.75; cursor: pointer; margin-top: 14px; font: inherit; text-decoration: underline; }
+        .popup-close:hover { opacity: 1; }
+        .popup-cta:focus-visible, .popup-close:focus-visible, .popup-x:focus-visible { outline: 3px solid var(--color-tulipan-coral); outline-offset: 2px; }
     </style>
 </head>
 <body>
@@ -109,6 +171,9 @@
     <img src="imagenes/header.png" alt="Separador decorativo" class="separator">
     <section>
         <h2>Mis Libros</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 20px; padding: 0 20px;">
+            Sumérgete en mis novelas de romance erótico. Historias llenas de pasión, seducción y personajes inolvidables. Descubre mi catálogo completo y reserva tus próximas lecturas.
+        </p>
         <div class="book-container" id="dynamic-books-container">
             <p style="text-align:center; width:100%; font-size:1.2rem; font-weight:bold; color:var(--color-tulipan-morado);">Cargando mi biblioteca mágica...</p>
         </div>
@@ -145,16 +210,30 @@
         <img src="imagenes/logo-ana.png" alt="Foto de la autora" class="bio-photo">
         <h2>Biografía</h2>
         <p>
-            Ana Carolina, creo que ahora soy del mundo... De cualquier lugar. Llegué a España hace unos cuantos años, mi obligación de aprender castellano por estudios se convirtió en leer muchos libros, demasiados. Y es una de mis pasiones, después de BTS claramente... seguido de una mala leche tremenda, y ser creo que... un poco malhablada. Algunas veces ni siquiera se en que idioma hablo. Mientras se me entienda... 
+            Ana Carolina, creo que ahora soy del mundo... De cualquier lugar. Llegué a España hace unos cuantos años, mi obligación de aprender castellano por estudios se convirtió en leer muchos libros, demasiados. Y es una de mis pasiones, después de BTS claramente... seguido de una mala leche tremenda, y ser creo que... un poco malhablada. Algunas veces ni siquiera sé en que idioma hablo. Mientras se me entienda... 
         </p>
         <button id="closeBio" class="close-button">Cerrar</button>
     </div>
     <footer>
         <div class="footer-content">
             <p>&copy; 2026 Ana Carolina. Todos los derechos reservados.</p>
-            <p>¿Tienes alguna consulta? <a href="mailto:caeolinadeana.autora@gmail.com" class="footer-link">Envíame un correo</a></p>
+            <p>¿Tienes alguna consulta? <a href="mailto:carolinadeana.autora@gmail.com" class="footer-link">Envíame un correo</a></p>
         </div>
     </footer>
+
+    <!-- ANUNCIO (POPUP) DE LA PREVENTA -->
+    <div id="promoPopup" class="popup-overlay" role="dialog" aria-modal="true" aria-labelledby="promoTitle">
+        <div class="popup-box">
+            <button type="button" class="popup-x" id="promoX" aria-label="Cerrar anuncio">&times;</button>
+            <p class="popup-tag">Próximamente</p>
+            <img src="imagenes/portada-el-arte-de-romperme.jpg" alt="Portada del libro El arte de romperme" class="popup-cover">
+            <h3 class="popup-title" id="promoTitle">El arte de romperme</h3>
+            <p class="popup-text">Estoy valorando abrir una preventa. ¿Te gustaría que te avise? Es un formulario rápido y sin compromiso.</p>
+            <a href="preventa.html" class="popup-cta" id="promoCta">Quiero que me avisen</a>
+            <button type="button" class="popup-close" id="promoClose">Ahora no, gracias</button>
+        </div>
+    </div>
+
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7AvPH2JJ9DEePkRh8BAabJ7RHSxcM-koTbh8s-0F3A3NNIGA0ldXCcxB_QIjPuOtm/exec"; 
 
@@ -229,7 +308,7 @@
                 });
             } catch (error) {
                 console.error("Error cargando libros", error);
-                document.getElementById('dynamic-books-container').innerHTML = '<p>Error de conexión con el catálogo. Refresca la página.</p>';
+                document.getElementById('dynamic-books-container').innerHTML = '<p style="text-align:center; width:100%;">¡Vaya! Los duendes de internet están tardando en colocar los libros en las estanterías. <br><br>Mientras tanto, puedes ver todas mis novedades directamente en <a href="https://www.instagram.com/anacaro.li.na" style="color:var(--color-tulipan-morado); font-weight:bold;">mi Instagram</a>.</p>';
             }
         }
         
@@ -252,6 +331,50 @@
         document.getElementById('closeBio').addEventListener('click', function() {
             document.getElementById('bioContent').classList.remove('show');
         });
+
+        // --- ANUNCIO (POPUP) ---
+        // Está dentro de la propia página (no abre ninguna ventana nueva), así que los navegadores no lo bloquean.
+        (function () {
+            const popup = document.getElementById('promoPopup');
+            const STORAGE_KEY = 'popupPreventaCerrado';
+            const DIAS_OCULTO = 3;           // días sin volver a mostrarlo tras cerrarlo
+            const RETRASO_MS = 1500;         // espera antes de aparecer
+            let lastFocus = null;
+
+            function yaCerrado() {
+                try {
+                    const t = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+                    return t && (Date.now() - t) < DIAS_OCULTO * 24 * 60 * 60 * 1000;
+                } catch (e) { return false; }
+            }
+            function recordarCierre() {
+                try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
+            }
+            function abrir() {
+                lastFocus = document.activeElement;
+                popup.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                document.getElementById('promoCta').focus();
+            }
+            function cerrar() {
+                popup.classList.remove('show');
+                document.body.style.overflow = '';
+                recordarCierre();
+                if (lastFocus && lastFocus.focus) lastFocus.focus();
+            }
+
+            document.getElementById('promoX').addEventListener('click', cerrar);
+            document.getElementById('promoClose').addEventListener('click', cerrar);
+            document.getElementById('promoCta').addEventListener('click', recordarCierre);
+            popup.addEventListener('click', function (e) { if (e.target === popup) cerrar(); });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && popup.classList.contains('show')) cerrar();
+            });
+
+            // Para probarlo siempre: index.html?popup=1
+            const forzar = new URLSearchParams(window.location.search).get('popup') === '1';
+            if (forzar || !yaCerrado()) setTimeout(abrir, RETRASO_MS);
+        })();
     </script>
 </body>
 </html>
