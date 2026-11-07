@@ -53,6 +53,31 @@
         .dialog-controls { margin-top: 20px; }
         .dialog-controls button { padding: 10px 20px; font-size: 1em; margin: 0 5px; }
         #prompt-input { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+
+        /* --- Dashboard de interesados --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin: 20px 0; }
+        .stat-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .stat-card .stat-value { font-size: 1.9em; font-weight: bold; color: #2c3e50; line-height: 1.2; }
+        .stat-card .stat-label { font-size: 0.9em; color: #7f8c8d; margin-top: 4px; }
+        .stat-card.stat-main { border-left: 5px solid #3498db; }
+        .interest-toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        .interest-toolbar input[type="search"] { flex: 1; min-width: 220px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .interest-toolbar select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #fff; }
+        .interest-toolbar button { background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
+        .interest-toolbar button.secondary { background-color: #16a085; }
+        .interest-toolbar button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+        .table-wrap { overflow-x: auto; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; }
+        .interest-table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+        .interest-table th, .interest-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; vertical-align: top; }
+        .interest-table th { background-color: #f2f2f2; white-space: nowrap; }
+        .interest-table td.comment-cell { min-width: 200px; max-width: 320px; overflow-wrap: anywhere; }
+        .interest-table a { color: #3498db; text-decoration: none; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.85em; font-weight: bold; }
+        .badge-si { background: #e8f5e9; color: #2e7d32; }
+        .badge-no { background: #f2f2f2; color: #7f8c8d; }
+        #interest-error { color: #e74c3c; text-align: center; padding: 20px; display: none; }
+        #interest-count { color: #7f8c8d; font-size: 0.9em; margin: 0 0 10px; }
+
         @media (max-width: 900px) { .main-layout { flex-direction: column-reverse; } }
         #printable-albaran { display: none; }
         @media print { body > *:not(#printable-albaran) { display: none !important; } #printable-albaran, #printable-albaran * { display: block !important; } }
@@ -115,11 +140,46 @@
                     </div>
                 </div>
 
+                <!-- Dashboard de interesados en la preventa -->
+                <div id="interest-container" style="display: none; flex-grow: 1; min-width: 0;">
+                    <h1>Interesados en la preventa</h1>
+                    <p>Respuestas del formulario de interés. Vienen de una hoja distinta a la de los pedidos.</p>
+
+                    <div class="stats-grid">
+                        <div class="stat-card stat-main"><div class="stat-value" id="stat-total">–</div><div class="stat-label">Personas interesadas</div></div>
+                        <div class="stat-card"><div class="stat-value" id="stat-signed">–</div><div class="stat-label">Lo quieren firmado</div></div>
+                        <div class="stat-card"><div class="stat-value" id="stat-unsigned">–</div><div class="stat-label">Sin firmar</div></div>
+                        <div class="stat-card"><div class="stat-value" id="stat-last" style="font-size:1.2em;">–</div><div class="stat-label">Última respuesta</div></div>
+                    </div>
+
+                    <div class="interest-toolbar">
+                        <input type="search" id="interest-search" placeholder="Buscar por nombre, Instagram, correo o comentario">
+                        <select id="interest-filter">
+                            <option value="todos">Todos</option>
+                            <option value="Sí">Quieren firmado</option>
+                            <option value="No">Sin firmar</option>
+                        </select>
+                        <button type="button" id="interest-refresh">Actualizar</button>
+                        <button type="button" id="interest-csv" class="secondary">Descargar CSV</button>
+                    </div>
+
+                    <div id="interest-loader" class="loading" style="display:none;">Cargando respuestas...</div>
+                    <div id="interest-error"></div>
+                    <p id="interest-count"></p>
+                    <div class="table-wrap">
+                        <table class="interest-table">
+                            <thead><tr><th>Fecha</th><th>Nombre</th><th>Instagram</th><th>Correo</th><th>Firmado</th><th>Comentarios</th></tr></thead>
+                            <tbody id="interest-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <aside id="filter-menu">
                     <h3>Navegación</h3>
                     <ul style="margin-bottom: 20px;">
                         <li><a href="#" id="menu-orders" class="active">📦 Ver Pedidos</a></li>
                         <li><a href="#" id="menu-books">📚 Gestión Libros</a></li>
+                        <li><a href="#" id="menu-interest">📊 Interesados</a></li>
                     </ul>
                     <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
                     <h3 id="filter-title">Filtrar Pedidos</h3>
@@ -175,7 +235,13 @@
     <div id="printable-albaran"></div>
 
     <script>
+        // Script de PEDIDOS y LIBROS
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7AvPH2JJ9DEePkRh8BAabJ7RHSxcM-koTbh8s-0F3A3NNIGA0ldXCcxB_QIjPuOtm/exec";
+        // Script de INTERESADOS (el de la hoja independiente de la preventa)
+        const INTEREST_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBgrx6-dLdQhP_eD-NLIuYP2piI8FFgKE7_ZwJm1ulFtxgyZa7jeAIGxcLDDRkZt1tVA/exec";
+
+        // Las credenciales se guardan solo en memoria (no en el navegador) para consultar también el script de interesados
+        let adminUser = '', adminPass = '';
 
         document.getElementById('login-btn').addEventListener('click', attemptLogin);
         function attemptLogin() {
@@ -184,31 +250,152 @@
             const payload = { action: 'login', user: document.getElementById('username').value, pass: document.getElementById('password').value };
             fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
             .then(res => res.json()).then(data => {
-                if (data.success) { document.getElementById('login-overlay').style.display = 'none'; document.getElementById('main-content').style.display = 'block'; loadOrders(); } 
+                if (data.success) { adminUser = payload.user; adminPass = payload.pass; document.getElementById('login-overlay').style.display = 'none'; document.getElementById('main-content').style.display = 'block'; loadOrders(); } 
                 else { document.getElementById('login-error').style.display = 'block'; btn.disabled = false; btn.textContent = 'Entrar'; }
             });
         }
 
+        // --- Navegación entre secciones ---
+        function showSection(section) {
+            document.getElementById('orders-container').style.display = section === 'orders' ? 'block' : 'none';
+            document.getElementById('books-container').style.display = section === 'books' ? 'block' : 'none';
+            document.getElementById('interest-container').style.display = section === 'interest' ? 'block' : 'none';
+            const showFilters = section === 'orders' ? 'block' : 'none';
+            document.getElementById('filter-title').style.display = showFilters;
+            document.getElementById('filter-list').style.display = showFilters;
+            ['orders', 'books', 'interest'].forEach(s => document.getElementById('menu-' + s).classList.toggle('active', s === section));
+        }
+
         document.getElementById('menu-orders').addEventListener('click', (e) => {
             e.preventDefault();
-            document.getElementById('orders-container').style.display = 'block';
-            document.getElementById('books-container').style.display = 'none';
-            document.getElementById('filter-title').style.display = 'block';
-            document.getElementById('filter-list').style.display = 'block';
-            document.getElementById('menu-books').classList.remove('active');
-            e.target.classList.add('active');
+            showSection('orders');
         });
 
         document.getElementById('menu-books').addEventListener('click', (e) => {
             e.preventDefault();
-            document.getElementById('orders-container').style.display = 'none';
-            document.getElementById('books-container').style.display = 'block';
-            document.getElementById('filter-title').style.display = 'none';
-            document.getElementById('filter-list').style.display = 'none';
-            document.getElementById('menu-orders').classList.remove('active');
-            e.target.classList.add('active');
+            showSection('books');
             loadBooksAdmin();
         });
+
+        document.getElementById('menu-interest').addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('interest');
+            loadInterests();
+        });
+
+        // --- Dashboard de interesados ---
+        let allInterests = [];
+
+        function esc(value) {
+            return String(value === undefined || value === null ? '' : value)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function formatDate(iso) {
+            const d = new Date(iso);
+            return isNaN(d) ? '' : d.toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
+        }
+
+        async function loadInterests() {
+            const loader = document.getElementById('interest-loader');
+            const errorBox = document.getElementById('interest-error');
+            const refreshBtn = document.getElementById('interest-refresh');
+            errorBox.style.display = 'none';
+
+            if (INTEREST_SCRIPT_URL.startsWith('PEGA_AQUI')) {
+                errorBox.textContent = 'Falta pegar la URL del script de interesados en INTEREST_SCRIPT_URL (en panel.html).';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            loader.style.display = 'block';
+            refreshBtn.disabled = true;
+            try {
+                const res = await fetch(INTEREST_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'getInterests', user: adminUser, pass: adminPass })
+                });
+                const result = await res.json();
+                if (!result.success) throw new Error(result.message || 'No autorizado');
+                allInterests = result.data || [];
+                renderInterests();
+            } catch (err) {
+                errorBox.textContent = 'No se pudieron cargar los interesados: ' + err.message;
+                errorBox.style.display = 'block';
+            } finally {
+                loader.style.display = 'none';
+                refreshBtn.disabled = false;
+            }
+        }
+
+        function getFilteredInterests() {
+            const q = document.getElementById('interest-search').value.trim().toLowerCase();
+            const firmado = document.getElementById('interest-filter').value;
+            return allInterests
+                .filter(r => firmado === 'todos' || r.firmado === firmado)
+                .filter(r => !q || [r.nombre, r.instagram, r.correo, r.comentarios].join(' ').toLowerCase().includes(q))
+                .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        }
+
+        function renderInterests() {
+            // Estadísticas sobre todas las respuestas (sin filtrar)
+            const total = allInterests.length;
+            const signed = allInterests.filter(r => r.firmado === 'Sí').length;
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-signed').textContent = signed;
+            document.getElementById('stat-unsigned').textContent = total - signed;
+            const last = allInterests.map(r => new Date(r.fecha)).filter(d => !isNaN(d)).sort((a, b) => b - a)[0];
+            document.getElementById('stat-last').textContent = last ? formatDate(last) : '–';
+
+            const rows = getFilteredInterests();
+            document.getElementById('interest-count').textContent = rows.length === total
+                ? `${total} respuestas`
+                : `Mostrando ${rows.length} de ${total} respuestas`;
+
+            const body = document.getElementById('interest-body');
+            if (rows.length === 0) {
+                body.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#7f8c8d; padding:30px;">No hay respuestas que mostrar.</td></tr>';
+                return;
+            }
+            body.innerHTML = rows.map(r => {
+                const user = String(r.instagram || '').replace(/^@/, '');
+                const igLink = /^[A-Za-z0-9._]{1,30}$/.test(user)
+                    ? `<a href="https://instagram.com/${encodeURIComponent(user)}" target="_blank" rel="noopener noreferrer">@${esc(user)}</a>`
+                    : esc(r.instagram);
+                const badge = r.firmado === 'Sí' ? '<span class="badge badge-si">Sí</span>' : '<span class="badge badge-no">No</span>';
+                return `<tr>
+                    <td style="white-space:nowrap;">${esc(formatDate(r.fecha))}</td>
+                    <td>${esc(r.nombre)}</td>
+                    <td>${igLink}</td>
+                    <td>${esc(r.correo)}</td>
+                    <td>${badge}</td>
+                    <td class="comment-cell">${esc(r.comentarios)}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function downloadInterestsCSV() {
+            const rows = getFilteredInterests();
+            // Evita que Excel interprete texto como fórmula
+            const safe = v => { let s = String(v === undefined || v === null ? '' : v); if (/^[=+\-@]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+            const header = ['Fecha', 'Nombre', 'Instagram', 'Correo', 'Firmado', 'Comentarios'];
+            const lines = [header.map(safe).join(';')];
+            rows.forEach(r => lines.push([formatDate(r.fecha), r.nombre, String(r.instagram || '').replace(/^@/, ''), r.correo, r.firmado, r.comentarios].map(safe).join(';')));
+            const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'interesados-preventa.csv';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(a.href);
+        }
+
+        document.getElementById('interest-search').addEventListener('input', renderInterests);
+        document.getElementById('interest-filter').addEventListener('change', renderInterests);
+        document.getElementById('interest-refresh').addEventListener('click', loadInterests);
+        document.getElementById('interest-csv').addEventListener('click', downloadInterestsCSV);
 
         const preorderCheckbox = document.getElementById('book-preorder');
         const amazonInput = document.getElementById('book-amazon');
