@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Te interesa la preventa?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --color-cielo: #87CEEB; --color-titulo-rosa: #FF1493; --color-texto-oscuro: #2D3945; --color-tulipan-coral: #FF7F50; --color-tulipan-morado: #9370DB; --color-fondo-suave: #F0F8FF; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--color-fondo-suave); }
+        .header-title { color: var(--color-titulo-rosa); }
+        .header-subtitle, .form-label, h3 { color: var(--color-texto-oscuro); }
+        .form-input { border-color: #D1D5DB; transition: border-color 0.2s, box-shadow 0.2s; }
+        .form-input:focus { border-color: var(--color-tulipan-coral); box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-tulipan-coral) 25%, transparent); outline: none; }
+        .submit-btn { background-color: var(--color-titulo-rosa); transition: background-color 0.2s; }
+        .submit-btn:hover { background-color: color-mix(in srgb, var(--color-titulo-rosa) 90%, black); }
+        .submit-btn:disabled { opacity: .6; cursor: wait; }
+        .info-box { background-color: color-mix(in srgb, var(--color-cielo) 20%, transparent); border-left: 4px solid var(--color-cielo); color: var(--color-texto-oscuro); }
+        .pack-box { background-color: color-mix(in srgb, var(--color-tulipan-coral) 12%, white); border-left: 4px solid var(--color-tulipan-coral); color: var(--color-texto-oscuro); }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--color-tulipan-coral); animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .trampa { position: absolute; left: -9999px; }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4 md:p-8 max-w-3xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold header-title">¿Te interesa la preventa?</h1>
+            <p class="text-lg header-subtitle mt-2" id="header-book-title"></p>
+        </header>
+
+        <div class="flex justify-center mb-8">
+            <img src="" id="header-book-cover" alt="Portada del libro" class="rounded-lg shadow-lg max-w-xs md:max-w-sm lg:max-w-md hidden">
+        </div>
+
+        <div class="info-box p-4 rounded-md mb-8">
+            <p class="font-bold">Esto no es un pedido</p>
+            <p class="text-sm mb-2">Precio previsto de la preventa: <strong>26 € con el envío incluido</strong>.</p>
+                <p class="text-sm">Todavía no hay preventa abierta. Este formulario solo me ayuda a saber cuánta gente estaría interesada. No tienes que pagar nada ni te compromete a comprar. Si finalmente la abro, te escribiré al correo que dejes aquí.</p>
+        </div>
+
+        <div class="pack-box p-4 rounded-md mb-8">
+            <p class="font-bold mb-2">El pack incluye:</p>
+            <ul class="list-disc pl-5 text-sm space-y-1">
+                <li>Llavero libro</li>
+                <li>Coletero</li>
+                <li>Tote tropes</li>
+                <li>Marcapáginas Rosa 3D</li>
+                <li>Marcapáginas overlays</li>
+                <li>Melchs</li>
+                <li>Imán</li>
+                <li>Portavasos books club (colores al azar)</li>
+            </ul>
+        </div>
+
+        <div class="bg-white p-6 md:p-10 rounded-lg shadow-lg">
+            <form id="interes-form">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="mb-4"><label class="form-label block mb-2" for="nombre">Nombre *</label><input type="text" id="nombre" name="nombre" required maxlength="100" autocomplete="name" class="form-input w-full p-2 border rounded-md"></div>
+                        <div class="mb-4"><label class="form-label block mb-2" for="instagram">Usuario de Instagram *</label><input type="text" id="instagram" name="instagram" required maxlength="31" placeholder="@tuusuario" pattern="@?[A-Za-z0-9._]{1,30}" title="Solo letras, números, puntos y guiones bajos" autocapitalize="none" class="form-input w-full p-2 border rounded-md"></div>
+                    </div>
+                    <div>
+                        <div class="mb-4"><label class="form-label block mb-2" for="email">Correo Electrónico *</label><input type="email" id="email" name="email" required maxlength="150" autocomplete="email" class="form-input w-full p-2 border rounded-md"></div>
+                        <div class="mb-4">
+                            <label class="form-label block mb-2">¿Lo querrías firmado? *</label>
+                            <div class="flex items-center space-x-4">
+                                <label class="flex items-center"><input type="radio" name="firmado" value="Sí" required class="mr-2"> Sí</label>
+                                <label class="flex items-center"><input type="radio" name="firmado" value="No" class="mr-2"> No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <label class="form-label block mb-2" for="comentarios">Comentarios (opcional)</label>
+                    <textarea id="comentarios" name="comentarios" rows="3" maxlength="500" class="form-input w-full p-2 border rounded-md"></textarea>
+                </div>
+
+                <!-- Campo trampa contra bots -->
+                <input class="trampa" type="text" id="web" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                <div class="mt-8 text-center"><button type="submit" id="submit-button" class="submit-btn text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">Avisarme si hay preventa</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-lg shadow-2xl p-8 max-w-sm w-full text-center">
+            <div id="modal-loader" class="loader ease-linear rounded-full h-12 w-12 mx-auto mb-4"></div>
+            <h3 id="modal-title" class="text-2xl font-bold header-subtitle mb-2">Enviando...</h3>
+            <p id="modal-message" class="text-gray-600 mb-6">Estamos guardando tu respuesta. Por favor, espera.</p>
+            <button id="modal-close-btn" class="submit-btn text-white font-bold py-2 px-6 rounded-md hidden">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        // URL del NUEVO Apps Script (el de la hoja de interesados, no el de reservas)
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwBtq2cWbauvH6cEWlXBq4IfI2mC4eylPJb-Rk3UudknLIJEl1Ln5LEcnv9ZIUMLlJsaw/exec";
+
+        // Libro y portada por defecto (la imagen debe estar en la carpeta imagenes/ del repo)
+        const urlParams = new URLSearchParams(window.location.search);
+        const LIBRO = urlParams.get('libro') || "El arte de romperme";
+        const PORTADA = urlParams.get('portada') || "imagenes/portada-el-arte-de-romperme.jpg";
+
+        document.getElementById('header-book-title').textContent = `"${LIBRO}"`;
+        document.title = `Preventa - ${LIBRO}`;
+        if (PORTADA) {
+            const img = document.getElementById('header-book-cover');
+            img.src = PORTADA;
+            img.classList.remove('hidden');
+        }
+
+        const form = document.getElementById('interes-form');
+        const submitButton = document.getElementById('submit-button');
+        const modal = document.getElementById('modal');
+        const modalLoader = document.getElementById('modal-loader');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (document.getElementById('web').value) return; // bot
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Enviando...';
+            modal.classList.remove('hidden');
+            modalLoader.classList.remove('hidden');
+            modalCloseBtn.classList.add('hidden');
+            modalTitle.textContent = 'Enviando...';
+            modalMessage.textContent = 'Estamos guardando tu respuesta. Por favor, espera.';
+
+            const data = {};
+            new FormData(form).forEach((value, key) => { if (key !== 'web') data[key] = value; });
+            data.libro = LIBRO;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'submitInterest', interestData: data })
+                });
+                const result = await response.json();
+                if (!result.success) throw new Error(result.message || 'Error desconocido');
+
+                modalTitle.textContent = '¡Gracias!';
+                modalMessage.textContent = 'He guardado tu interés. Si abro la preventa, te escribiré al correo que has indicado.';
+                form.reset();
+            } catch (error) {
+                modalTitle.textContent = 'No se pudo enviar';
+                modalMessage.textContent = 'Hubo un problema al guardar tu respuesta. Inténtalo de nuevo en unos minutos.';
+            } finally {
+                modalLoader.classList.add('hidden');
+                modalCloseBtn.classList.remove('hidden');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Avisarme si hay preventa';
+            }
+        });
+
+        modalCloseBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    </script>
+</body>
+</html>
