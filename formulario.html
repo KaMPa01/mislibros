@@ -17,6 +17,7 @@
         .submit-btn:hover { background-color: color-mix(in srgb, var(--color-titulo-rosa) 90%, black); }
         .submit-btn:disabled { opacity: .6; cursor: wait; }
         .info-box { background-color: color-mix(in srgb, var(--color-cielo) 20%, transparent); border-left: 4px solid var(--color-cielo); color: var(--color-texto-oscuro); }
+        .pack-box { background-color: color-mix(in srgb, var(--color-tulipan-coral) 12%, white); border-left: 4px solid var(--color-tulipan-coral); color: var(--color-texto-oscuro); }
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--color-tulipan-coral); animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .trampa { position: absolute; left: -9999px; }
@@ -37,6 +38,20 @@
             <p class="font-bold">Esto no es un pedido</p>
             <p class="text-sm mb-2">Precio previsto de la preventa: <strong>26 € con el envío incluido</strong>.</p>
                 <p class="text-sm">Todavía no hay preventa abierta. Este formulario solo me ayuda a saber cuánta gente estaría interesada. No tienes que pagar nada ni te compromete a comprar. Si finalmente la abro, te escribiré al correo que dejes aquí.</p>
+        </div>
+
+        <div class="pack-box p-4 rounded-md mb-8">
+            <p class="font-bold mb-2">El pack incluye:</p>
+            <ul class="list-disc pl-5 text-sm space-y-1">
+                <li>Llavero libro</li>
+                <li>Coletero</li>
+                <li>Tote tropes</li>
+                <li>Marcapáginas Rosa 3D</li>
+                <li>Marcapáginas overlays</li>
+                <li>Melchs</li>
+                <li>Imán</li>
+                <li>Portavasos books club (colores al azar)</li>
+            </ul>
         </div>
 
         <div class="bg-white p-6 md:p-10 rounded-lg shadow-lg">
