@@ -2,167 +2,738 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel Pro | Ana Carolina</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Gestión de Pedidos</title>
+    <meta name="robots" content="noindex, nofollow">
     <style>
-        :root { --primary: #FF1493; --secondary: #34495e; --bg: #f8fafc; --white: #ffffff; --border: #e2e8f0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        
-        /* Sidebar y Layout */
-        .sidebar { width: 260px; background: var(--secondary); color: white; display: flex; flex-direction: column; }
-        .menu-item { padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; color: #cbd5e1; }
-        .menu-item.active { background: var(--primary); color: white; }
-        .main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        .content { padding: 2rem; }
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f7f9; display: flex; justify-content: center; align-items: center; z-index: 2000; }
+        .login-box { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        .login-box h2 { margin-top: 0; }
+        .login-box input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .login-box button { width: 100%; background-color: #3498db; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-size: 1em; }
+        .login-box button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+        #login-error { color: #e74c3c; margin-top: 10px; display: none; }
+        #main-content { display: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1, h2, h3 { color: #2c3e50; }
+        .main-layout { display: flex; flex-direction: row; gap: 30px; }
+        #orders-container { flex-grow: 1; }
+        #filter-menu { flex-basis: 220px; flex-shrink: 0; background-color: #ffffff; border-radius: 8px; padding: 20px; height: fit-content; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        #filter-menu h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        #filter-menu ul { list-style: none; padding: 0; margin: 0; }
+        #filter-menu li a { display: block; padding: 10px 15px; text-decoration: none; color: #34495e; border-radius: 5px; transition: background-color 0.2s; }
+        #filter-menu li a:hover { background-color: #f2f2f2; }
+        #filter-menu li a.active { background-color: #3498db; color: white; font-weight: bold; }
+        .loading { text-align: center; padding: 50px; font-size: 1.2em; }
+        .order-list { list-style: none; padding: 0; }
+        .order-item { background-color: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: box-shadow 0.2s; }
+        .order-item:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        .order-item.status-enviado { background-color: #e8f5e9; border-left: 5px solid #4CAF50; }
+        .order-details { flex-grow: 1; }
+        .order-details strong { font-size: 1.1em; }
+        .order-actions button { background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
+        .details-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: flex-start; z-index: 1000; overflow-y: auto; padding: 40px 20px; box-sizing: border-box; }
+        .details-content { background: white; padding: 40px; width: 100%; max-width: 800px; box-shadow: 0 0 20px rgba(0,0,0,0.2); border-radius: 8px; }
+        .details-header { display: flex; justify-content: space-between; border-bottom: 2px solid #ccc; padding-bottom: 20px; align-items: flex-start; }
+        .details-header .sender-info { text-align: right; }
+        .details-section { margin-top: 25px; }
+        .details-section .info-block { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 10px; }
+        .info-block p { margin: 5px 0; }
+        .bizum-link a { font-weight: bold; color: #16a085; text-decoration: none; }
+        .albaran-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .albaran-table th, .albaran-table td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        .albaran-table th { background-color: #f2f2f2; }
+        .albaran-table th:nth-child(1), .albaran-table td:nth-child(1) { width: 55%; }
+        .details-controls { text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+        .details-controls button { background-color: #2ecc71; color: white; padding: 12px 20px; font-size: 1em; margin: 5px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.2s; }
+        .details-controls .close-btn { background-color: #e74c3c; }
+        .tracking-number { background-color: #eaf2f8; border-left: 4px solid #3498db; padding: 10px; margin-top: 10px; font-weight: bold;}
+        .dialog-box { background: white; padding: 30px; border-radius: 8px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .dialog-controls { margin-top: 20px; }
+        .dialog-controls button { padding: 10px 20px; font-size: 1em; margin: 0 5px; }
+        #prompt-input { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
 
-        /* Tarjetas y Tablas */
-        .card { background: white; border-radius: 0.8rem; padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 2rem; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th { text-align: left; padding: 0.8rem; border-bottom: 2px solid var(--border); color: #64748b; font-size: 0.8rem; }
-        td { padding: 0.8rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-        
-        /* Botones y Formulario */
-        .btn { padding: 0.6rem 1.2rem; border-radius: 0.4rem; border: none; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
-        .btn-save { background: #22c55e; color: white; }
-        .btn-edit { background: #3498db; color: white; padding: 0.3rem 0.6rem; font-size: 0.8rem; }
-        .btn-delete { background: #e74c3c; color: white; padding: 0.3rem 0.6rem; font-size: 0.8rem; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-        input, select { width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 0.4rem; box-sizing: border-box; }
-        
-        #login-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
-        .badge-PREVENTA { background: #fef3c7; color: #92400e; }
-        .badge-AMAZON { background: #dcfce7; color: #166534; }
+        /* --- Dashboard de interesados --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin: 20px 0; }
+        .stat-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .stat-card .stat-value { font-size: 1.9em; font-weight: bold; color: #2c3e50; line-height: 1.2; }
+        .stat-card .stat-label { font-size: 0.9em; color: #7f8c8d; margin-top: 4px; }
+        .stat-card.stat-main { border-left: 5px solid #3498db; }
+        .interest-toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        .interest-toolbar input[type="search"] { flex: 1; min-width: 220px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .interest-toolbar select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #fff; }
+        .interest-toolbar button { background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
+        .interest-toolbar button.secondary { background-color: #16a085; }
+        .interest-toolbar button:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+        .table-wrap { overflow-x: auto; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; }
+        .interest-table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+        .interest-table th, .interest-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; vertical-align: top; }
+        .interest-table th { background-color: #f2f2f2; white-space: nowrap; }
+        .interest-table td.comment-cell { min-width: 200px; max-width: 320px; overflow-wrap: anywhere; }
+        .interest-table a { color: #3498db; text-decoration: none; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.85em; font-weight: bold; }
+        .badge-si { background: #e8f5e9; color: #2e7d32; }
+        .badge-no { background: #f2f2f2; color: #7f8c8d; }
+        #interest-error { color: #e74c3c; text-align: center; padding: 20px; display: none; }
+        #interest-count { color: #7f8c8d; font-size: 0.9em; margin: 0 0 10px; }
+
+        @media (max-width: 900px) { .main-layout { flex-direction: column-reverse; } }
+        #printable-albaran { display: none; }
+        @media print { body > *:not(#printable-albaran) { display: none !important; } #printable-albaran, #printable-albaran * { display: block !important; } }
     </style>
 </head>
 <body>
-
     <div id="login-overlay">
-        <div style="background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 300px; text-align: center;">
-            <h2 style="color: var(--primary);">Acceso Admin</h2>
-            <input type="text" id="username" placeholder="Usuario" style="margin-bottom: 1rem;">
-            <input type="password" id="password" placeholder="Contraseña" style="margin-bottom: 1rem;">
-            <button class="btn btn-save" style="width: 100%; justify-content: center;" onclick="login()">Entrar</button>
-        </div>
+        <div class="login-box"><h2>Acceso al Panel</h2><p>Introduce tus credenciales</p><input type="text" id="username" placeholder="Usuario" required><input type="password" id="password" placeholder="Contraseña" required><button id="login-btn">Entrar</button><p id="login-error">Usuario o contraseña incorrectos.</p></div>
     </div>
-
-    <aside class="sidebar">
-        <div style="padding: 2rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);"><h3>ANA CAROLINA</h3></div>
-        <div class="menu-item active" onclick="nav('libros', this)"><i class="fas fa-book"></i> Gestión de Libros</div>
-        <div class="menu-item" onclick="nav('pedidos', this)"><i class="fas fa-shopping-cart"></i> Pedidos</div>
-    </aside>
-
-    <main class="main">
-        <div class="content">
-            <section id="sec-libros">
-                <div class="card">
-                    <h3>Añadir / Editar Libro</h3>
-                    <div class="form-grid">
-                        <div><label>Título</label><input type="text" id="cfg-titulo"></div>
-                        <div><label>Portada (URL)</label><input type="text" id="cfg-portada"></div>
-                        <div><label>Estado</label>
-                            <select id="cfg-estado" onchange="toggleAmz()">
-                                <option value="PREVENTA">Preventa Activa</option>
-                                <option value="AMAZON">Venta en Amazon</option>
-                                <option value="OCULTO">Oculto</option>
-                            </select>
-                        </div>
-                        <div id="amz-input" style="display:none;"><label>Link Amazon</label><input type="text" id="cfg-amazon"></div>
-                    </div>
-                    <button class="btn btn-save" onclick="guardarLibro()"><i class="fas fa-save"></i> Guardar Cambios</button>
+    <div id="main-content">
+        <div class="container">
+            <div class="main-layout">
+                <div id="orders-container">
+                    <h1>Panel de Pedidos</h1>
+                    <p>Aquí se muestran los pedidos recibidos desde el formulario de preventa.</p>
+                    <div id="loader" class="loading">Cargando pedidos...</div>
+                    <ul id="order-list" class="order-list"></ul>
                 </div>
 
-                <div class="card">
-                    <h3>Catálogo Actual</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Portada</th>
-                                <th>Título</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabla-libros-body"></tbody>
+                <div id="books-container" style="display: none; flex-grow: 1;">
+                    <h1>Gestión de Libros</h1>
+                    <div style="margin-bottom: 30px;">
+                        <h3>Libros Publicados</h3>
+                        <div id="loader-books" class="loading">Cargando libros...</div>
+                        <ul id="items-libros" class="order-list"></ul>
+                    </div>
+
+                    <div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                        <h3 id="form-book-title">Añadir Nuevo Libro</h3>
+                        <form id="add-book-form">
+                            <input type="hidden" id="book-id">
+                            <input type="hidden" id="book-current-cover">
+                            <input type="text" id="book-title" placeholder="Título del libro" required style="width:100%; margin-bottom:10px; padding:10px; border:1px solid #ccc; border-radius:5px;">
+                            <textarea id="book-desc" placeholder="Sinopsis" required style="width:100%; height:100px; margin-bottom:10px; padding:10px; border:1px solid #ccc; border-radius:5px;"></textarea>
+                            
+                            <div style="display:flex; gap:20px; margin-bottom:15px; align-items:flex-start; flex-wrap:wrap;">
+                                <div style="flex:1; min-width:300px; background:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee;">
+                                    <label style="display:block; font-size:0.9em; font-weight:bold; margin-bottom:10px;">Versiones y Precios *</label>
+                                    <div id="versions-wrapper"></div>
+                                    <button type="button" id="add-version-btn" style="background:#f39c12; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:0.85em; margin-top:5px; font-weight:bold;">+ Añadir edición especial</button>
+                                </div>
+                                <div style="flex:1; min-width:250px;">
+                                    <label style="display:block; margin-bottom:15px; font-weight:bold; color: #2c3e50;">
+                                        <input type="checkbox" id="book-preorder"> Es preventa (Habilita reservas)
+                                    </label>
+                                    <label style="display:block; font-size:0.9em; font-weight:bold; margin-bottom:10px;">URL Amazon (Si no es preventa)</label>
+                                    <input type="url" id="book-amazon" placeholder="https://amazon..." style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; transition: background-color 0.2s;">
+                                </div>
+                            </div>
+                            
+                            <label style="font-weight:bold; display:block; margin-top:10px;">Portada del Libro:</label>
+                            <p id="current-cover-msg" style="display:none; font-size:0.85em; color:gray; margin-top:5px;">Sube una nueva foto solo si quieres reemplazar la actual.</p>
+                            <input type="file" id="book-cover" accept="image/*" required style="display:block; margin-top:5px; margin-bottom:20px;">
+                            
+                            <div style="text-align:right;">
+                                <button type="button" id="cancel-edit-btn" style="display:none; background:#e74c3c; color:white; border:none; padding:12px 20px; border-radius:5px; cursor:pointer; margin-right:10px; font-weight:bold;">Cancelar Edición</button>
+                                <button type="submit" id="save-book-btn" style="background:#2ecc71; color:white; border:none; padding:12px 20px; border-radius:5px; cursor:pointer; font-weight:bold;">Guardar Libro</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Dashboard de interesados en la preventa -->
+                <div id="interest-container" style="display: none; flex-grow: 1; min-width: 0;">
+                    <h1>Interesados en la preventa</h1>
+                    <p>Respuestas del formulario de interés. Vienen de una hoja distinta a la de los pedidos.</p>
+
+                    <div class="stats-grid">
+                        <div class="stat-card stat-main"><div class="stat-value" id="stat-total">–</div><div class="stat-label">Personas interesadas</div></div>
+                        <div class="stat-card"><div class="stat-value" id="stat-signed">–</div><div class="stat-label">Lo quieren firmado</div></div>
+                        <div class="stat-card"><div class="stat-value" id="stat-unsigned">–</div><div class="stat-label">Sin firmar</div></div>
+                        <div class="stat-card"><div class="stat-value" id="stat-last" style="font-size:1.2em;">–</div><div class="stat-label">Última respuesta</div></div>
+                    </div>
+
+                    <div class="interest-toolbar">
+                        <input type="search" id="interest-search" placeholder="Buscar por nombre, Instagram, correo o comentario">
+                        <select id="interest-filter">
+                            <option value="todos">Todos</option>
+                            <option value="Sí">Quieren firmado</option>
+                            <option value="No">Sin firmar</option>
+                        </select>
+                        <button type="button" id="interest-refresh">Actualizar</button>
+                        <button type="button" id="interest-csv" class="secondary">Descargar CSV</button>
+                    </div>
+
+                    <div id="interest-loader" class="loading" style="display:none;">Cargando respuestas...</div>
+                    <div id="interest-error"></div>
+                    <p id="interest-count"></p>
+                    <div class="table-wrap">
+                        <table class="interest-table">
+                            <thead><tr><th>Fecha</th><th>Nombre</th><th>Instagram</th><th>Correo</th><th>Firmado</th><th>Comentarios</th></tr></thead>
+                            <tbody id="interest-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <aside id="filter-menu">
+                    <h3>Navegación</h3>
+                    <ul style="margin-bottom: 20px;">
+                        <li><a href="#" id="menu-orders" class="active">📦 Ver Pedidos</a></li>
+                        <li><a href="#" id="menu-books">📚 Gestión Libros</a></li>
+                        <li><a href="#" id="menu-interest">📊 Interesados</a></li>
+                    </ul>
+                    <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+                    <h3 id="filter-title">Filtrar Pedidos</h3>
+                    <ul id="filter-list">
+                        <li><a href="#" class="filter-btn active" data-filter="todos">Todos</a></li>
+                        <li><a href="#" class="filter-btn" data-filter="pendiente">No Enviados</a></li>
+                        <li><a href="#" class="filter-btn" data-filter="enviado">Enviados</a></li>
+                    </ul>
+                </aside>
+            </div>
+        </div>
+        
+        <div id="details-overlay" class="details-overlay">
+            <div id="details-content" class="details-content">
+                <div class="details-header">
+                    <div class="logo"><h2>Detalle del Pedido</h2><p>Ana Carolina - Autora</p></div>
+                    <div class="sender-info"><strong>Pedido #: <span id="details-order-id"></span></strong><br>Fecha: <span id="details-date"></span></div>
+                </div>
+                <div class="details-section">
+                    <h3>Datos del Cliente</h3>
+                    <div class="info-block"><p><strong>Nombre:</strong> <span id="details-name"></span></p><p><strong>Email:</strong> <span id="details-email"></span></p><p><strong>Teléfono:</strong> <span id="details-phone"></span></p></div>
+                </div>
+                <div class="details-section">
+                    <h3>Detalles del Libro y Firma</h3>
+                    <div class="info-block"><p><strong>¿Quiere el libro firmado?:</strong> <span id="details-signed"></span></p><p><strong>Nombre para la dedicatoria:</strong> <span id="details-dedication"></span></p></div>
+                </div>
+                <div class="details-section">
+                    <h3>Producto</h3>
+                    <table class="albaran-table">
+                        <thead><tr><th>Descripción</th><th>Cantidad</th><th>Precio Unitario</th><th>Total</th></tr></thead>
+                        <tbody><tr><td id="product-desc-table">Libro</td><td>1</td><td id="product-price-table">20 €</td><td id="product-total-table">20 €</td></tr></tbody>
                     </table>
                 </div>
-            </section>
-
-            <section id="sec-pedidos" style="display:none;">
-                <div class="card"><h3>Lista de Pedidos</h3><table id="tabla-pedidos"><thead><tr><th>Cliente</th><th>Estado</th></tr></thead><tbody id="pedidos-body"></tbody></table></div>
-            </section>
+                <div class="details-section">
+                    <h3>Información de Envío</h3>
+                    <div id="shipping-info-block" class="info-block"></div>
+                </div>
+                <div class="details-section payment-proof-section">
+                    <h3>Justificante de Pago (Bizum)</h3>
+                    <div class="info-block bizum-link"><p><a id="details-payment-proof" href="#" target="_blank" rel="noopener noreferrer">VER JUSTIFICANTE DE PAGO</a></p></div>
+                </div>
+                <div id="details-controls" class="details-controls">
+                    <button id="print-btn">Imprimir / Guardar PDF</button>
+                    <button id="mark-sent-btn">Marcar como Enviado</button>
+                    <button id="close-btn" class="close-btn">Cerrar</button>
+                </div>
+            </div>
         </div>
-    </main>
+    </div>
+    
+    <div id="confirm-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="confirm-title">¿Estás seguro?</h3><p id="confirm-text">Esta acción no se puede deshacer.</p><div class="dialog-controls"><button id="confirm-yes-btn">Sí</button><button id="confirm-no-btn" class="close-btn">Cancelar</button></div></div></div>
+    <div id="prompt-overlay" class="details-overlay" style="z-index: 3000; display: none;"><div class="dialog-box"><h3 id="prompt-title">Introduce el dato</h3><p id="prompt-text"></p><input type="text" id="prompt-input"><div class="dialog-controls"><button id="prompt-ok-btn">Aceptar</button><button id="prompt-cancel-btn" class="close-btn">Cancelar</button></div></div></div>
+    <div id="printable-albaran"></div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3i9b6Ek6ghlzNjNkWDZJlnouhN49OCWgazcHu1u-uAHMhWOEQBlWYu8XXJS9pA1DK/exec";
+        // Script de PEDIDOS y LIBROS
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7AvPH2JJ9DEePkRh8BAabJ7RHSxcM-koTbh8s-0F3A3NNIGA0ldXCcxB_QIjPuOtm/exec";
+        // Script de INTERESADOS (el de la hoja independiente de la preventa)
+        const INTEREST_SCRIPT_URL = "PEGA_AQUI_LA_URL_DEL_SCRIPT_DE_INTERESADOS";
 
-        async function login() {
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            const r = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'login', user, pass }) });
-            const d = await r.json();
-            if(d.success) { document.getElementById('login-overlay').style.display = 'none'; cargarCatalogo(); }
-            else alert("Error de acceso");
-        }
+        // Las credenciales se guardan solo en memoria (no en el navegador) para consultar también el script de interesados
+        let adminUser = '', adminPass = '';
 
-        function nav(sec, el) {
-            document.querySelectorAll('section').forEach(s => s.style.display = 'none');
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-            document.getElementById('sec-' + sec).style.display = 'block';
-            el.classList.add('active');
-            if(sec === 'pedidos') cargarPedidos();
-        }
-
-        function toggleAmz() {
-            document.getElementById('amz-input').style.display = (document.getElementById('cfg-estado').value === 'AMAZON') ? 'block' : 'none';
-        }
-
-        async function cargarCatalogo() {
-            const r = await fetch(SCRIPT_URL + "?action=getAllLibros");
-            const libros = await r.json();
-            const body = document.getElementById('tabla-libros-body');
-            body.innerHTML = "";
-            libros.forEach(l => {
-                body.innerHTML += `
-                    <tr>
-                        <td><img src="${l.portada}" style="width:40px; border-radius:4px;"></td>
-                        <td><strong>${l.titulo}</strong></td>
-                        <td><span class="badge badge-${l.estado}">${l.estado}</span></td>
-                        <td style="display:flex; gap:5px;">
-                            <button class="btn btn-edit" onclick="prepararEdicion('${l.titulo}', '${l.portada}', '${l.estado}', '${l.amazonUrl || ''}')"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-delete" onclick="eliminarLibro(${l.rowIndex})"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>`;
+        document.getElementById('login-btn').addEventListener('click', attemptLogin);
+        function attemptLogin() {
+            const btn = document.getElementById('login-btn');
+            btn.disabled = true; btn.textContent = 'Verificando...';
+            const payload = { action: 'login', user: document.getElementById('username').value, pass: document.getElementById('password').value };
+            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
+            .then(res => res.json()).then(data => {
+                if (data.success) { adminUser = payload.user; adminPass = payload.pass; document.getElementById('login-overlay').style.display = 'none'; document.getElementById('main-content').style.display = 'block'; loadOrders(); } 
+                else { document.getElementById('login-error').style.display = 'block'; btn.disabled = false; btn.textContent = 'Entrar'; }
             });
         }
 
-        function prepararEdicion(t, p, e, a) {
-            document.getElementById('cfg-titulo').value = t;
-            document.getElementById('cfg-portada').value = p;
-            document.getElementById('cfg-estado').value = e;
-            document.getElementById('cfg-amazon').value = a;
-            toggleAmz();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // --- Navegación entre secciones ---
+        function showSection(section) {
+            document.getElementById('orders-container').style.display = section === 'orders' ? 'block' : 'none';
+            document.getElementById('books-container').style.display = section === 'books' ? 'block' : 'none';
+            document.getElementById('interest-container').style.display = section === 'interest' ? 'block' : 'none';
+            const showFilters = section === 'orders' ? 'block' : 'none';
+            document.getElementById('filter-title').style.display = showFilters;
+            document.getElementById('filter-list').style.display = showFilters;
+            ['orders', 'books', 'interest'].forEach(s => document.getElementById('menu-' + s).classList.toggle('active', s === section));
         }
 
-        async function eliminarLibro(idx) {
-            if(!confirm("¿Seguro que quieres eliminar este libro?")) return;
-            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteLibro', rowIndex: idx }) });
-            cargarCatalogo();
+        document.getElementById('menu-orders').addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('orders');
+        });
+
+        document.getElementById('menu-books').addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('books');
+            loadBooksAdmin();
+        });
+
+        document.getElementById('menu-interest').addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('interest');
+            loadInterests();
+        });
+
+        // --- Dashboard de interesados ---
+        let allInterests = [];
+
+        function esc(value) {
+            return String(value === undefined || value === null ? '' : value)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
-        async function guardarLibro() {
-            const data = {
-                titulo: document.getElementById('cfg-titulo').value,
-                portada: document.getElementById('cfg-portada').value,
-                estado: document.getElementById('cfg-estado').value,
-                amazonUrl: document.getElementById('cfg-amazon').value
+        function formatDate(iso) {
+            const d = new Date(iso);
+            return isNaN(d) ? '' : d.toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
+        }
+
+        async function loadInterests() {
+            const loader = document.getElementById('interest-loader');
+            const errorBox = document.getElementById('interest-error');
+            const refreshBtn = document.getElementById('interest-refresh');
+            errorBox.style.display = 'none';
+
+            if (INTEREST_SCRIPT_URL.startsWith('PEGA_AQUI')) {
+                errorBox.textContent = 'Falta pegar la URL del script de interesados en INTEREST_SCRIPT_URL (en panel.html).';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            loader.style.display = 'block';
+            refreshBtn.disabled = true;
+            try {
+                const res = await fetch(INTEREST_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'getInterests', user: adminUser, pass: adminPass })
+                });
+                const result = await res.json();
+                if (!result.success) throw new Error(result.message || 'No autorizado');
+                allInterests = result.data || [];
+                renderInterests();
+            } catch (err) {
+                errorBox.textContent = 'No se pudieron cargar los interesados: ' + err.message;
+                errorBox.style.display = 'block';
+            } finally {
+                loader.style.display = 'none';
+                refreshBtn.disabled = false;
+            }
+        }
+
+        function getFilteredInterests() {
+            const q = document.getElementById('interest-search').value.trim().toLowerCase();
+            const firmado = document.getElementById('interest-filter').value;
+            return allInterests
+                .filter(r => firmado === 'todos' || r.firmado === firmado)
+                .filter(r => !q || [r.nombre, r.instagram, r.correo, r.comentarios].join(' ').toLowerCase().includes(q))
+                .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        }
+
+        function renderInterests() {
+            // Estadísticas sobre todas las respuestas (sin filtrar)
+            const total = allInterests.length;
+            const signed = allInterests.filter(r => r.firmado === 'Sí').length;
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-signed').textContent = signed;
+            document.getElementById('stat-unsigned').textContent = total - signed;
+            const last = allInterests.map(r => new Date(r.fecha)).filter(d => !isNaN(d)).sort((a, b) => b - a)[0];
+            document.getElementById('stat-last').textContent = last ? formatDate(last) : '–';
+
+            const rows = getFilteredInterests();
+            document.getElementById('interest-count').textContent = rows.length === total
+                ? `${total} respuestas`
+                : `Mostrando ${rows.length} de ${total} respuestas`;
+
+            const body = document.getElementById('interest-body');
+            if (rows.length === 0) {
+                body.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#7f8c8d; padding:30px;">No hay respuestas que mostrar.</td></tr>';
+                return;
+            }
+            body.innerHTML = rows.map(r => {
+                const user = String(r.instagram || '').replace(/^@/, '');
+                const igLink = /^[A-Za-z0-9._]{1,30}$/.test(user)
+                    ? `<a href="https://instagram.com/${encodeURIComponent(user)}" target="_blank" rel="noopener noreferrer">@${esc(user)}</a>`
+                    : esc(r.instagram);
+                const badge = r.firmado === 'Sí' ? '<span class="badge badge-si">Sí</span>' : '<span class="badge badge-no">No</span>';
+                return `<tr>
+                    <td style="white-space:nowrap;">${esc(formatDate(r.fecha))}</td>
+                    <td>${esc(r.nombre)}</td>
+                    <td>${igLink}</td>
+                    <td>${esc(r.correo)}</td>
+                    <td>${badge}</td>
+                    <td class="comment-cell">${esc(r.comentarios)}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function downloadInterestsCSV() {
+            const rows = getFilteredInterests();
+            // Evita que Excel interprete texto como fórmula
+            const safe = v => { let s = String(v === undefined || v === null ? '' : v); if (/^[=+\-@]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+            const header = ['Fecha', 'Nombre', 'Instagram', 'Correo', 'Firmado', 'Comentarios'];
+            const lines = [header.map(safe).join(';')];
+            rows.forEach(r => lines.push([formatDate(r.fecha), r.nombre, String(r.instagram || '').replace(/^@/, ''), r.correo, r.firmado, r.comentarios].map(safe).join(';')));
+            const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'interesados-preventa.csv';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(a.href);
+        }
+
+        document.getElementById('interest-search').addEventListener('input', renderInterests);
+        document.getElementById('interest-filter').addEventListener('change', renderInterests);
+        document.getElementById('interest-refresh').addEventListener('click', loadInterests);
+        document.getElementById('interest-csv').addEventListener('click', downloadInterestsCSV);
+
+        const preorderCheckbox = document.getElementById('book-preorder');
+        const amazonInput = document.getElementById('book-amazon');
+
+        function toggleAmazonInput() {
+            if (preorderCheckbox.checked) {
+                amazonInput.value = '';
+                amazonInput.disabled = true;
+                amazonInput.style.backgroundColor = '#f0f0f0';
+                amazonInput.placeholder = 'No requerida en preventa';
+            } else {
+                amazonInput.disabled = false;
+                amazonInput.style.backgroundColor = '#fff';
+                amazonInput.placeholder = 'https://amazon...';
+            }
+        }
+        preorderCheckbox.addEventListener('change', toggleAmazonInput);
+
+        function renderVersionsInputs(versionsArray) {
+            const wrapper = document.getElementById('versions-wrapper');
+            wrapper.innerHTML = '';
+            versionsArray.forEach((v, index) => {
+                const div = document.createElement('div');
+                div.style.display = 'flex'; div.style.gap = '5px'; div.style.marginBottom = '8px';
+                div.innerHTML = `
+                    <input type="text" class="v-name" placeholder="Ej. Edición Estándar" value="${v.nombre}" required style="flex:2; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                    <input type="number" class="v-price" placeholder="Precio" value="${v.precio}" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                    ${index > 0 ? `<button type="button" onclick="this.parentElement.remove()" style="background:#e74c3c; color:white; border:none; border-radius:4px; cursor:pointer; padding:0 10px; font-weight:bold;">X</button>` : ''}
+                `;
+                wrapper.appendChild(div);
+            });
+        }
+
+        document.getElementById('add-version-btn').addEventListener('click', () => {
+            const div = document.createElement('div');
+            div.style.display = 'flex'; div.style.gap = '5px'; div.style.marginBottom = '8px';
+            div.innerHTML = `
+                <input type="text" class="v-name" placeholder="Ej. Edición Especial" required style="flex:2; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                <input type="number" class="v-price" placeholder="Precio" required style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                <button type="button" onclick="this.parentElement.remove()" style="background:#e74c3c; color:white; border:none; border-radius:4px; cursor:pointer; padding:0 10px; font-weight:bold;">X</button>
+            `;
+            document.getElementById('versions-wrapper').appendChild(div);
+        });
+
+        renderVersionsInputs([{nombre: 'Edición Estándar', precio: ''}]); 
+
+        async function loadBooksAdmin() {
+            const list = document.getElementById('items-libros');
+            document.getElementById('loader-books').style.display = 'block';
+            list.innerHTML = '';
+            
+            try {
+                const res = await fetch(SCRIPT_URL + "?action=getBooks");
+                let books = await res.json();
+                books = books.filter(book => book.titulo && book.titulo.toString().trim() !== "");
+                books.reverse();
+                
+                document.getElementById('loader-books').style.display = 'none';
+                if (books.length === 0) list.innerHTML = '<p style="text-align:center;">No hay libros.</p>';
+                
+                books.forEach(book => {
+                    let precioLabel = book.precio;
+                    try {
+                        const parsed = JSON.parse(book.precio);
+                        if(parsed.length === 1) precioLabel = parsed[0].precio + '€';
+                        else precioLabel = `Desde ${Math.min(...parsed.map(p=>p.precio))}€ (${parsed.length} versiones)`;
+                    } catch(e) {}
+
+                    const esPreventa = String(book.es_preventa).toLowerCase() === "true";
+
+                    const li = document.createElement('li');
+                    li.className = 'order-item';
+                    li.innerHTML = `
+                        <div class="order-details">
+                            <strong>${book.titulo}</strong> - ${precioLabel} <br>
+                            <small style="color:${esPreventa ? '#9370DB' : '#7f8c8d'}; font-weight:bold;">${esPreventa ? 'En Preventa' : 'Venta Directa'}</small>
+                        </div>
+                        <div class="order-actions"><button>Editar</button></div>`;
+                    li.querySelector('button').onclick = () => editBook(book);
+                    list.appendChild(li);
+                });
+            } catch(e) { document.getElementById('loader-books').textContent = "Error al cargar libros."; }
+        }
+
+        function editBook(book) {
+            const titulo = book.titulo || '';
+            const descripcion = book.descripcion || '';
+            const amazonUrl = book.amazon_url || '';
+            
+            document.getElementById('form-book-title').textContent = "Editando: " + titulo;
+            document.getElementById('book-id').value = book.id;
+            document.getElementById('book-current-cover').value = book.portada_url;
+            
+            document.getElementById('book-title').value = titulo;
+            document.getElementById('book-desc').value = descripcion;
+            document.getElementById('book-amazon').value = amazonUrl;
+            
+            const esPreventa = String(book.es_preventa).toLowerCase() === "true";
+            document.getElementById('book-preorder').checked = esPreventa;
+            toggleAmazonInput();
+            
+            let parsedVersions = [];
+            try { parsedVersions = JSON.parse(book.precio); } 
+            catch(e) { parsedVersions = [{nombre: 'Edición Estándar', precio: book.precio || ''}]; }
+            renderVersionsInputs(parsedVersions);
+
+            document.getElementById('save-book-btn').textContent = "Actualizar Libro";
+            document.getElementById('save-book-btn').style.backgroundColor = "#3498db";
+            document.getElementById('cancel-edit-btn').style.display = "inline-block";
+            document.getElementById('current-cover-msg').style.display = "block";
+            document.getElementById('book-cover').required = false; 
+            
+            window.scrollTo({ top: document.getElementById('add-book-form').offsetTop, behavior: 'smooth' });
+        }
+
+        document.getElementById('cancel-edit-btn').addEventListener('click', () => {
+            document.getElementById('add-book-form').reset();
+            document.getElementById('form-book-title').textContent = "Añadir Nuevo Libro";
+            document.getElementById('book-id').value = "";
+            renderVersionsInputs([{nombre: 'Edición Estándar', precio: ''}]);
+            toggleAmazonInput(); 
+            
+            document.getElementById('save-book-btn').textContent = "Guardar Libro";
+            document.getElementById('save-book-btn').style.backgroundColor = "#2ecc71";
+            document.getElementById('cancel-edit-btn').style.display = "none";
+            document.getElementById('current-cover-msg').style.display = "none";
+            document.getElementById('book-cover').required = true;
+        });
+
+        document.getElementById('add-book-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('save-book-btn');
+            btn.disabled = true; btn.textContent = 'Guardando...';
+
+            const fileInput = document.getElementById('book-cover');
+            let coverData = null;
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                coverData = await new Promise(resolve => {
+                    reader.onload = () => resolve({ fileName: file.name, mimeType: file.type, base64Data: reader.result.split(',')[1] });
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            const versionElements = document.querySelectorAll('#versions-wrapper > div');
+            const versiones = [];
+            versionElements.forEach(el => {
+                versiones.push({
+                    nombre: el.querySelector('.v-name').value,
+                    precio: el.querySelector('.v-price').value
+                });
+            });
+
+            const id = document.getElementById('book-id').value;
+            const amazonFinalUrl = document.getElementById('book-amazon').disabled ? "" : document.getElementById('book-amazon').value;
+
+            const payload = {
+                action: id ? 'updateBook' : 'addBook',
+                id: id,
+                titulo: document.getElementById('book-title').value,
+                descripcion: document.getElementById('book-desc').value,
+                precio: JSON.stringify(versiones),
+                amazon_url: amazonFinalUrl,
+                es_preventa: document.getElementById('book-preorder').checked,
+                coverFile: coverData,
+                currentCover: document.getElementById('book-current-cover').value
             };
-            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'upsertLibro', data }) });
-            alert("¡Web actualizada!");
-            cargarCatalogo();
+
+            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
+            .then(res => res.json()).then(result => {
+                if(result.success) { alert('¡Libro guardado con éxito!'); document.getElementById('cancel-edit-btn').click(); loadBooksAdmin(); }
+                else alert('Error: ' + result.message);
+                btn.disabled = false;
+            });
+        });
+
+        let allOrders = []; let currentOpenOrder = null;
+
+        function loadOrders() {
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('order-list').innerHTML = '';
+            fetch(SCRIPT_URL).then(r => r.json()).then(data => {
+                document.getElementById('loader').style.display = 'none';
+                allOrders = data; filterOrders(document.querySelector('.filter-btn.active').dataset.filter);
+            });
         }
+
+        function filterOrders(filter) {
+            let fOrders = filter === 'todos' ? allOrders : (filter === 'enviado' ? allOrders.filter(o => o.estado && o.estado.toLowerCase() === 'enviado') : allOrders.filter(o => !o.estado || o.estado.toLowerCase() !== 'enviado'));
+            const list = document.getElementById('order-list'); list.innerHTML = '';
+            fOrders.forEach(o => {
+                if(!o.marca_temporal) return;
+                const li = document.createElement('li'); li.className = 'order-item' + (o.estado && o.estado.toLowerCase() === 'enviado' ? ' status-enviado' : '');
+                li.innerHTML = `<div class="order-details"><strong>${o.nombre_y_apellido || 'Anónimo'}</strong> - ${o.libro_reservado || 'Libro'}<br><small>${new Date(o.marca_temporal).toLocaleString('es-ES')}</small></div><div class="order-actions"><button>Ver Detalles</button></div>`;
+                li.querySelector('button').onclick = () => showOrderDetails(o);
+                list.appendChild(li);
+            });
+        }
+
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.onclick = (e) => {
+            e.preventDefault(); document.querySelector('.filter-btn.active').classList.remove('active'); e.target.classList.add('active'); filterOrders(e.target.dataset.filter);
+        });
+
+        function showConfirm(title, text) {
+            return new Promise((resolve) => {
+                const confirmOverlay = document.getElementById('confirm-overlay');
+                document.getElementById('confirm-title').textContent = title;
+                document.getElementById('confirm-text').textContent = text;
+                confirmOverlay.style.display = 'flex';
+                const yesBtn = document.getElementById('confirm-yes-btn');
+                const noBtn = document.getElementById('confirm-no-btn');
+                const cleanup = () => { yesBtn.removeEventListener('click', yesListener); noBtn.removeEventListener('click', noListener); };
+                const yesListener = () => { confirmOverlay.style.display = 'none'; cleanup(); resolve(true); };
+                const noListener = () => { confirmOverlay.style.display = 'none'; cleanup(); resolve(false); };
+                yesBtn.addEventListener('click', yesListener, { once: true });
+                noBtn.addEventListener('click', noListener, { once: true });
+            });
+        }
+
+        function showPrompt(title, text, defaultValue = "") {
+            return new Promise((resolve) => {
+                const promptOverlay = document.getElementById('prompt-overlay');
+                document.getElementById('prompt-title').textContent = title;
+                document.getElementById('prompt-text').textContent = text;
+                const input = document.getElementById('prompt-input');
+                input.value = defaultValue;
+                promptOverlay.style.display = 'flex';
+                input.focus();
+                const okBtn = document.getElementById('prompt-ok-btn');
+                const cancelBtn = document.getElementById('prompt-cancel-btn');
+                const cleanup = () => { okBtn.removeEventListener('click', okListener); cancelBtn.removeEventListener('click', cancelListener); input.removeEventListener('keypress', enterListener); };
+                const okListener = () => { promptOverlay.style.display = 'none'; cleanup(); resolve(input.value); };
+                const cancelListener = () => { promptOverlay.style.display = 'none'; cleanup(); resolve(null); };
+                const enterListener = (e) => { if (e.key === 'Enter') { okListener(); } };
+                okBtn.addEventListener('click', okListener, { once: true });
+                cancelBtn.addEventListener('click', cancelListener, { once: true });
+                input.addEventListener('keypress', enterListener);
+            });
+        }
+
+function showOrderDetails(order) {
+            currentOpenOrder = order;
+            document.getElementById('details-order-id').textContent = order.rowIndex;
+            
+            // Blindaje por si falta la fecha
+            document.getElementById('details-date').textContent = order.marca_temporal ? new Date(order.marca_temporal).toLocaleDateString('es-ES') : 'N/A';
+            
+            // Datos del cliente
+            document.getElementById('details-name').textContent = order.nombre_y_apellido || 'Anónimo';
+            document.getElementById('details-email').textContent = order.correo_electronico_obligatorio_para_envios_correos_y_inpost || 'N/A';
+            document.getElementById('details-phone').textContent = order.telefono_obligatorio_para_envio_correos_y_inpost || 'N/A';
+            
+            // Detalles de la firma
+            document.getElementById('details-signed').textContent = order.quieres_firmado || 'No';
+            document.getElementById('details-dedication').textContent = order.nombre_para_la_firma || 'N/A';
+            
+            // --- ARREGLO: Alimentar la tabla del Albarán en lugar de las etiquetas borradas ---
+            document.getElementById('product-desc-table').textContent = `Libro "${order.libro_reservado || 'Básico'}"`;
+            document.getElementById('product-price-table').textContent = `${order.precio_pagado || 0} €`;
+            document.getElementById('product-total-table').textContent = `${order.precio_pagado || 0} €`;
+
+            // Construir la dirección dinámicamente
+            let shipHTML = `<p><strong>Método:</strong> ${order.metodo_de_envio || 'No especificado'}</p>`;
+            if(order.para_envios_por_correos_direccion) {
+                shipHTML += `<p><strong>Dir:</strong> ${order.para_envios_por_correos_direccion}</p>
+                             <p><strong>CP:</strong> ${order.codigo_postal_obligatorio_para_envio_correos || ''}</p>
+                             <p><strong>Pob:</strong> ${order.poblacion_obligatorio_para_envio_correos_y_inpost || ''}</p>`;
+            }
+            if(order.punto_inpost) {
+                shipHTML += `<p><strong>Punto Inpost:</strong> ${order.punto_inpost}</p>`;
+            }
+            if(order.numero_de_envio) {
+                shipHTML += `<div class="tracking-number">Nº Envío: ${order.numero_de_envio}</div>`;
+            }
+            document.getElementById('shipping-info-block').innerHTML = shipHTML;
+
+            // Gestión del justificante Bizum
+            const proofUrl = order.pago_mediante_bizum_y_justificante_de_pago_telefono_698982882;
+            const proofLink = document.getElementById('details-payment-proof');
+            if (proofUrl && proofUrl !== 'undefined' && proofUrl !== '') {
+                proofLink.href = proofUrl;
+                document.querySelector('.payment-proof-section').style.display = 'block';
+            } else {
+                proofLink.href = '#';
+                document.querySelector('.payment-proof-section').style.display = 'none';
+            }
+
+            // Preparar el botón de Marcar Enviado
+            const btnSent = document.getElementById('mark-sent-btn');
+            btnSent.dataset.rowIndex = order.rowIndex;
+            btnSent.dataset.currentState = (order.estado || '').toLowerCase();
+            btnSent.textContent = btnSent.dataset.currentState === 'enviado' ? 'Desmarcar Envío' : 'Marcar como Enviado';
+            btnSent.style.background = btnSent.dataset.currentState === 'enviado' ? '#f39c12' : '#2ecc71';
+
+            // Mostrar la ventana
+            document.getElementById('details-overlay').style.display = 'flex';
+        }
+
+        document.getElementById('close-btn').onclick = () => document.getElementById('details-overlay').style.display = 'none';
+
+        document.getElementById('mark-sent-btn').addEventListener('click', async (e) => {
+            const button = e.target;
+            const rowIndex = button.dataset.rowIndex;
+            const currentState = button.dataset.currentState;
+            let payload;
+            
+            if (currentState === 'enviado') {
+                const confirmed = await showConfirm("Confirmar Acción", "Se borrará el número de seguimiento. ¿Estás seguro de que quieres desmarcar este pedido?");
+                if (confirmed) { payload = { action: 'updateStatus', rowIndex: rowIndex, status: 'Pendiente', tracking: '', sendEmail: false }; } else { return; }
+            } else {
+                const trackingNumber = await showPrompt("Marcar como Enviado", "Introduce el número de envío/seguimiento:");
+                if (trackingNumber === null) { return; }
+                const sendEmailConfirmed = await showConfirm("Enviar Email", "¿Quieres enviar un email de notificación al cliente?");
+                
+                payload = { 
+                    action: 'updateStatus', rowIndex: rowIndex, status: 'Enviado', tracking: trackingNumber, sendEmail: sendEmailConfirmed,
+                    orderData: { 
+                        customerName: currentOpenOrder.nombre_y_apellido, customerEmail: currentOpenOrder.correo_electronico_obligatorio_para_envios_correos_y_inpost, 
+                        bookTitle: currentOpenOrder.libro_reservado, shippingMethod: currentOpenOrder.metodo_de_envio, trackingNumber: trackingNumber, bookPrice: currentOpenOrder.precio_pagado 
+                    }
+                };
+            }
+
+            button.disabled = true; button.textContent = 'Actualizando...';
+            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
+            .then(res => res.json()).then(result => {
+                if (result.success) { alert('¡Estado del pedido actualizado!'); document.getElementById('details-overlay').style.display = 'none'; loadOrders(); } 
+                else { alert('Error al actualizar: ' + result.message); }
+                button.disabled = false;
+            }).catch(error => { alert('Error de conexión.'); button.disabled = false; });
+        });
+        
+        document.getElementById('print-btn').onclick = () => {
+            document.getElementById('printable-albaran').innerHTML = document.querySelector('.details-content').innerHTML;
+            document.querySelector('#printable-albaran .details-controls').remove();
+            setTimeout(() => window.print(), 100);
+        };
     </script>
 </body>
 </html>
